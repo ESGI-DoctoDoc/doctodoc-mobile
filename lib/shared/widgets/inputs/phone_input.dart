@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import 'base/input_text.dart';
+
+class PhoneInput extends StatefulWidget {
+  final TextEditingController controller;
+  final bool? required;
+
+  const PhoneInput({
+    super.key,
+    required this.controller,
+    this.required,
+  });
+
+  @override
+  State<PhoneInput> createState() => _PhoneInputState();
+}
+
+class _PhoneInputState extends State<PhoneInput> {
+  final mask = MaskTextInputFormatter(
+      mask: '## ## ## ## ##',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
+  // late final EmailValidator _validator;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // _validator = EmailValidator(required: widget.required ?? true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InputText(
+      label: "Téléphone",
+      placeholder: "## ## ## ## ##",
+      controller: widget.controller,
+      type: InputTextType.phone,
+      mask: [mask],
+      keyboardType: InputKeyboardType.numeric,
+      // validator: _validator.validation,
+    );
+  }
+}

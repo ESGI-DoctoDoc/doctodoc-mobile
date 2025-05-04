@@ -1,6 +1,8 @@
+import 'package:doctodoc_mobile/screens/introcution_screen.dart';
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:doctodoc_mobile/shared/config/theme.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -14,11 +16,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: titleApp,
-      onGenerateRoute: DynamicRouterConfig.generateRoute,
-      home: Placeholder(
-        child: Center(child: Text('hello world')),
+    return SafeArea(
+      child: MaterialApp(
+        title: titleApp,
+        onGenerateRoute: DynamicRouterConfig.generateRoute,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        home: IntroductionScreen()
       ),
     );
   }
