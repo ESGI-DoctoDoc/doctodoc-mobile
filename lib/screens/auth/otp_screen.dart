@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/otp_input.dart';
 
 class OtpWidget extends StatefulWidget {

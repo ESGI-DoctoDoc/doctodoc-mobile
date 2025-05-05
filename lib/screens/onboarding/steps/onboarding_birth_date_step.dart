@@ -30,7 +30,7 @@ class _OnboardingBirthDateStepState extends State<OnboardingBirthDateStep> {
       child: Form(
         child: Column(
           children: [
-            Text("Entrez votre date de naissance"),
+            const Text("Entrez votre date de naissance"),
             const SizedBox(height: 20),
             BirthdateInput(
               controller: birthDateController,

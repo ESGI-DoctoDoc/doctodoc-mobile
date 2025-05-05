@@ -7,6 +7,6 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonBase(label: "Secondary button",);
+    return const ButtonBase(label: "Secondary button",);
   }
 }

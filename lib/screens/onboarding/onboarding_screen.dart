@@ -78,7 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               });
             },
           ),
-          OnboardingGeneralPractitionerStep(
+          const OnboardingGeneralPractitionerStep(
               //   onFinish: (doctor) {
               //     _userData.generalPractitioner = doctor;
               //     // Finalisez l'onboarding ici

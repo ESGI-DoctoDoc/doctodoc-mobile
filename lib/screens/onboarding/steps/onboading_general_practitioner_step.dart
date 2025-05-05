@@ -12,13 +12,13 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
       child: Form(
         child: Column(
           children: [
             Text("Sélectionnez votre médecin traitant"),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             //todo add doctor list
           ],
         ),

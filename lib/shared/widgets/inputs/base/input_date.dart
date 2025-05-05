@@ -84,8 +84,7 @@ class _InputDateState extends State<InputDate> {
             borderSide: BorderSide(
               color: Theme.of(context)
                   .extension<CustomColors>()!
-                  .success
-                  .withValues(),
+                  .success,
               width: 1.5,
             ),
           ),
@@ -93,7 +92,7 @@ class _InputDateState extends State<InputDate> {
             borderRadius:
                 const BorderRadius.all(Radius.circular(inputBorderRadius)),
             borderSide: BorderSide(
-              color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+              color: Theme.of(context).dividerColor.withAlpha(77),
               width: 0.5,
             ),
           ),
@@ -142,7 +141,7 @@ class InputDateNoModal extends StatefulWidget {
 class _InputDateNoModalState extends State<InputDateNoModal> {
   @override
   Widget build(BuildContext context) {
-    DateTime _selectedDate = DateTime.now();
+    DateTime selectedDate = DateTime.now();
     const inputBorderRadius = 12.0;
 
     return Material(
@@ -159,14 +158,14 @@ class _InputDateNoModalState extends State<InputDateNoModal> {
           ),
         ),
         child: CalendarDatePicker(
-          initialDate: _selectedDate,
+          initialDate: selectedDate,
           firstDate: DateTime(1900),
           lastDate: DateTime(2100),
           onDateChanged: (date) {
             setState(() {
-              _selectedDate = date;
+              selectedDate = date;
               widget.controller.text =
-                  "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}";
+                  "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
             });
           },
         ),
