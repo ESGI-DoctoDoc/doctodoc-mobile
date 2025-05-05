@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-class OnboardingAppBar extends StatelessWidget {
-  const OnboardingAppBar({super.key});
+class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+
+  const OnboardingAppBar({
+    super.key,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,4 +25,7 @@ class OnboardingAppBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
