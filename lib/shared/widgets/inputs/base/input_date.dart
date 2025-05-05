@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 class InputDate extends StatefulWidget {
   final TextEditingController controller;
   final String label;
+  final DateTime? min;
+  final DateTime? max;
+  final VoidCallback? onChanged;
 
   const InputDate({
     super.key,
     required this.controller,
     required this.label,
+    this.min,
+    this.max,
+    this.onChanged,
   });
 
   @override
@@ -19,15 +25,45 @@ class _InputDateState extends State<InputDate> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      firstDate: widget.min ?? DateTime(1900),
+      lastDate: widget.max ?? DateTime(2100),
+      initialDate: () {
+        final now = DateTime.now();
+        final first = widget.min ?? DateTime(1900);
+        final last = widget.max ?? DateTime(2100);
+        if (now.isBefore(first)) return first;
+        if (now.isAfter(last)) return last;
+        return now;
+      }(),
     );
     if (picked != null) {
-      setState(() {
-        //todo: fomatter la date
-        widget.controller.text = picked.toString().split(" ")[0];
-      });
+      if (widget.min != null && widget.max != null) {
+        if (picked.isAfter(widget.min!) && picked.isBefore(widget.max!)) {
+          setState(() {
+            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+          });
+          widget.onChanged?.call();
+        }
+      } else if (widget.min != null) {
+        if (picked.isAfter(widget.min!) || picked.isAtSameMomentAs(widget.min!)) {
+          setState(() {
+            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+          });
+          widget.onChanged?.call();
+        }
+      } else if (widget.max != null) {
+        if (picked.isBefore(widget.max!) || picked.isAtSameMomentAs(widget.max!)) {
+          setState(() {
+            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+          });
+          widget.onChanged?.call();
+        }
+      } else {
+        setState(() {
+          widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+        });
+        widget.onChanged?.call();
+      }
     }
   }
 
@@ -71,7 +107,12 @@ class _InputDateState extends State<InputDate> {
           filled: true,
           fillColor: Colors.white,
           suffixIcon: IconButton(
-            onPressed: widget.controller.clear,
+            onPressed: () {
+              setState(() {
+                widget.controller.clear();
+                widget.onChanged?.call();
+              });
+            },
             icon: const Icon(Icons.clear),
           ),
         ),

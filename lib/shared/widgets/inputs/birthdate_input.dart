@@ -1,16 +1,16 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_date.dart';
 import 'package:flutter/material.dart';
 
-import 'base/input_text.dart';
-
 class BirthdateInput extends StatefulWidget {
   final TextEditingController controller;
   final bool? required;
+  final void Function()? onChanged;
 
   const BirthdateInput({
     super.key,
     required this.controller,
     this.required,
+    this.onChanged,
   });
 
   @override
@@ -18,12 +18,9 @@ class BirthdateInput extends StatefulWidget {
 }
 
 class _BirthdateInputState extends State<BirthdateInput> {
-  // late final EmailValidator _validator;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // _validator = EmailValidator(required: widget.required ?? true);
   }
 
   @override
@@ -31,6 +28,9 @@ class _BirthdateInputState extends State<BirthdateInput> {
     return InputDate(
       controller: widget.controller,
       label: "Date de naissance",
+      min: DateTime.now().subtract(const Duration(days: 365 * 100)),
+      max: DateTime.now().subtract(const Duration(days: 365 * 18)),
+      onChanged: () => widget.onChanged?.call(),
     );
   }
 }

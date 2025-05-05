@@ -16,20 +16,42 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
+  int _currentStep = 1;
+  bool canGoNext = true;
 
-  // final UserData _userData = UserData();
+  final Map<String, String> _userData = {};
 
   void _nextPage() {
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+    canGoNext = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      final int page =
+          _pageController.hasClients && _pageController.page != null
+              ? _pageController.page!.round()
+              : 0;
+      if (_currentStep != page + 1) {
+        setState(() {
+          _currentStep = page + 1;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: OnboardingAppBar(title: "title"),
+      appBar: OnboardingAppBar(
+        title: "title",
+        step: _currentStep,
+      ),
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
@@ -40,31 +62,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
           OnboardingNameStep(
-              // onNext: (firstName, lastName) {
-              //   _userData.firstName = firstName;
-              //   _userData.lastName = lastName;
-              //   _nextPage();
-              // },
-              ),
+            onNext: (isValid, firstName, lastName) {
+              // _userData.firstName = firstName;
+              // _userData.lastName = lastName;
+              setState(() {
+                canGoNext = isValid;
+              });
+            },
+          ),
           OnboardingBirthDateStep(
-              //   onNext: (birthDate) {
-              //     _userData.birthDate = birthDate;
-              //     _nextPage();
-              //   },
+            onNext: (isValid, birthDate) {
+              // _userData.birthDate = birthDate;
+              setState(() {
+                canGoNext = isValid;
+              });
+            },
           ),
           OnboardingGeneralPractitionerStep(
-          //   onFinish: (doctor) {
-          //     _userData.generalPractitioner = doctor;
-          //     // Finalisez l'onboarding ici
-          //     print("Données utilisateur : $_userData");
-          //   },
-          ),
+              //   onFinish: (doctor) {
+              //     _userData.generalPractitioner = doctor;
+              //     // Finalisez l'onboarding ici
+              //     print("Données utilisateur : $_userData");
+              //   },
+              ),
         ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: PrimaryButton(
           label: "Continuer",
+          disabled: !canGoNext,
           onTap: () => _nextPage(),
         ),
       ),

@@ -1,6 +1,27 @@
+import 'package:doctodoc_mobile/shared/widgets/inputs/validators/validator.dart';
 import 'package:flutter/material.dart';
 
 import 'base/input_text.dart';
+
+class EmailValidator extends Validator {
+  final bool required;
+  final emailRegex =
+  RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  final String errorMessage = "L'email est invalide";
+
+  EmailValidator({this.required = true});
+
+  @override
+  String? validation(String? value) {
+    if (value == null || value.isEmpty) {
+      return required ? "L'email est requis" : null;
+    } else if (!emailRegex.hasMatch(value)) {
+      return errorMessage;
+    } else {
+      return null;
+    }
+  }
+}
 
 class EmailInput extends StatefulWidget {
   final TextEditingController controller;
@@ -17,12 +38,12 @@ class EmailInput extends StatefulWidget {
 }
 
 class _EmailInputState extends State<EmailInput> {
-  // late final EmailValidator _validator;
+  late final EmailValidator _validator;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // _validator = EmailValidator(required: widget.required ?? true);
+    _validator = EmailValidator(required: widget.required ?? true);
   }
 
   @override
@@ -32,7 +53,7 @@ class _EmailInputState extends State<EmailInput> {
       placeholder: "john.doe@mail.fr",
       controller: widget.controller,
       keyboardType: InputKeyboardType.email,
-      // validator: _validator.validation,
+      validator: _validator.validation,
     );
   }
 }

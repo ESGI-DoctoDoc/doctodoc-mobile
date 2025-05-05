@@ -3,7 +3,12 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingNameStep extends StatefulWidget {
-  const OnboardingNameStep({super.key});
+  final void Function(bool isValid, String firstName, String lastName) onNext;
+
+  const OnboardingNameStep({
+    super.key,
+    required this.onNext,
+  });
 
   @override
   State<OnboardingNameStep> createState() => _OnboardingNameStepState();
@@ -17,26 +22,16 @@ class _OnboardingNameStepState extends State<OnboardingNameStep> {
   @override
   void initState() {
     super.initState();
-    firstnameController.addListener(_onNameChanged);
-    lastnameController.addListener(_onNameChanged);
   }
 
-  void _onNameChanged() {
-    if (_nameKey.currentState?.validate() ?? false) {
-      _onNext();
-    }
-  }
-
-  void _onNext() {
+  void _handleChange() {
     final firstName = firstnameController.text.trim();
     final lastName = lastnameController.text.trim();
-    print("onNext() called with: $firstName $lastName");
+    widget.onNext(_nameKey.currentState?.validate() ?? false, firstName, lastName);
   }
 
   @override
   void dispose() {
-    firstnameController.removeListener(_onNameChanged);
-    lastnameController.removeListener(_onNameChanged);
     firstnameController.dispose();
     lastnameController.dispose();
     super.dispose();
@@ -52,9 +47,9 @@ class _OnboardingNameStepState extends State<OnboardingNameStep> {
           children: [
             Text("Entrez votre nom et prénom"),
             const SizedBox(height: 20),
-            FirstnameInput(controller: firstnameController),
+            FirstnameInput(controller: firstnameController, onChanged: () => _handleChange()),
             const SizedBox(height: 10),
-            LastnameInput(controller: lastnameController),
+            LastnameInput(controller: lastnameController, onChanged: () => _handleChange()),
           ],
         ),
       ),

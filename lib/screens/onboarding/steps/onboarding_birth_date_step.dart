@@ -2,16 +2,26 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/birthdate_input.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingBirthDateStep extends StatefulWidget {
+  final void Function(bool isValid, String birthDate) onNext;
+
   const OnboardingBirthDateStep({
     super.key,
+    required this.onNext,
   });
 
   @override
-  State<OnboardingBirthDateStep> createState() => _OnboardingBirthDateStepState();
+  State<OnboardingBirthDateStep> createState() =>
+      _OnboardingBirthDateStepState();
 }
 
 class _OnboardingBirthDateStepState extends State<OnboardingBirthDateStep> {
   final TextEditingController birthDateController = TextEditingController();
+
+  void _handleNext() {
+    final birthDate = birthDateController.text.trim();
+    final isValid = birthDate.isNotEmpty;
+    widget.onNext(isValid, birthDate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +32,10 @@ class _OnboardingBirthDateStepState extends State<OnboardingBirthDateStep> {
           children: [
             Text("Entrez votre date de naissance"),
             const SizedBox(height: 20),
-            BirthdateInput(controller: birthDateController),
+            BirthdateInput(
+              controller: birthDateController,
+              onChanged: () => _handleNext(),
+            ),
           ],
         ),
       ),

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ButtonBase extends StatelessWidget {
   final String label;
   final GestureTapCallback? onTap;
+  final bool disabled;
 
   const ButtonBase({
     required this.label,
     super.key,
     this.onTap,
+    this.disabled = false,
   });
 
   @override
@@ -16,10 +18,15 @@ class ButtonBase extends StatelessWidget {
       width: double.infinity,
       height: 50,
       child: FilledButton(
-        onPressed: onTap,
+        onPressed: disabled ? null : onTap,
         style: ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(
-            Theme.of(context).primaryColor,
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.disabled)) {
+                return Colors.grey;
+              }
+              return Theme.of(context).primaryColor;
+            },
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(

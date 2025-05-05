@@ -22,6 +22,7 @@ class InputText extends StatefulWidget {
   final Function(String?)? validator;
   final List<TextInputFormatter>? mask;
   final InputKeyboardType? keyboardType;
+  final Function? onChange;
 
   const InputText({
     super.key,
@@ -32,6 +33,7 @@ class InputText extends StatefulWidget {
     this.keyboardType = InputKeyboardType.text,
     this.validator,
     this.mask,
+    this.onChange,
   });
 
   @override
@@ -47,17 +49,24 @@ class _InputTextState extends State<InputText> {
     return Material(
       elevation: 0.5,
       borderRadius: const BorderRadius.all(Radius.circular(inputBorderRadius)),
-      child: TextField(
+      child: TextFormField(
+        validator: widget.validator != null
+            ? (value) => widget.validator!(value)
+            : null,
         keyboardType: _mapKeyboardType(widget.keyboardType),
         controller: widget.controller,
         inputFormatters: widget.mask,
         decoration: buildInputDecoration(
-          context: context,
-          label: widget.label,
-          hintText: widget.placeholder,
-          icon: Icons.close
-        ),
+            context: context,
+            label: widget.label,
+            hintText: widget.placeholder,
+            icon: Icons.close),
         obscureText: widget.type == InputTextType.password,
+        onChanged: (value) {
+          if(widget.onChange != null) {
+            widget.onChange!();
+          }
+        },
       ),
     );
   }

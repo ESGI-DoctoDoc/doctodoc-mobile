@@ -8,7 +8,7 @@ InputDecoration buildInputDecoration({
   required IconData? icon,
 }) {
   const inputBorderRadius = 12.0;
-  const inputHeight = 16.0;
+  const inputHeight = 18.0;
 
   return InputDecoration(
     focusedBorder: OutlineInputBorder(
@@ -37,6 +37,10 @@ InputDecoration buildInputDecoration({
     suffixIcon: Icon(
       icon,
       color: Theme.of(context).iconTheme.color,
+    ),
+    errorStyle: const TextStyle(
+      color: Colors.red,
+      height: 3,
     ),
   );
 }
