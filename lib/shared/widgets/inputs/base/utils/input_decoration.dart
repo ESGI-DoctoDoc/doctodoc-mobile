@@ -14,14 +14,16 @@ InputDecoration buildInputDecoration({
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(inputBorderRadius),
       borderSide: BorderSide(
-        color: Theme.of(context).extension<CustomColors>()!.success.withValues(),
+        color: Theme.of(context)
+            .extension<CustomColors>()!
+            .success,
         width: 1.5,
       ),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(inputBorderRadius),
       borderSide: BorderSide(
-        color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+        color: Theme.of(context).dividerColor.withAlpha(77),
         width: 0.5,
       ),
     ),

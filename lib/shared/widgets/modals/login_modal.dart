@@ -1,6 +1,10 @@
+import 'package:doctodoc_mobile/screens/auth/otp_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/auth_bloc/auth_bloc.dart';
+import '../../../models/credentials.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/email_input.dart';
 import '../inputs/password_input.dart';
@@ -17,58 +21,90 @@ class _LoginModalState extends State<LoginModal> {
   final loginKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  String test = "Connexion";
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ModalBase(
-      title: 'Connexion',
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.grey, //todo utiliser theme
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset('assets/images/doctodoc-logo.png'),
-            const SizedBox(height: 30),
-            Form(
-              key: loginKey,
-              child: Column(
-                children: [
-                  EmailInput(controller: emailController),
-                  const SizedBox(height: 10),
-                  PasswordInput(controller: passwordController),
-                ],
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (previous, current) {
+        return previous != current;
+      },
+      listener: _authListener,
+      child: ModalBase(
+        title: "Connexion",
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.grey, //todo utiliser theme
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/images/doctodoc-logo.png'),
+              const SizedBox(height: 30),
+              Form(
+                key: loginKey,
+                child: Column(
+                  children: [
+                    EmailInput(controller: emailController),
+                    const SizedBox(height: 10),
+                    PasswordInput(controller: passwordController),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            PrimaryButton(
-              label: "Se connecter",
-              onTap: () => _login(),
-            ),
-            FilledButton(onPressed: () => _fastLogin(), child: Text('Fast login')),
-            const SizedBox(height: 20),
-            Text("Mot de passe oublié ?"),
-            const SizedBox(height: 10),
-            InkWell(
-              child: Text("Toujours pas inscrit ? Inscrivez-vous"),
-              onTap: () => showRegisterModal(context, true),
-            ),
-          ],
+              const SizedBox(height: 20),
+              PrimaryButton(
+                label: "Se connecter",
+                onTap: () => _login(),
+              ),
+              FilledButton(
+                  onPressed: () => _fastLogin(), child: Text('Fast login')),
+              const SizedBox(height: 20),
+              Text("Mot de passe oublié ?"),
+              const SizedBox(height: 10),
+              InkWell(
+                child: Text("Toujours pas inscrit ? Inscrivez-vous"),
+                onTap: () => showRegisterModal(context, true),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _fastLogin() {
-    emailController.text = "m.laurant@mail.fr";
-    passwordController.text = "mypassword";
+    emailController.text = "melissa.laurent.jouvet@gmail.com";
+    passwordController.text = "Mélissa1234#";
   }
 
   void _login() {
-    print("logging ...");
+    Credentials credentials = Credentials(
+      username: emailController.text,
+      password: passwordController.text,
+    );
+
+    final authBloc = context.read<AuthBloc>();
+    authBloc.add(OnFirstFactorAuthentication(credentials: credentials));
+  }
+
+  void _authListener(BuildContext context, AuthState state) {
+    if (state.status == AuthStatus.firstFactorAuthenticationError) {
+      print(state.exception?.code);
+    } else if (state.status == AuthStatus.firstFactorAuthenticationValidate) {
+      print("login successful");
+      OtpWidget.navigateTo(context);
+    } else if (state.status == AuthStatus.loadingFirstFactorAuthentication) {
+      print("loading");
+    }
   }
 }
 

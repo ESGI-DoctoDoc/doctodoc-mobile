@@ -1,8 +1,8 @@
 class AppException implements Exception {
-  final String message;
+  final String code;
 
   AppException({
-    required this.message,
+    required this.code,
   });
 
   static AppException from(dynamic exception) {
@@ -12,7 +12,7 @@ class AppException implements Exception {
 }
 
 class UnknownException extends AppException {
-  static const errorMessage = 'An unexpected error occurred';
+  static const defaultCode = 'error.unexpected';
 
-  UnknownException() : super(message: errorMessage);
+  UnknownException() : super(code: defaultCode);
 }

@@ -84,8 +84,7 @@ class _InputDateState extends State<InputDate> {
             borderSide: BorderSide(
               color: Theme.of(context)
                   .extension<CustomColors>()!
-                  .success
-                  .withValues(),
+                  .success,
               width: 1.5,
             ),
           ),
@@ -93,7 +92,7 @@ class _InputDateState extends State<InputDate> {
             borderRadius:
                 const BorderRadius.all(Radius.circular(inputBorderRadius)),
             borderSide: BorderSide(
-              color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+              color: Theme.of(context).dividerColor.withAlpha(77),
               width: 0.5,
             ),
           ),
