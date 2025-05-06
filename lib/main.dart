@@ -1,8 +1,11 @@
+import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
 import 'package:doctodoc_mobile/screens/introcution_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/auth_data_source/remote_auth_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
+import 'package:doctodoc_mobile/services/data_sources/register_data_source/remote_register_data_source.dart';
 import 'package:doctodoc_mobile/services/dio_client.dart';
 import 'package:doctodoc_mobile/services/repositories/auth_repository/auth_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/register_repository/register_repository.dart';
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:doctodoc_mobile/shared/config/theme.dart';
 import 'package:flutter/material.dart';
@@ -34,12 +37,26 @@ class MyApp extends StatelessWidget {
               ),
               localAuthDataSource: SharedPreferencesAuthDataSource()),
         ),
+        RepositoryProvider(
+          create: (context) => RegisterRepository(
+            registerDataSource: RemoteRegisterDataSource(
+              dio: DioClient(
+                localAuthDataSource: SharedPreferencesAuthDataSource(),
+              ).dio,
+            ),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => RegisterBloc(
+              registerRepository: context.read<RegisterRepository>(),
             ),
           ),
         ],
