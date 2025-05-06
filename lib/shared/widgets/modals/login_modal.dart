@@ -82,8 +82,8 @@ class _LoginModalState extends State<LoginModal> {
   }
 
   void _fastLogin() {
-    emailController.text = "melissa.laurent.jouvet@gmail.com";
-    passwordController.text = "Mélissa1234#";
+    emailController.text = "patient1@example.com";
+    passwordController.text = "Abdcd76@";
   }
 
   void _login() {

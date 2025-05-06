@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           OtpWidget(
-            onSubmit: () {
+            onSubmit: (code) {
               _nextPage();
             },
           ),
