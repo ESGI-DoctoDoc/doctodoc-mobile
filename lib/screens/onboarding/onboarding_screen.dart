@@ -16,8 +16,9 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
+  String code = "";
   int _currentStep = 1;
-  bool canGoNext = true;
+  bool canGoNext = false;
 
   final Map<String, String> _userData = {};
 
@@ -57,8 +58,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           OtpWidget(
-            onSubmit: (code) {
-              _nextPage();
+            onSubmit: (otpCode) {
+              setState(() {
+                canGoNext = otpCode.length == 6;
+                code = otpCode;
+              });
             },
           ),
           OnboardingNameStep(

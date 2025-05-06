@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/otp_input.dart';
 
 class OtpWidget extends StatefulWidget {
@@ -45,8 +46,16 @@ class _OtpWidgetState extends State<OtpWidget> {
   }
 }
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
+
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  bool canGoNext = false;
+  String code = "";
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +69,20 @@ class OtpScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: OtpWidget(
-            onSubmit: (code) => _validateCode(context, code),
+            onSubmit: (otpCode) {
+              setState(() {
+                code = otpCode;
+                canGoNext = otpCode.length == 6;
+              });
+            },
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: PrimaryButton(
+            label: "Continuer",
+            disabled: !canGoNext,
+            onTap: () => _validateCode(context, code),
           ),
         ),
       ),
