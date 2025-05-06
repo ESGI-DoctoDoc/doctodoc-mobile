@@ -66,12 +66,12 @@ class _LoginModalState extends State<LoginModal> {
                 onTap: () => _login(),
               ),
               FilledButton(
-                  onPressed: () => _fastLogin(), child: Text('Fast login')),
+                  onPressed: () => _fastLogin(), child: const Text('Fast login')),
               const SizedBox(height: 20),
-              Text("Mot de passe oublié ?"),
+              const Text("Mot de passe oublié ?"),
               const SizedBox(height: 10),
               InkWell(
-                child: Text("Toujours pas inscrit ? Inscrivez-vous"),
+                child: const Text("Toujours pas inscrit ? Inscrivez-vous"),
                 onTap: () => showRegisterModal(context, true),
               ),
             ],

@@ -1,7 +1,6 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_date.dart';
 import 'package:flutter/material.dart';
 
-import 'base/input_text.dart';
 
 class SelectDayInput extends StatefulWidget {
   final TextEditingController controller;

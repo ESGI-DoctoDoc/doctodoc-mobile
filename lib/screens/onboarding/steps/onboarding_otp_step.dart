@@ -23,14 +23,14 @@ class _OtpOnboardingScreenState extends State<OtpOnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           children: [
             // AppBar personnalisée ou visuel onboarding
-            const Text("Bienvenue !"),
-            const SizedBox(height: 20),
+            Text("Bienvenue !"),
+            SizedBox(height: 20),
             OtpWidget()
           ],
         ),

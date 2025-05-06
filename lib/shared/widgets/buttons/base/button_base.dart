@@ -36,7 +36,7 @@ class ButtonBase extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(fontSize: 16), //todo utiliser valeur du theme
+          style: const TextStyle(fontSize: 16), //todo utiliser valeur du theme
         ),
       ),
     );
