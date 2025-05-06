@@ -1,3 +1,5 @@
+import '../../../models/user.dart';
+
 abstract class LocalAuthDataSource {
   Future<void> saveToken(String token);
 
@@ -8,4 +10,6 @@ abstract class LocalAuthDataSource {
   Future<bool> isFirstLaunch();
 
   Future<void> saveFirstLaunch();
+
+  Future<void> saveUser(User user);
 }

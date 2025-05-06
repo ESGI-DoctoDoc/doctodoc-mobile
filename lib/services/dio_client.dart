@@ -14,7 +14,6 @@ class DioClient {
     _dio.options.baseUrl = dotenv.env['BASE_URL_API'] ?? '';
     _dio.options.headers = {
       "Content-Type": "application/json",
-      "x-api-key": dotenv.env['API_KEY'] ?? '',
     };
 
     _dio.interceptors.add(InterceptorsWrapper(

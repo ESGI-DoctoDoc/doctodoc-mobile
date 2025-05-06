@@ -1,9 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/user.dart';
 import 'local_auth_data_source.dart';
 
 class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
   static const _tokenKey = 'auth_token';
+  static const _userKey = 'user';
   static const _firstLaunch = 'first_launch';
 
   @override
@@ -34,5 +36,12 @@ class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
   Future<void> saveFirstLaunch() async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool(_firstLaunch, true);
+  }
+
+  @override
+  Future<void> saveUser(User user) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setBool(_userKey, user.hasOnBoardingDone);
+    await saveToken(user.auth.token);
   }
 }
