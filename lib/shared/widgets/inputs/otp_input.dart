@@ -21,11 +21,7 @@ class OtpInput extends StatelessWidget {
       decoration:
           buildInputDecoration(context: context, label: "", hintText: "", icon: null),
       onChanged: (value) {
-        if (value.length == 6) {
-          // Handle OTP submission
-          print("OTP entered: $value");
-          onSubmit();
-        }
+        onSubmit();
       },
     );
   }

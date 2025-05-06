@@ -24,7 +24,6 @@ class _OtpWidgetState extends State<OtpWidget> {
   final TextEditingController codeController = TextEditingController();
 
   void _submitCode() {
-    print("Code validé : ${codeController.text}");
     if (widget.onSubmit != null) {
       widget.onSubmit!(codeController.text);
     }

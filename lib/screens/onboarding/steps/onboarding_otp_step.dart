@@ -28,7 +28,6 @@ class _OtpOnboardingScreenState extends State<OtpOnboardingScreen> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            // AppBar personnalisée ou visuel onboarding
             Text("Bienvenue !"),
             SizedBox(height: 20),
             OtpWidget()
