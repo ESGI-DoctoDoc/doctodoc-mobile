@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../models/user.dart';
 import 'local_auth_data_source.dart';
 
 class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
   static const _tokenKey = 'auth_token';
-  static const _userKey = 'user';
   static const _firstLaunch = 'first_launch';
+  static const _userOnBoardingStatusKey = 'user_on_boarding_status';
+  static const _userPatientId = 'user_patient_id';
 
   @override
   Future<void> saveToken(String token) async {
@@ -39,9 +39,9 @@ class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
   }
 
   @override
-  Future<void> saveUser(User user) async {
+  Future<void> saveUser(bool onBoardingStatus, String patientId) async {
     final preferences = await SharedPreferences.getInstance();
-    await preferences.setBool(_userKey, user.hasOnBoardingDone);
-    await saveToken(user.auth.token);
+    await preferences.setBool(_userOnBoardingStatusKey, onBoardingStatus);
+    await preferences.setString(_userPatientId, patientId);
   }
 }

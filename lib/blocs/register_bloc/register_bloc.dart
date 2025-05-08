@@ -13,12 +13,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     required this.registerRepository,
   }) : super(RegisterState()) {
     on<OnRegister>(_onRegister);
+    on<OnBoarding>(_onBoarding);
   }
 
   Future<void> _onRegister(
       OnRegister event, Emitter<RegisterState> emit) async {
     try {
-      emit(state.copyWith(status: RegisterStatus.loading));
+      emit(state.copyWith(registerStatus: RegisterStatus.loading));
 
       String email = event.email;
       String password = event.password;
@@ -26,10 +27,32 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
       await registerRepository.register(email, password, phoneNumber);
 
-      emit(state.copyWith(status: RegisterStatus.registered));
+      emit(state.copyWith(registerStatus: RegisterStatus.registered));
     } catch (error) {
       emit(state.copyWith(
-        status: RegisterStatus.error,
+        registerStatus: RegisterStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onBoarding(
+      OnBoarding event, Emitter<RegisterState> emit) async {
+    try {
+      emit(state.copyWith(onBoardingStatus: OnBoardingStatus.loading));
+
+      String firstName = event.firstName;
+      String lastName = event.lastName;
+      String birthdate = event.birthdate;
+      String? referentDoctorId = event.referentDoctorId;
+
+      await registerRepository.onBoarding(
+          firstName, lastName, birthdate, referentDoctorId);
+
+      emit(state.copyWith(onBoardingStatus: OnBoardingStatus.onBoarded));
+    } catch (error) {
+      emit(state.copyWith(
+        onBoardingStatus: OnBoardingStatus.error,
         exception: AppException.from(error),
       ));
     }

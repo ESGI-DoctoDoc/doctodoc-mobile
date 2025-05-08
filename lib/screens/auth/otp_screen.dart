@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,6 +94,8 @@ class _OtpScreenState extends State<OtpScreen> {
       print(state.exception?.code);
     } else if (state.status == AuthStatus.authenticated) {
       print("login completed");
+      // todo : check the onboarding status in shared preferences
+      OnboardingScreen.navigateTo(context);
     } else if (state.status == AuthStatus.loadingSecondFactorAuthentication) {
       print("loading");
     }

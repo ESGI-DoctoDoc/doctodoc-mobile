@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/user.dart';
 
@@ -28,8 +29,11 @@ class AuthRepository {
   Future<void> validateDoubleAuthCode(String doubleAuthCode) async {
     try {
       User user = await authDataSource.validateDoubleAuthCode(doubleAuthCode);
-      localAuthDataSource.saveUser(user);
-    } catch (error) {
+      localAuthDataSource.saveUser(
+          user.hasOnBoardingDone, user.patientId.toString());
+      localAuthDataSource.saveToken(user.auth.token);
+    } on DioException catch (error) {
+      print(error.response?.data);
       throw UnknownException();
     }
   }

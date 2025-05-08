@@ -7,21 +7,32 @@ enum RegisterStatus {
   error,
 }
 
+enum OnBoardingStatus {
+  initial,
+  loading,
+  onBoarded,
+  error,
+}
+
 class RegisterState {
-  final RegisterStatus status;
+  final RegisterStatus registerStatus;
+  final OnBoardingStatus onBoardingStatus;
   final AppException? exception;
 
   RegisterState({
-    this.status = RegisterStatus.initial,
+    this.registerStatus = RegisterStatus.initial,
+    this.onBoardingStatus = OnBoardingStatus.initial,
     this.exception,
   });
 
   RegisterState copyWith({
-    RegisterStatus? status,
+    RegisterStatus? registerStatus,
+    OnBoardingStatus? onBoardingStatus,
     AppException? exception,
   }) {
     return RegisterState(
-      status: status ?? this.status,
+      registerStatus: registerStatus ?? this.registerStatus,
+      onBoardingStatus: onBoardingStatus ?? this.onBoardingStatus,
       exception: exception ?? this.exception,
     );
   }

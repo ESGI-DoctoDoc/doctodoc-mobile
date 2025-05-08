@@ -26,7 +26,7 @@ class _RegisterModalState extends State<RegisterModal> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listenWhen: (previous, current) {
-        return previous != current;
+        return previous.registerStatus != current.registerStatus;
       },
       listener: _registerListener,
       child: ModalBase(
@@ -82,11 +82,11 @@ class _RegisterModalState extends State<RegisterModal> {
   }
 
   void _registerListener(BuildContext context, RegisterState state) {
-    if (state.status == RegisterStatus.registered) {
+    if (state.registerStatus == RegisterStatus.registered) {
       print('registered ok');
-    } else if (state.status == RegisterStatus.loading) {
+    } else if (state.registerStatus == RegisterStatus.loading) {
       print('loading');
-    } else if (state.status == RegisterStatus.error) {
+    } else if (state.registerStatus == RegisterStatus.error) {
       print(state.exception?.code);
     }
   }

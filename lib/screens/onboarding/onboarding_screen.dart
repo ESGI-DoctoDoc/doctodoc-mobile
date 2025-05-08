@@ -1,13 +1,21 @@
+import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboading_general_practitioner_step.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_birth_date_step.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_name_step.dart';
 import 'package:doctodoc_mobile/screens/onboarding/widgets/onboarding_app_bar.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../auth/otp_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  static const String routeName = '/on-boarding';
+
+  static void navigateTo(BuildContext context) {
+    Navigator.of(context).pushNamed(routeName);
+  }
+
   const OnboardingScreen({super.key});
 
   @override
@@ -48,57 +56,87 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: OnboardingAppBar(
-        title: "title",
-        step: _currentStep,
-      ),
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          OtpWidget(
-            onSubmit: (otpCode) {
-              setState(() {
-                canGoNext = otpCode.length == 6;
-                code = otpCode;
-              });
-            },
+    return BlocListener<RegisterBloc, RegisterState>(
+      listenWhen: (previous, current) {
+        return previous.onBoardingStatus != current.onBoardingStatus;
+      },
+      listener: _onBoardingListener,
+      child: Scaffold(
+        appBar: OnboardingAppBar(
+          title: "title",
+          step: _currentStep,
+        ),
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            OtpWidget(
+              onSubmit: (otpCode) {
+                setState(() {
+                  canGoNext = otpCode.length == 6;
+                  code = otpCode;
+                });
+              },
+            ),
+            OnboardingNameStep(
+              onNext: (isValid, firstName, lastName) {
+                // _userData.firstname = firstname;
+                // _userData.lastName = lastName;
+                setState(() {
+                  canGoNext = isValid;
+                });
+              },
+            ),
+            OnboardingBirthDateStep(
+              onNext: (isValid, birthDate) {
+                // _userData.birthDate = birthDate;
+                _onBoardingDone(context);
+                setState(() {
+                  canGoNext = isValid;
+                });
+              },
+            ),
+            OnboardingGeneralPractitionerStep(
+                // onFinish: () {
+                // _userData.generalPractitioner = doctor;
+                // Finalisez l'onboarding ici
+                // print("Données utilisateur : $_userData");
+                // },
+                ),
+          ],
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: PrimaryButton(
+            label: "Continuer",
+            disabled: !canGoNext,
+            onTap: () => _nextPage(),
           ),
-          OnboardingNameStep(
-            onNext: (isValid, firstName, lastName) {
-              // _userData.firstName = firstName;
-              // _userData.lastName = lastName;
-              setState(() {
-                canGoNext = isValid;
-              });
-            },
-          ),
-          OnboardingBirthDateStep(
-            onNext: (isValid, birthDate) {
-              // _userData.birthDate = birthDate;
-              setState(() {
-                canGoNext = isValid;
-              });
-            },
-          ),
-          const OnboardingGeneralPractitionerStep(
-              //   onFinish: (doctor) {
-              //     _userData.generalPractitioner = doctor;
-              //     // Finalisez l'onboarding ici
-              //     print("Données utilisateur : $_userData");
-              //   },
-              ),
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: PrimaryButton(
-          label: "Continuer",
-          disabled: !canGoNext,
-          onTap: () => _nextPage(),
         ),
       ),
     );
+  }
+
+  void _onBoardingListener(BuildContext context, RegisterState state) {
+    if (state.onBoardingStatus == OnBoardingStatus.onBoarded) {
+      print('on boarded ok');
+    } else if (state.onBoardingStatus == OnBoardingStatus.loading) {
+      print('loading');
+    } else if (state.onBoardingStatus == OnBoardingStatus.error) {
+      print(state.exception?.code);
+    }
+  }
+
+  void _onBoardingDone(BuildContext context) {
+    const firstName = "John";
+    const lastName = "Doe";
+    const birthdate = "2002-01-01";
+
+    final registerBloc = context.read<RegisterBloc>();
+    registerBloc.add(OnBoarding(
+      firstName: firstName,
+      lastName: lastName,
+      birthdate: birthdate,
+    ));
   }
 }

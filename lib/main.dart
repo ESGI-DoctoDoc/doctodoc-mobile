@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
                 localAuthDataSource: SharedPreferencesAuthDataSource(),
               ).dio,
             ),
+            localAuthDataSource: SharedPreferencesAuthDataSource(),
           ),
         ),
       ],
