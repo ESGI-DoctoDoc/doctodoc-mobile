@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/login_modal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,7 +64,7 @@ class _RegisterModalState extends State<RegisterModal> {
                 InlineTextLink(
                   text: "Connectez-vous",
                   onTap: () {
-                    showRegisterModal(context, true);
+                    showLoginModal(context, true);
                   },
                 ),
               ],
@@ -116,7 +117,7 @@ class _RegisterModalState extends State<RegisterModal> {
   void _fastRegister() {
     emailController.text = "m.laurant@mail.fr";
     passwordController.text = "mypassword@1Z";
-    phoneController.text = "0606060606";
+    phoneController.text = "06 06 06 06 06";
   }
 
   void _registerListener(BuildContext context, RegisterState state) {
@@ -130,6 +131,11 @@ class _RegisterModalState extends State<RegisterModal> {
   }
 
   void _register() {
+    // check if the form is valid
+    if (!registerKey.currentState!.validate()) {
+      return;
+    }
+
     final registerBloc = context.read<RegisterBloc>();
     registerBloc.add(OnRegister(
       email: emailController.text,

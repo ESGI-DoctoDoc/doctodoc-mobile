@@ -41,6 +41,8 @@ class InputText extends StatefulWidget {
 }
 
 class _InputTextState extends State<InputText> {
+  bool isValueEmpty = true;
+
   @override
   Widget build(BuildContext context) {
     const inputBorderRadius = 12.0;
@@ -57,13 +59,19 @@ class _InputTextState extends State<InputText> {
         controller: widget.controller,
         inputFormatters: widget.mask,
         decoration: buildInputDecoration(
-            context: context,
-            label: widget.label,
-            hintText: widget.placeholder,
-            icon: Icons.close),
+          context: context,
+          label: widget.label,
+          hintText: widget.placeholder,
+          icon: !isValueEmpty ? Icons.clear : null,
+        ),
         obscureText: widget.type == InputTextType.password,
         onChanged: (value) {
-          if(widget.onChange != null) {
+          setState(() {
+            isValueEmpty = value.isEmpty;
+            print(isValueEmpty);
+          });
+
+          if (widget.onChange != null) {
             widget.onChange!();
           }
         },

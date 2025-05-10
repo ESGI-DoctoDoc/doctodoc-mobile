@@ -120,6 +120,11 @@ class _LoginModalState extends State<LoginModal> {
   }
 
   void _login() {
+    // check if form is valid
+    if (!loginKey.currentState!.validate()) {
+      return;
+    }
+
     Credentials credentials = Credentials(
       username: emailController.text,
       password: passwordController.text,

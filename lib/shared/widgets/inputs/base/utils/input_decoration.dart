@@ -29,6 +29,20 @@ InputDecoration buildInputDecoration({
     ),
     hintText: hintText,
     label: Text(label),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputBorderRadius),
+      borderSide: const BorderSide(
+        color: Colors.red,
+        width: 1.5,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputBorderRadius),
+      borderSide: const BorderSide(
+        color: Colors.red,
+        width: 1.5,
+      ),
+    ),
     contentPadding: const EdgeInsets.all(inputHeight),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(inputBorderRadius),
