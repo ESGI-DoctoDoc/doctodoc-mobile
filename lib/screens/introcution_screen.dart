@@ -1,8 +1,7 @@
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
-import 'package:doctodoc_mobile/shared/widgets/buttons/secondary_button.dart';
+import 'package:doctodoc_mobile/shared/widgets/texts/inline_text_link.dart';
 import 'package:flutter/material.dart';
 
-import '../shared/widgets/buttons/base/button_base.dart';
 import '../shared/widgets/modals/login_modal.dart';
 import '../shared/widgets/modals/register_modal.dart';
 
@@ -25,10 +24,12 @@ class IntroductionScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.only(right: 24.0, left: 24.0, bottom: 50, top: 24.0),
+              padding: const EdgeInsets.only(
+                  right: 24.0, left: 24.0, bottom: 50, top: 24.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withAlpha(77),
@@ -70,13 +71,11 @@ class IntroductionScreen extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Inscrivez-vous',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      InlineTextLink(
+                        text: "Inscrivez-vous",
+                        onTap: () {
+                          showRegisterModal(context, false);
+                        },
                       ),
                     ],
                   )

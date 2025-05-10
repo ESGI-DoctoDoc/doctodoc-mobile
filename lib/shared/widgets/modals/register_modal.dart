@@ -1,13 +1,14 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/login_modal.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../buttons/primary_button.dart';
 import '../inputs/email_input.dart';
 import '../inputs/password_input.dart';
-import 'base/modal_base.dart';
+import '../texts/inline_text_link.dart';
 
 class RegisterModal extends StatefulWidget {
   const RegisterModal({super.key});
@@ -29,50 +30,87 @@ class _RegisterModalState extends State<RegisterModal> {
         return previous.registerStatus != current.registerStatus;
       },
       listener: _registerListener,
-      child: ModalBase(
-        title: 'Inscription',
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              color: Colors.grey, //todo utiliser theme
-              borderRadius: BorderRadius.circular(12)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset('assets/images/doctodoc-logo.png'),
-              const SizedBox(height: 30),
-              Form(
-                key: registerKey,
-                child: Column(
-                  children: [
-                    EmailInput(controller: emailController),
-                    const SizedBox(height: 10),
-                    PasswordInput(controller: passwordController),
-                    const SizedBox(height: 10),
-                    PhoneInput(controller: phoneController)
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Form(
+              key: registerKey,
+              child: Column(
+                children: [
+                  EmailInput(controller: emailController),
+                  const SizedBox(height: 10),
+                  PasswordInput(controller: passwordController),
+                  const SizedBox(height: 10),
+                  PhoneInput(controller: phoneController),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildRegisterButton(),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Déja inscrit ?",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                InlineTextLink(
+                  text: "Connectez-vous",
+                  onTap: () {
+                    showRegisterModal(context, true);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Text(
+              "En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
               ),
-              const SizedBox(height: 20),
-              PrimaryButton(
-                label: "S'inscrire",
-                onTap: () => _register(),
-              ),
-              FilledButton(
-                  onPressed: () => _fastRegister(),
-                  child: const Text('Fast register')),
-              const SizedBox(height: 20),
-              const Text("Mot de passe oublié ?"),
-              const SizedBox(height: 10),
-              InkWell(
-                child: const Text("Toujours pas inscrit ? Inscrivez-vous"),
-                onTap: () => showLoginModal(context, true),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  //todo remove for release
+  Widget _buildRegisterButton() {
+    if (!kReleaseMode) {
+      return Row(
+        children: [
+          Expanded(
+            child: PrimaryButton(
+              label: "S'inscrire",
+              onTap: () => _register(),
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 100,
+            child: PrimaryButton(
+              label: "Fast",
+              onTap: () => _fastRegister(),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return PrimaryButton(
+        label: "S'inscrire'",
+        onTap: () => _register(),
+      );
+    }
   }
 
   void _fastRegister() {
@@ -105,19 +143,34 @@ void showRegisterModal(BuildContext context, bool replace) {
   if (replace) {
     Navigator.pop(context);
   }
-  Future.microtask(() => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  WoltModalSheet.show(
+    context: context,
+    pageListBuilder: (context) {
+      return [
+        WoltModalSheetPage(
+          hasSabGradient: false,
+          hasTopBarLayer: false,
+          pageTitle: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              "Inscrivez-vous à Doctodoc pour continuer",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: RegisterModal(),
+          isTopBarLayerAlwaysVisible: true,
+          trailingNavBarWidget: IconButton(
+            padding: const EdgeInsets.all(20),
+            icon: const Icon(Icons.close),
+            onPressed: Navigator.of(context).pop,
           ),
+          child: const RegisterModal(),
         ),
-      ));
+      ];
+    },
+  );
 }

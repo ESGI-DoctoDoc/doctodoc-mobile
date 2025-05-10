@@ -1,14 +1,16 @@
 import 'package:doctodoc_mobile/screens/auth/otp_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/auth_bloc/auth_bloc.dart';
 import '../../../models/credentials.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/email_input.dart';
 import '../inputs/password_input.dart';
-import 'base/modal_base.dart';
+import '../texts/inline_text_link.dart';
 
 class LoginModal extends StatefulWidget {
   const LoginModal({super.key});
@@ -21,7 +23,6 @@ class _LoginModalState extends State<LoginModal> {
   final loginKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String test = "Connexion";
 
   @override
   void dispose() {
@@ -33,52 +34,84 @@ class _LoginModalState extends State<LoginModal> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-      listenWhen: (previous, current) {
-        return previous != current;
-      },
+      listenWhen: (previous, current) => previous != current,
       listener: _authListener,
-      child: ModalBase(
-        title: "Connexion",
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.grey, //todo utiliser theme
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset('assets/images/doctodoc-logo.png'),
-              const SizedBox(height: 30),
-              Form(
-                key: loginKey,
-                child: Column(
-                  children: [
-                    EmailInput(controller: emailController),
-                    const SizedBox(height: 10),
-                    PasswordInput(controller: passwordController),
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Form(
+              key: loginKey,
+              child: Column(
+                children: [
+                  EmailInput(controller: emailController),
+                  const SizedBox(height: 10),
+                  PasswordInput(controller: passwordController),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildLoginButton(),
+            const SizedBox(height: 20),
+            InlineTextLink(
+              text: "Mot de passe oublié ?",
+              onTap: () {
+                //todo: implement forgot password
+              },
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Toujours pas inscrit ?",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              PrimaryButton(
-                label: "Se connecter",
-                onTap: () => _login(),
-              ),
-              FilledButton(
-                  onPressed: () => _fastLogin(), child: const Text('Fast login')),
-              const SizedBox(height: 20),
-              const Text("Mot de passe oublié ?"),
-              const SizedBox(height: 10),
-              InkWell(
-                child: const Text("Toujours pas inscrit ? Inscrivez-vous"),
-                onTap: () => showRegisterModal(context, true),
-              ),
-            ],
-          ),
+                InlineTextLink(
+                  text: "Inscrivez-vous",
+                  onTap: () {
+                    showRegisterModal(context, true);
+                  },
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
+  }
+
+  //todo remove for release
+  Widget _buildLoginButton() {
+    if (!kReleaseMode) {
+      return Row(
+        children: [
+          Expanded(
+            child: PrimaryButton(
+              label: "Se connecter",
+              onTap: () => _login(),
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 100,
+            child: PrimaryButton(
+              label: "Fast",
+              onTap: () => _fastLogin(),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return PrimaryButton(
+        label: "Se connecter",
+        onTap: () => _login(),
+      );
+    }
   }
 
   void _fastLogin() {
@@ -112,19 +145,35 @@ void showLoginModal(BuildContext context, bool replace) {
   if (replace) {
     Navigator.pop(context);
   }
-  Future.microtask(() => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+
+  WoltModalSheet.show(
+    context: context,
+    pageListBuilder: (context) {
+      return [
+        WoltModalSheetPage(
+          hasSabGradient: false,
+          hasTopBarLayer: false,
+          pageTitle: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              "Connectez-vous à votre compte",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: LoginModal(),
+          isTopBarLayerAlwaysVisible: true,
+          trailingNavBarWidget: IconButton(
+            padding: const EdgeInsets.all(20),
+            icon: const Icon(Icons.close),
+            onPressed: Navigator.of(context).pop,
           ),
+          child: const LoginModal(),
         ),
-      ));
+      ];
+    },
+  );
 }

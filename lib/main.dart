@@ -61,14 +61,13 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: SafeArea(
-          child: MaterialApp(
-              title: titleApp,
-              onGenerateRoute: DynamicRouterConfig.generateRoute,
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode: ThemeMode.system,
-              home: const IntroductionScreen()),
+        child: MaterialApp(
+          title: titleApp,
+          onGenerateRoute: DynamicRouterConfig.generateRoute,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.system,
+          home: const IntroductionScreen(),
         ),
       ),
     );
