@@ -34,6 +34,17 @@ class DioClient {
         print("[$method] $url$query -- with payload = $payload");
         return handler.next(options);
       },
+      onResponse: (options, handler) {
+        String method = options.requestOptions.method;
+        String url = options.requestOptions.path;
+        String query = options.requestOptions.queryParameters.isEmpty
+            ? ''
+            : '?${options.requestOptions.queryParameters.entries.map((e) => '${e.key}=${e.value}').join('&')}';
+        String payload = options.data != null ? options.data.toString() : '';
+
+        print("[$method] $url$query -- with payload = $payload");
+        return handler.next(options);
+      },
     ));
   }
 

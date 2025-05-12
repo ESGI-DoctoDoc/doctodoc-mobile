@@ -43,6 +43,8 @@ dependencies:
   google_fonts: ^6.2.1
   mask_text_input_formatter: ^2.9.0
   wolt_modal_sheet: ^0.11.0
+  flutter_otp_text_field: ^1.5.1+1
+  jiffy: ^6.4.3
 
 dev_dependencies:
   flutter_test:

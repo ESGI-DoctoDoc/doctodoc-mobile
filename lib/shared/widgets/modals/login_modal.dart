@@ -7,6 +7,7 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/auth_bloc/auth_bloc.dart';
 import '../../../models/credentials.dart';
+import '../../../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/email_input.dart';
 import '../inputs/password_input.dart';
@@ -98,10 +99,18 @@ class _LoginModalState extends State<LoginModal> {
           ),
           const SizedBox(width: 10),
           SizedBox(
-            width: 100,
+            width: 60,
             child: PrimaryButton(
-              label: "Fast",
-              onTap: () => _fastLogin(),
+              label: "Y",
+              onTap: () => _fastLogin(true),
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 60,
+            child: PrimaryButton(
+              label: "N",
+              onTap: () => _fastLogin(false),
             ),
           ),
         ],
@@ -114,8 +123,9 @@ class _LoginModalState extends State<LoginModal> {
     }
   }
 
-  void _fastLogin() {
-    emailController.text = "patient1@example.com";
+  void _fastLogin(bool exist) {
+    emailController.text =
+        exist ? "patient1@example.com" : "c.lecqds@fmiqsd.cr";
     passwordController.text = "Abdcd76@";
   }
 
@@ -134,12 +144,14 @@ class _LoginModalState extends State<LoginModal> {
     authBloc.add(OnFirstFactorAuthentication(credentials: credentials));
   }
 
-  void _authListener(BuildContext context, AuthState state) {
+  void _authListener(BuildContext context, AuthState state) async {
     if (state.status == AuthStatus.firstFactorAuthenticationError) {
       print(state.exception?.code);
     } else if (state.status == AuthStatus.firstFactorAuthenticationValidate) {
       print("login successful");
-      OtpWidget.navigateTo(context);
+      final sharedPreferences = SharedPreferencesAuthDataSource();
+      sharedPreferences.saveHasCompletedTwoFactorAuthentication(false);
+      OtpScreen.navigateTo(context);
     } else if (state.status == AuthStatus.loadingFirstFactorAuthentication) {
       print("loading");
     }

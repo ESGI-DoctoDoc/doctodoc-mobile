@@ -6,7 +6,7 @@ import '../../screens/onboarding/onboarding_screen.dart';
 
 class DynamicRouterConfig {
   static final routes = {
-    OtpWidget.routeName: (args) => const OtpScreen(),
+    OtpScreen.routeName: (args) => const OtpScreen(),
     OnboardingScreen.routeName: (args) => const OnboardingScreen(),
   };
 

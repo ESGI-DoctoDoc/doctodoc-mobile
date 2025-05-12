@@ -29,7 +29,7 @@ class User {
       firstName: json['firstName'] ?? '',
       email: json['email'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
-      hasOnBoardingDone: json['hasOnBoardingDone'] ?? '',
+      hasOnBoardingDone: json['hasOnBoardingDone'] ?? false,
     );
   }
 }

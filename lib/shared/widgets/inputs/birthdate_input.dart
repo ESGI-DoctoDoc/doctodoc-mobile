@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_date.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
 class BirthdateInput extends StatefulWidget {
   final TextEditingController controller;
@@ -28,8 +29,8 @@ class _BirthdateInputState extends State<BirthdateInput> {
     return InputDate(
       controller: widget.controller,
       label: "Date de naissance",
-      min: DateTime.now().subtract(const Duration(days: 365 * 100)),
-      max: DateTime.now().subtract(const Duration(days: 365 * 18)),
+      min: Jiffy.now().subtract(years: 100).dateTime,
+      max: Jiffy.now().subtract(years: 18).subtract(days: 5).dateTime,
       onChanged: () => widget.onChanged?.call(),
     );
   }

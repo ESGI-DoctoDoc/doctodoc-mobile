@@ -1,9 +1,9 @@
-import 'package:doctodoc_mobile/shared/widgets/inputs/base/utils/input_decoration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class OtpInput extends StatelessWidget {
   final TextEditingController controller;
-  final VoidCallback onSubmit;
+  final Function onSubmit;
 
   const OtpInput({
     super.key,
@@ -14,14 +14,12 @@ class OtpInput extends StatelessWidget {
   //todo refaire le otp
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      maxLength: 6,
-      decoration:
-          buildInputDecoration(context: context, label: "", hintText: "", icon: null),
-      onChanged: (value) {
-        onSubmit();
+    return OtpTextField(
+      numberOfFields: 6,
+      borderColor: Colors.black,
+      showFieldAsBox: true,
+      onSubmit: (onSubmit) {
+        this.onSubmit(onSubmit);
       },
     );
   }

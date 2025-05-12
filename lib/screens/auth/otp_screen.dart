@@ -1,4 +1,7 @@
+import 'package:doctodoc_mobile/screens/home_screen.dart';
+import 'package:doctodoc_mobile/screens/introcution_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
+import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,47 +9,16 @@ import '../../blocs/auth_bloc/auth_bloc.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/otp_input.dart';
 
-class OtpWidget extends StatefulWidget {
-  static const String routeName = '/auth/opt';
-
-  static void navigateTo(BuildContext context) {
-    Navigator.of(context).pushNamed(routeName);
-  }
-
-  final Function(String code)? onSubmit;
-
-  const OtpWidget({super.key, this.onSubmit});
-
-  @override
-  State<OtpWidget> createState() => _OtpWidgetState();
-}
-
-class _OtpWidgetState extends State<OtpWidget> {
-  final TextEditingController codeController = TextEditingController();
-
-  void _submitCode() {
-    if (widget.onSubmit != null) {
-      widget.onSubmit!(codeController.text);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text("Demander votre code de vérification"),
-        const SizedBox(height: 20),
-        OtpInput(
-          controller: codeController,
-          onSubmit: _submitCode,
-        ),
-        const SizedBox(height: 20),
-      ],
+class OtpScreen extends StatefulWidget {
+  static String routeName = '/auth/otp';
+  static navigateTo(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const OtpScreen(),
+      ),
     );
   }
-}
 
-class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
 
   @override
@@ -56,6 +28,13 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   bool canGoNext = false;
   String code = "";
+  final TextEditingController codeController = TextEditingController();
+
+  @override
+  void dispose() {
+    codeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +44,40 @@ class _OtpScreenState extends State<OtpScreen> {
       },
       listener: _authListener,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Vérification du compte")),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left_outlined, size: 35),
+            onPressed: () => _logoutUser(context),
+          ),
+          title: const Text(
+            "Vérification du compte",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: OtpWidget(
-            onSubmit: (otpCode) {
-              setState(() {
-                code = otpCode;
-                canGoNext = otpCode.length == 6;
-              });
-            },
+          child: Column(
+            children: [
+              const Text(
+                "Un code vous a été envoyé par SMS, saisissez-le ci-dessous.",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              OtpInput(
+                controller: codeController,
+                onSubmit: (otpCode) {
+                  setState(() {
+                    code = otpCode;
+                    canGoNext = otpCode.length == 6;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
         bottomNavigationBar: Padding(
@@ -89,13 +92,20 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  void _authListener(BuildContext context, AuthState state) {
+  void _authListener(BuildContext context, AuthState state) async {
     if (state.status == AuthStatus.secondFactorAuthenticationError) {
       print(state.exception?.code);
     } else if (state.status == AuthStatus.authenticated) {
       print("login completed");
-      // todo : check the onboarding status in shared preferences
-      OnboardingScreen.navigateTo(context);
+      final sharedPreferences = SharedPreferencesAuthDataSource();
+      sharedPreferences.saveHasCompletedTwoFactorAuthentication(true);
+
+      final hasOnboarded = await sharedPreferences.hasCompletedOnboarding();
+      if(hasOnboarded) {
+        HomeScreen.navigateTo(context);
+      } else {
+        OnboardingScreen.navigateTo(context);
+      }
     } else if (state.status == AuthStatus.loadingSecondFactorAuthentication) {
       print("loading");
     }
@@ -104,5 +114,11 @@ class _OtpScreenState extends State<OtpScreen> {
   void _validateCode(BuildContext context, String code) {
     final authBloc = context.read<AuthBloc>();
     authBloc.add(OnSecondFactorAuthentication(doubleAuthCode: code));
+  }
+
+  void _logoutUser(BuildContext context) {
+    final sharedPreferences = SharedPreferencesAuthDataSource();
+    sharedPreferences.reset();
+    IntroductionScreen.navigateTo(context);
   }
 }

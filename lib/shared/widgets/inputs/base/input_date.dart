@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 class InputDate extends StatefulWidget {
   final TextEditingController controller;
   final String label;
-  final DateTime? min;
-  final DateTime? max;
+  final DateTime min;
+  final DateTime max;
   final VoidCallback? onChanged;
 
   const InputDate({
     super.key,
     required this.controller,
     required this.label,
-    this.min,
-    this.max,
+    required this.min,
+    required this.max,
     this.onChanged,
   });
 
@@ -25,42 +25,22 @@ class _InputDateState extends State<InputDate> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      firstDate: widget.min ?? DateTime(1900),
-      lastDate: widget.max ?? DateTime(2100),
+      firstDate: widget.min,
+      lastDate: widget.max,
       initialDate: () {
         final now = DateTime.now();
-        final first = widget.min ?? DateTime(1900);
-        final last = widget.max ?? DateTime(2100);
+        final first = widget.min;
+        final last = widget.max;
         if (now.isBefore(first)) return first;
         if (now.isAfter(last)) return last;
         return now;
       }(),
     );
     if (picked != null) {
-      if (widget.min != null && widget.max != null) {
-        if (picked.isAfter(widget.min!) && picked.isBefore(widget.max!)) {
-          setState(() {
-            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
-          });
-          widget.onChanged?.call();
-        }
-      } else if (widget.min != null) {
-        if (picked.isAfter(widget.min!) || picked.isAtSameMomentAs(widget.min!)) {
-          setState(() {
-            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
-          });
-          widget.onChanged?.call();
-        }
-      } else if (widget.max != null) {
-        if (picked.isBefore(widget.max!) || picked.isAtSameMomentAs(widget.max!)) {
-          setState(() {
-            widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
-          });
-          widget.onChanged?.call();
-        }
-      } else {
+      if (picked.isAfter(widget.min) && picked.isBefore(widget.max)) {
         setState(() {
-          widget.controller.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+          widget.controller.text =
+              "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
         });
         widget.onChanged?.call();
       }
@@ -82,15 +62,12 @@ class _InputDateState extends State<InputDate> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(inputBorderRadius),
             borderSide: BorderSide(
-              color: Theme.of(context)
-                  .extension<CustomColors>()!
-                  .success,
+              color: Theme.of(context).extension<CustomColors>()!.success,
               width: 1.5,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius:
-                const BorderRadius.all(Radius.circular(inputBorderRadius)),
+            borderRadius: const BorderRadius.all(Radius.circular(inputBorderRadius)),
             borderSide: BorderSide(
               color: Theme.of(context).dividerColor.withAlpha(77),
               width: 0.5,
@@ -151,9 +128,7 @@ class _InputDateNoModalState extends State<InputDateNoModal> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(inputBorderRadius),
           border: Border.all(
-            color: Theme.of(context)
-                .dividerColor
-                .withAlpha(77),
+            color: Theme.of(context).dividerColor.withAlpha(77),
             width: 1.0,
           ),
         ),

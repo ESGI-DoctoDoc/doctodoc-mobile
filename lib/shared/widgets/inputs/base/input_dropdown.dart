@@ -69,7 +69,6 @@ class _InputDropdownState extends State<InputDropdown> {
   @override
   Widget build(BuildContext context) {
     const inputBorderRadius = 12.0;
-    const inputHeight = 16.0;
 
     return Material(
       elevation: 0.5,
@@ -84,7 +83,10 @@ class _InputDropdownState extends State<InputDropdown> {
               context: context,
               label: widget.label,
               hintText: widget.placeholder,
-              icon: Icons.arrow_drop_down
+              icon: Icons.arrow_drop_down,
+              onTap: () {
+                widget.controller.clear();
+              },
             ),
           ),
         ),

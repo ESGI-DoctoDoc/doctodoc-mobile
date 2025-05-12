@@ -6,6 +6,7 @@ InputDecoration buildInputDecoration({
   required String label,
   required String hintText,
   required IconData? icon,
+  required Function onTap,
 }) {
   const inputBorderRadius = 12.0;
   const inputHeight = 18.0;
@@ -50,9 +51,12 @@ InputDecoration buildInputDecoration({
     ),
     filled: true,
     fillColor: Colors.white,
-    suffixIcon: Icon(
-      icon,
-      color: Theme.of(context).iconTheme.color,
+    suffixIcon: InkWell(
+      child: Icon(
+        icon,
+        color: Theme.of(context).iconTheme.color,
+      ),
+      onTap: () => onTap(),
     ),
     errorStyle: const TextStyle(
       color: Colors.red,

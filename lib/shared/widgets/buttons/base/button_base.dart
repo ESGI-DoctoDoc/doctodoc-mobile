@@ -29,7 +29,9 @@ class _ButtonBaseState extends State<ButtonBase> {
       child: FilledButton(
         onPressed: widget.disabled ? null : widget.onTap,
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor),
+          backgroundColor: WidgetStateProperty.all(
+            widget.disabled ? Colors.grey : (widget.bgColor ?? Theme.of(context).primaryColor),
+          ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

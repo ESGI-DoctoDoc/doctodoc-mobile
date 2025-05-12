@@ -1,7 +1,7 @@
 import 'package:doctodoc_mobile/shared/widgets/buttons/base/button_base.dart';
 import 'package:flutter/material.dart';
 
-class PrimaryButton extends StatelessWidget {
+class PrimaryButton extends StatefulWidget {
   final String label;
   final GestureTapCallback? onTap;
   final bool disabled;
@@ -14,11 +14,16 @@ class PrimaryButton extends StatelessWidget {
   });
 
   @override
+  State<PrimaryButton> createState() => _PrimaryButtonState();
+}
+
+class _PrimaryButtonState extends State<PrimaryButton> {
+  @override
   Widget build(BuildContext context) {
     return ButtonBase(
-      disabled: disabled,
-      label: label,
-      onTap: onTap,
+      disabled: widget.disabled,
+      label: widget.label,
+      onTap: widget.onTap,
     );
   }
 }

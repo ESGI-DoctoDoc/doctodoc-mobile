@@ -45,7 +45,13 @@ class _OnboardingNameStepState extends State<OnboardingNameStep> {
         key: _nameKey,
         child: Column(
           children: [
-            const Text("Entrez votre nom et prénom"),
+            const Text(
+              "Quel est votre nom et prénom ?",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 20),
             FirstnameInput(controller: firstnameController, onChanged: () => _handleChange()),
             const SizedBox(height: 10),

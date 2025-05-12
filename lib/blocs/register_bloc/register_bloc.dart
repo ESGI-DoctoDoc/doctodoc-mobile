@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/services/repositories/register_repository/regist
 import 'package:meta/meta.dart';
 
 part 'register_event.dart';
+
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
@@ -47,7 +48,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       String? referentDoctorId = event.referentDoctorId;
 
       await registerRepository.onBoarding(
-          firstName, lastName, birthdate, referentDoctorId);
+        firstName,
+        lastName,
+        birthdate,
+        referentDoctorId,
+      );
 
       emit(state.copyWith(onBoardingStatus: OnBoardingStatus.onBoarded));
     } catch (error) {

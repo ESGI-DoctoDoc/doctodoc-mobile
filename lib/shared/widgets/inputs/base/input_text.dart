@@ -63,12 +63,19 @@ class _InputTextState extends State<InputText> {
           label: widget.label,
           hintText: widget.placeholder,
           icon: !isValueEmpty ? Icons.clear : null,
+          onTap: () {
+            if (!isValueEmpty) {
+              widget.controller.clear();
+              setState(() {
+                isValueEmpty = true;
+              });
+            }
+          },
         ),
         obscureText: widget.type == InputTextType.password,
         onChanged: (value) {
           setState(() {
             isValueEmpty = value.isEmpty;
-            print(isValueEmpty);
           });
 
           if (widget.onChange != null) {

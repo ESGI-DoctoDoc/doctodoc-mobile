@@ -123,6 +123,7 @@ class _RegisterModalState extends State<RegisterModal> {
   void _registerListener(BuildContext context, RegisterState state) {
     if (state.registerStatus == RegisterStatus.registered) {
       print('registered ok');
+      showLoginModal(context, true);
     } else if (state.registerStatus == RegisterStatus.loading) {
       print('loading');
     } else if (state.registerStatus == RegisterStatus.error) {
@@ -136,11 +137,13 @@ class _RegisterModalState extends State<RegisterModal> {
       return;
     }
 
+    final phoneNumber = "+33${phoneController.text.substring(1)}".replaceAll(" ", "");
+
     final registerBloc = context.read<RegisterBloc>();
     registerBloc.add(OnRegister(
       email: emailController.text,
       password: passwordController.text,
-      phoneNumber: phoneController.text,
+      phoneNumber: phoneNumber,
     ));
   }
 }

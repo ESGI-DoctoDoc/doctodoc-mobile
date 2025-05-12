@@ -20,7 +20,8 @@ class AuthRepository {
   Future<void> login(String email, String password) async {
     try {
       Auth auth = await authDataSource.login(email, password);
-      localAuthDataSource.saveToken(auth.token);
+      await localAuthDataSource.saveToken(auth.token);
+      await localAuthDataSource.saveHasCompletedTwoFactorAuthentication(false);
     } catch (error) {
       throw UnknownException();
     }
@@ -30,7 +31,9 @@ class AuthRepository {
     try {
       User user = await authDataSource.validateDoubleAuthCode(doubleAuthCode);
       localAuthDataSource.saveUser(
-          user.hasOnBoardingDone, user.patientId.toString());
+        user.hasOnBoardingDone,
+        user.patientId.toString(),
+      );
       localAuthDataSource.saveToken(user.auth.token);
     } on DioException catch (error) {
       print(error.response?.data);

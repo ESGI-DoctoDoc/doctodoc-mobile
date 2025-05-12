@@ -6,6 +6,15 @@ import '../shared/widgets/modals/login_modal.dart';
 import '../shared/widgets/modals/register_modal.dart';
 
 class IntroductionScreen extends StatelessWidget {
+  static void navigateTo(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const IntroductionScreen(),
+      ),
+    );
+  }
+
   const IntroductionScreen({super.key});
 
   @override

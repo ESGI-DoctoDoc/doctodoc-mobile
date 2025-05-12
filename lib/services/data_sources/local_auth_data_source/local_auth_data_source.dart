@@ -5,9 +5,13 @@ abstract class LocalAuthDataSource {
 
   Future<String?> retrieveToken();
 
-  Future<bool> isFirstLaunch();
+  Future<void> saveHasCompletedTwoFactorAuthentication(bool status);
 
-  Future<void> saveFirstLaunch();
+  Future<bool> hasCompletedTwoFactorAuthentication();
 
-  Future<void> saveUser(bool onBoardingStatus, String patientId);
+  Future<bool> hasCompletedOnboarding();
+
+  Future<void> saveUser(bool hasOnboarded, String patientId);
+
+  Future<void> reset();
 }
