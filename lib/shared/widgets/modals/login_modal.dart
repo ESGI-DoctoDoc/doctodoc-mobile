@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/auth/otp_screen.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/forgot_password_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _LoginModalState extends State<LoginModal> {
             InlineTextLink(
               text: "Mot de passe oublié ?",
               onTap: () {
-                //todo: implement forgot password
+                showForgotPasswordModal(context);
               },
             ),
             const SizedBox(height: 10),
