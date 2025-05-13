@@ -26,6 +26,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  bool isLoading = false;
   bool canGoNext = false;
   String code = "";
   final TextEditingController codeController = TextEditingController();
@@ -84,6 +85,7 @@ class _OtpScreenState extends State<OtpScreen> {
           padding: const EdgeInsets.all(20.0),
           child: PrimaryButton(
             label: "Continuer",
+            isLoading: isLoading,
             disabled: !canGoNext,
             onTap: () => _validateCode(context, code),
           ),
@@ -96,6 +98,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (state.status == AuthStatus.secondFactorAuthenticationError) {
       print(state.exception?.code);
     } else if (state.status == AuthStatus.authenticated) {
+      //Todo remove this
       print("login completed");
       final sharedPreferences = SharedPreferencesAuthDataSource();
       sharedPreferences.saveHasCompletedTwoFactorAuthentication(true);
@@ -109,9 +112,15 @@ class _OtpScreenState extends State<OtpScreen> {
     } else if (state.status == AuthStatus.loadingSecondFactorAuthentication) {
       print("loading");
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _validateCode(BuildContext context, String code) {
+    setState(() {
+      isLoading = true;
+    });
     final authBloc = context.read<AuthBloc>();
     authBloc.add(OnSecondFactorAuthentication(doubleAuthCode: code));
   }

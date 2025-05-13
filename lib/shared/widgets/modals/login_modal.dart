@@ -25,6 +25,7 @@ class _LoginModalState extends State<LoginModal> {
   final loginKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -95,6 +96,7 @@ class _LoginModalState extends State<LoginModal> {
           Expanded(
             child: PrimaryButton(
               label: "Se connecter",
+              isLoading: isLoading,
               onTap: () => _login(),
             ),
           ),
@@ -119,14 +121,14 @@ class _LoginModalState extends State<LoginModal> {
     } else {
       return PrimaryButton(
         label: "Se connecter",
+        isLoading: isLoading,
         onTap: () => _login(),
       );
     }
   }
 
   void _fastLogin(bool exist) {
-    emailController.text =
-        exist ? "patient1@example.com" : "c.lecqds@fmiqsd.cr";
+    emailController.text = exist ? "patient1@example.com" : "c.lecqds@fmiqsd.cr";
     passwordController.text = "Abdcd76@";
   }
 
@@ -136,6 +138,9 @@ class _LoginModalState extends State<LoginModal> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
     Credentials credentials = Credentials(
       username: emailController.text,
       password: passwordController.text,
@@ -156,6 +161,9 @@ class _LoginModalState extends State<LoginModal> {
     } else if (state.status == AuthStatus.loadingFirstFactorAuthentication) {
       print("loading");
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 

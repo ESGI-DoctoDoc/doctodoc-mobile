@@ -5,11 +5,13 @@ class PrimaryButton extends StatefulWidget {
   final String label;
   final GestureTapCallback? onTap;
   final bool disabled;
+  final bool isLoading;
 
   const PrimaryButton({
-    required this.label,
     super.key,
+    required this.label,
     this.disabled = false,
+    this.isLoading = false,
     this.onTap,
   });
 
@@ -22,6 +24,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   Widget build(BuildContext context) {
     return ButtonBase(
       disabled: widget.disabled,
+      isLoading: widget.isLoading,
       label: widget.label,
       onTap: widget.onTap,
     );

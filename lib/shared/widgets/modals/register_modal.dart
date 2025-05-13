@@ -23,6 +23,7 @@ class _RegisterModalState extends State<RegisterModal> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,7 @@ class _RegisterModalState extends State<RegisterModal> {
           Expanded(
             child: PrimaryButton(
               label: "S'inscrire",
+              isLoading: isLoading,
               onTap: () => _register(),
             ),
           ),
@@ -109,6 +111,7 @@ class _RegisterModalState extends State<RegisterModal> {
     } else {
       return PrimaryButton(
         label: "S'inscrire'",
+        isLoading: isLoading,
         onTap: () => _register(),
       );
     }
@@ -129,6 +132,9 @@ class _RegisterModalState extends State<RegisterModal> {
     } else if (state.registerStatus == RegisterStatus.error) {
       print(state.exception?.code);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _register() {
@@ -137,6 +143,9 @@ class _RegisterModalState extends State<RegisterModal> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
     final phoneNumber = "+33${phoneController.text.substring(1)}".replaceAll(" ", "");
 
     final registerBloc = context.read<RegisterBloc>();

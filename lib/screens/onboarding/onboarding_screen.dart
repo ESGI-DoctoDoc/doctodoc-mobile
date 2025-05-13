@@ -29,6 +29,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   final numberOfPages = 4;
+  bool isLoading = false;
 
   String code = "";
   int _currentStep = 1;
@@ -124,6 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           padding: const EdgeInsets.all(20.0),
           child: PrimaryButton(
             label: _currentStep == numberOfPages - 1 ? "Terminer" : "Continuer",
+            isLoading: isLoading,
             disabled: !canGoNext,
             onTap: () {
               if (_currentStep == numberOfPages - 1) {
@@ -147,6 +149,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } else if (state.onBoardingStatus == OnBoardingStatus.error) {
       print(state.exception?.code);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _onBoardingDone(BuildContext context) {
@@ -155,6 +160,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
     final birthDate = _userData.birthDate != null && _userData.birthDate!.isNotEmpty
         ? Jiffy.parse(_userData.birthDate!, pattern: 'dd/MM/yyyy').format(pattern: 'yyyy-MM-dd')
         : "";
