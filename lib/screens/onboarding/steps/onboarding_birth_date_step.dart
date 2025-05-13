@@ -29,8 +29,15 @@ class _OnboardingBirthDateStepState extends State<OnboardingBirthDateStep> {
       padding: const EdgeInsets.all(20.0),
       child: Form(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Entrez votre date de naissance"),
+            const Text(
+              "Quel est votre date de naissance ?",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 20),
             BirthdateInput(
               controller: birthDateController,

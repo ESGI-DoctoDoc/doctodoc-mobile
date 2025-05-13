@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
-import '../../introcution_screen.dart';
-
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int step;
   final int numberOfPages;
+  final Function onBackButtonPressed;
 
   const OnboardingAppBar({
     super.key,
     required this.step,
     required this.numberOfPages,
+    required this.onBackButtonPressed,
   });
 
   @override
@@ -30,7 +29,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
           foregroundColor: Colors.black,
           leading: IconButton(
             icon: const Icon(Icons.chevron_left_outlined, size: 35),
-            onPressed: () => _logoutUser(context),
+            onPressed: () => onBackButtonPressed(),
           ),
         ),
         LinearProgressIndicator(
@@ -44,10 +43,4 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 4);
-
-  void _logoutUser(BuildContext context) {
-    final sharedPreferences = SharedPreferencesAuthDataSource();
-    sharedPreferences.reset();
-    IntroductionScreen.navigateTo(context);
-  }
 }

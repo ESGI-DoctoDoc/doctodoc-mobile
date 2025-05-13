@@ -30,7 +30,7 @@ class _BirthdateInputState extends State<BirthdateInput> {
       controller: widget.controller,
       label: "Date de naissance",
       min: Jiffy.now().subtract(years: 100).dateTime,
-      max: Jiffy.now().subtract(years: 18).subtract(days: 5).dateTime,
+      max: Jiffy.now().subtract(years: 18).subtract(days: 2).dateTime,
       onChanged: () => widget.onChanged?.call(),
     );
   }

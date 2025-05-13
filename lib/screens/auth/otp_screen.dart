@@ -1,5 +1,5 @@
 import 'package:doctodoc_mobile/screens/home_screen.dart';
-import 'package:doctodoc_mobile/screens/introcution_screen.dart';
+import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import 'package:flutter/material.dart';

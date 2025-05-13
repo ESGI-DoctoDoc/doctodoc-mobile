@@ -1,4 +1,4 @@
-import 'package:doctodoc_mobile/screens/introcution_screen.dart';
+import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctodoc_mobile/blocs/auth_bloc/auth_bloc.dart';

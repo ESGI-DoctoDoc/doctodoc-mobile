@@ -48,8 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     _pageController.addListener(() {
-      final int page =
-      _pageController.hasClients && _pageController.page != null
+      final int page = _pageController.hasClients && _pageController.page != null
           ? _pageController.page!.round()
           : 0;
       if (_currentStep != page + 1) {
@@ -68,7 +67,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       },
       listener: _onBoardingListener,
       child: Scaffold(
-        appBar: OnboardingAppBar(step: _currentStep, numberOfPages: numberOfPages),
+        appBar: OnboardingAppBar(
+          step: _currentStep,
+          numberOfPages: numberOfPages,
+          onBackButtonPressed: () {
+            print("->>");
+            print(_pageController.page);
+            if(_pageController.page != 0) {
+              _pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              //todo mélissa ici il faut déco le gars
+            }
+          },
+        ),
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
@@ -136,7 +150,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onBoardingDone(BuildContext context) {
-    if(!_userData.isValid()) {
+    if (!_userData.isValid()) {
       print("Error : User data is not valid");
       return;
     }

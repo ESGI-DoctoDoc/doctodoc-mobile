@@ -44,6 +44,7 @@ class _OnboardingNameStepState extends State<OnboardingNameStep> {
       child: Form(
         key: _nameKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Quel est votre nom et prénom ?",

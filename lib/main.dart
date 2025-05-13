@@ -1,5 +1,5 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
-import 'package:doctodoc_mobile/screens/introcution_screen.dart';
+import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/auth_data_source/remote_auth_data_source.dart';
