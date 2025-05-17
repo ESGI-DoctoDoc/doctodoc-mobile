@@ -45,6 +45,8 @@ dependencies:
   wolt_modal_sheet: ^0.11.0
   flutter_otp_text_field: ^1.5.1+1
   jiffy: ^6.4.3
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
 
 dev_dependencies:
   flutter_test:
