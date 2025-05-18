@@ -8,6 +8,8 @@ import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/patient.dart';
+import '../../shared/widgets/inputs/patient_selection.dart';
 import 'widgets/appointment_app_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -59,12 +61,12 @@ class AppointmentScreen extends StatefulWidget {
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
   final PageController _pageController = PageController();
-  final screens = [
-    AppointmentStepPatient,
-    AppointmentStepMedicalConcern,
-    AppointmentStepDoctorQuestions,
-    AppointmentStepCareTracking,
-    AppointmentStepDate,
+  final List<GlobalKey<FormState>> forms = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
   ];
 
   final AppointmentData _appointmentData = AppointmentData();
@@ -86,10 +88,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Color(0xFFEFEFEF),
       child: SafeArea(
         top: false,
         child: Scaffold(
+          backgroundColor: Color(0xFFEFEFEF),
           appBar: AppointmentAppBar(
             firstname: widget.doctorFirstName,
             lastname: widget.doctorLastName,
@@ -110,45 +113,98 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               AppointmentStepPatient(
-                onNext: () {},
+                formKey: forms[0],
+                onNext: (PatientItem patient) {
+                  _appointmentData.patientId = patient.patientId;
+                },
               ),
-              AppointmentStepMedicalConcern(),
-              AppointmentStepDoctorQuestions(),
-              AppointmentStepCareTracking(),
-              AppointmentStepDate(),
+              AppointmentStepMedicalConcern(
+                formKey: forms[1],
+                onNext: (String concern) {
+                  _appointmentData.consultationConcern = concern;
+                },
+              ),
+              AppointmentStepDoctorQuestions(
+                formKey: forms[2],
+                onEmpty: () {
+                  // handleNextPage();
+                },
+              ),
+              AppointmentStepCareTracking(
+                formKey: forms[3],
+                onEmpty: () {
+                  // handleNextPage();
+                },
+                onNext: (String careTrackingId) {
+                  _appointmentData.careTrackingId = careTrackingId;
+                },
+              ),
+              AppointmentStepDate(
+                formKey: forms[4],
+              ),
             ],
           ),
-          bottomNavigationBar: Padding(
+          bottomNavigationBar: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Color(0xFFE8E8E8),
+                  width: 2,
+                ),
+              ),
+            ),
             child: PrimaryButton(
               label: "Continuer",
               onTap: () {
-                final currentPage = _pageController.page?.round() ?? 0;
-                final isLastPage = currentPage == screens.length - 1;
-                if (isLastPage) {
-                  _appointmentData.date = DateTime.now();
-                  _appointmentData.time = "10:00";
-                  _appointmentData.consultationConcern = "Consultation concern";
-                  _appointmentData.patientId = "patientId";
-                  _appointmentData.careTrackingId = "careTrackingId";
-                  _appointmentData.questions = [
-                    Question()..questionName = "Question 1",
-                    Question()..questionName = "Question 2",
-                  ];
-
-                  showAppointmentConfirmationModal(context, _appointmentData);
-                } else {
-                  _pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
+                handleNextPage();
+              }
             ),
           ),
         ),
       ),
     );
+  }
+
+  void nextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void handleNextPage() {
+    final currentPage = _pageController.page?.round() ?? 0;
+
+    final formKey = forms[currentPage];
+    final formState = formKey.currentState;
+    if(formState == null) {
+      nextPage();
+      return;
+    }
+
+    canGoNext = formState.validate();
+    if(!canGoNext) {
+      print("Form is not valid");
+      return;
+    }
+
+    final isLastPage = currentPage == forms.length - 1;
+    if (isLastPage) {
+      _appointmentData.date = DateTime.now();
+      _appointmentData.time = "10:00";
+      _appointmentData.consultationConcern = "Consultation concern";
+      _appointmentData.patientId = "patientId";
+      _appointmentData.careTrackingId = "careTrackingId";
+      _appointmentData.questions = [
+        Question()..questionName = "Question 1",
+        Question()..questionName = "Question 2",
+      ];
+
+      showAppointmentConfirmationModal(context, _appointmentData);
+    } else {
+      nextPage();
+    }
   }
 }
 

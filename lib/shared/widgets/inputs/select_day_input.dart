@@ -1,6 +1,31 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_date.dart';
+import 'package:doctodoc_mobile/shared/widgets/inputs/validators/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
+
+class SelectDayValidator extends Validator {
+  final bool required;
+  final String errorMessage = "La date est invalide";
+
+  SelectDayValidator({this.required = true});
+
+  @override
+  String? validation(String? value) {
+    if (value == null || value.isEmpty) {
+      print("value is null or empty");
+      return required ? "La date est requise" : null;
+    }
+
+    final date = Jiffy.parse(value, pattern: 'dd/MM/yyyy');
+    final now = Jiffy.now();
+    if (!date.isSameOrAfter(now, unit: Unit.day)) {
+      return errorMessage;
+    }
+
+    return null;
+  }
+}
 
 class SelectDayInput extends StatefulWidget {
   final TextEditingController controller;
@@ -17,19 +42,21 @@ class SelectDayInput extends StatefulWidget {
 }
 
 class _SelectDayInputState extends State<SelectDayInput> {
-  // late final EmailValidator _validator;
+  late final SelectDayValidator _validator;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // _validator = EmailValidator(required: widget.required ?? true);
+    _validator = SelectDayValidator(required: widget.required ?? true);
   }
 
   @override
   Widget build(BuildContext context) {
     return InputDateNoModal(
+      min: Jiffy.now().dateTime,
+      max: Jiffy.now().clone().add(days: 60).dateTime,
       controller: widget.controller,
-      label: "Date de naissance",
+      validator: _validator.validation,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/shared/config/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
 class InputDate extends StatefulWidget {
   final TextEditingController controller;
@@ -102,13 +103,17 @@ class _InputDateState extends State<InputDate> {
 // todo add reactivity
 // todo add props
 class InputDateNoModal extends StatefulWidget {
+  final DateTime min;
+  final DateTime max;
   final TextEditingController controller;
-  final String label;
+  final String? Function(String?)? validator;
 
   const InputDateNoModal({
     super.key,
     required this.controller,
-    required this.label,
+    required this.min,
+    required this.max,
+    this.validator,
   });
 
   @override
@@ -119,32 +124,53 @@ class _InputDateNoModalState extends State<InputDateNoModal> {
   @override
   Widget build(BuildContext context) {
     DateTime selectedDate = DateTime.now();
+    widget.controller.text = "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year}";
     const inputBorderRadius = 12.0;
 
-    return Material(
-      elevation: 0.5,
-      borderRadius: const BorderRadius.all(Radius.circular(inputBorderRadius)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(inputBorderRadius),
-          border: Border.all(
-            color: Theme.of(context).dividerColor.withAlpha(77),
-            width: 1.0,
-          ),
-        ),
-        child: CalendarDatePicker(
-          initialDate: selectedDate,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2100),
-          onDateChanged: (date) {
-            setState(() {
-              selectedDate = date;
-              widget.controller.text =
-                  "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
-            });
-          },
-        ),
-      ),
+    return FormField<String>(
+      validator: widget.validator,
+      initialValue: widget.controller.text,
+      builder: (formFieldState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Material(
+              elevation: 0.5,
+              borderRadius: const BorderRadius.all(Radius.circular(inputBorderRadius)),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(inputBorderRadius),
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor.withAlpha(77),
+                    width: 1.0,
+                  ),
+                ),
+                child: CalendarDatePicker(
+                  initialDate: selectedDate,
+                  firstDate: widget.min,
+                  lastDate: widget.max,
+                  onDateChanged: (date) {
+                    final formattedDate = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+                    setState(() {
+                      formFieldState.didChange(formattedDate);
+                      selectedDate = date;
+                      widget.controller.text = formattedDate;
+                    });
+                  },
+                ),
+              ),
+            ),
+            if (formFieldState.hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  formFieldState.errorText!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

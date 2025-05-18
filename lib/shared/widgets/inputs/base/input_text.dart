@@ -23,6 +23,7 @@ class InputText extends StatefulWidget {
   final List<TextInputFormatter>? mask;
   final InputKeyboardType? keyboardType;
   final Function? onChange;
+  final bool? required;
 
   const InputText({
     super.key,
@@ -34,6 +35,7 @@ class InputText extends StatefulWidget {
     this.validator,
     this.mask,
     this.onChange,
+    this.required = false,
   });
 
   @override
@@ -52,9 +54,15 @@ class _InputTextState extends State<InputText> {
       elevation: 0.5,
       borderRadius: const BorderRadius.all(Radius.circular(inputBorderRadius)),
       child: TextFormField(
-        validator: widget.validator != null
-            ? (value) => widget.validator!(value)
-            : null,
+        validator: (value) {
+          if (widget.required == true && (value == null || value.trim().isEmpty)) {
+            return 'Ce champ est requis';
+          }
+          if (widget.validator != null) {
+            return widget.validator!(value);
+          }
+          return null;
+        },
         keyboardType: _mapKeyboardType(widget.keyboardType),
         controller: widget.controller,
         inputFormatters: widget.mask,
