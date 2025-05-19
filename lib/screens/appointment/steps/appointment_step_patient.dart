@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,18 @@ class AppointmentStepPatient extends StatefulWidget {
 
 class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
   final TextEditingController _patientController = TextEditingController();
+  List<PatientItem> patients = [
+    PatientItem(
+      patientId: "patientId1",
+      firstname: "Corentin",
+      lastname: "Lechene",
+    ),
+    PatientItem(
+      patientId: "patientId2",
+      firstname: "Bernard",
+      lastname: "Lechene",
+    ),
+  ];
 
   //todo mélissa
   bool _isLoading = true;
@@ -63,24 +76,24 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
             children: [
               AppointmentLabel(
                 label: "Selectionner le patient",
-                onTap: () {
-                  print("Label tapped");
+                onTap: () async {
+                  final patient = await showCreatePatientModal(context);
+                  if (patient != null) {
+                    final newPatient = PatientItem(
+                      patientId: patient.id,
+                      firstname: patient.firstName,
+                      lastname: patient.lastName,
+                    );
+
+                    setState(() {
+                      patients.add(newPatient);
+                    });
+                  }
                 },
               ),
               PatientSelection(
                 controller: _patientController,
-                patients: const [
-                  PatientItem(
-                    patientId: "patientId1",
-                    firstname: "Corentin",
-                    lastname: "Lechene",
-                  ),
-                  PatientItem(
-                    patientId: "patientId2",
-                    firstname: "Bernard",
-                    lastname: "Lechene",
-                  ),
-                ],
+                patients: patients,
                 onChange: (patient) {
                   widget.onNext(patient);
                 },
