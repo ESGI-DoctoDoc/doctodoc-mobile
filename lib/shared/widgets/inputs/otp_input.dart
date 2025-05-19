@@ -18,6 +18,9 @@ class OtpInput extends StatelessWidget {
       numberOfFields: 6,
       borderColor: Colors.black,
       showFieldAsBox: true,
+      onCodeChanged: (onChanged) {
+        onSubmit(onChanged);
+      },
       onSubmit: (onSubmit) {
         this.onSubmit(onSubmit);
       },
