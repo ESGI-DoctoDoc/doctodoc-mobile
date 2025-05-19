@@ -67,73 +67,78 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return previous.onBoardingStatus != current.onBoardingStatus;
       },
       listener: _onBoardingListener,
-      child: Scaffold(
-        appBar: OnboardingAppBar(
-          step: _currentStep,
-          numberOfPages: numberOfPages,
-          onBackButtonPressed: () {
-            print("->>");
-            print(_pageController.page);
-            if(_pageController.page != 0) {
-              _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            } else {
-              //todo mélissa ici il faut déco le gars
-            }
-          },
-        ),
-        body: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            OnboardingNameStep(
-              onNext: (isValid, firstName, lastName) {
-                _userData.firstName = firstName;
-                _userData.lastName = lastName;
-                setState(() {
-                  canGoNext = isValid;
-                });
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Scaffold(
+            appBar: OnboardingAppBar(
+              step: _currentStep,
+              numberOfPages: numberOfPages,
+              onBackButtonPressed: () {
+                print("->>");
+                print(_pageController.page);
+                if(_pageController.page != 0) {
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                } else {
+                  //todo mélissa ici il faut déco le gars
+                }
               },
             ),
-            OnboardingBirthDateStep(
-              onNext: (isValid, birthDate) {
-                _userData.birthDate = birthDate;
-                setState(() {
-                  canGoNext = isValid;
-                });
-              },
-            ),
-            OnboardingGeneralPractitionerStep(
-              onFinished: (doctorId) {
-                _userData.generalPractitioner = doctorId;
-                canGoNext = true;
-              },
-              onSkip: () {
-                _userData.generalPractitioner = "";
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  setState(() {
+            body: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                OnboardingNameStep(
+                  onNext: (isValid, firstName, lastName) {
+                    _userData.firstName = firstName;
+                    _userData.lastName = lastName;
+                    setState(() {
+                      canGoNext = isValid;
+                    });
+                  },
+                ),
+                OnboardingBirthDateStep(
+                  onNext: (isValid, birthDate) {
+                    _userData.birthDate = birthDate;
+                    setState(() {
+                      canGoNext = isValid;
+                    });
+                  },
+                ),
+                OnboardingGeneralPractitionerStep(
+                  onFinished: (doctorId) {
+                    _userData.generalPractitioner = doctorId;
                     canGoNext = true;
-                  });
-                });
-              },
+                  },
+                  onSkip: () {
+                    _userData.generalPractitioner = "";
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        canGoNext = true;
+                      });
+                    });
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: PrimaryButton(
-            label: _currentStep == numberOfPages - 1 ? "Terminer" : "Continuer",
-            isLoading: isLoading,
-            disabled: !canGoNext,
-            onTap: () {
-              if (_currentStep == numberOfPages - 1) {
-                _onBoardingDone(context);
-              } else {
-                _nextPage();
-              }
-            },
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: PrimaryButton(
+                label: _currentStep == numberOfPages - 1 ? "Terminer" : "Continuer",
+                isLoading: isLoading,
+                disabled: !canGoNext,
+                onTap: () {
+                  if (_currentStep == numberOfPages - 1) {
+                    _onBoardingDone(context);
+                  } else {
+                    _nextPage();
+                  }
+                },
+              ),
+            ),
           ),
         ),
       ),

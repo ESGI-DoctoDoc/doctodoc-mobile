@@ -44,50 +44,55 @@ class _OtpScreenState extends State<OtpScreen> {
         return previous != current;
       },
       listener: _authListener,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left_outlined, size: 35),
-            onPressed: () => _logoutUser(context),
-          ),
-          title: const Text(
-            "Vérification du compte",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Text(
-                "Un code vous a été envoyé par SMS, saisissez-le ci-dessous.",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.chevron_left_outlined, size: 35),
+                onPressed: () => _logoutUser(context),
               ),
-              const SizedBox(height: 20),
-              OtpInput(
-                controller: codeController,
-                onSubmit: (otpCode) {
-                  setState(() {
-                    code = otpCode;
-                    canGoNext = otpCode.length == 6;
-                  });
-                },
+              title: const Text(
+                "Vérification du compte",
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: PrimaryButton(
-            label: "Continuer",
-            isLoading: isLoading,
-            disabled: !canGoNext,
-            onTap: () => _validateCode(context, code),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const Text(
+                    "Un code vous a été envoyé par SMS, saisissez-le ci-dessous.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  OtpInput(
+                    controller: codeController,
+                    onSubmit: (otpCode) {
+                      setState(() {
+                        code = otpCode;
+                        canGoNext = otpCode.length == 6;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: PrimaryButton(
+                label: "Continuer",
+                isLoading: isLoading,
+                disabled: !canGoNext,
+                onTap: () => _validateCode(context, code),
+              ),
+            ),
           ),
         ),
       ),
