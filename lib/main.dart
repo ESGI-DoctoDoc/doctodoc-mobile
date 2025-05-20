@@ -1,13 +1,15 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
-import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
+import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/auth_data_source/remote_auth_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/register_data_source/remote_register_data_source.dart';
+import 'package:doctodoc_mobile/services/data_sources/user_data_source/remote_user_data_source.dart';
 import 'package:doctodoc_mobile/services/dio_client.dart';
 import 'package:doctodoc_mobile/services/repositories/auth_repository/auth_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/register_repository/register_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:doctodoc_mobile/shared/config/theme.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +35,10 @@ void main() async {
   if (isLoggedIn && hasTwoFactor == false) {
     print("User is logged in but has not completed two-factor authentication");
     await sharedPreferences.reset();
-  } else if(isLoggedIn && hasOnboarded == false) {
+  } else if (isLoggedIn && hasOnboarded == false) {
     print("User is logged in but has not completed onboarding");
     nextScreen = const OnboardingScreen();
-  } else if(isLoggedIn && hasTwoFactor == true && hasOnboarded == true) {
+  } else if (isLoggedIn && hasTwoFactor == true && hasOnboarded == true) {
     print("User is logged in and has completed onboarding");
     nextScreen = const HomeScreen();
   }
@@ -74,12 +76,23 @@ class MyApp extends StatelessWidget {
             localAuthDataSource: SharedPreferencesAuthDataSource(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => UserRepository(
+            userDataSource: RemoteUserDataSource(
+              dio: DioClient(
+                localAuthDataSource: SharedPreferencesAuthDataSource(),
+              ).dio,
+            ),
+            localAuthDataSource: SharedPreferencesAuthDataSource(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
+              localAuthDataSource: SharedPreferencesAuthDataSource(),
             ),
           ),
           BlocProvider(

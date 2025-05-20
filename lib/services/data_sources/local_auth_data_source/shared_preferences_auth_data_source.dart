@@ -59,4 +59,10 @@ class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
     await preferences.remove(_userOnBoardingStatusKey);
     await preferences.remove(_userPatientId);
   }
+
+  @override
+  Future<String?> retrieveUserPatientId() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getString(_userPatientId) ?? '';
+  }
 }

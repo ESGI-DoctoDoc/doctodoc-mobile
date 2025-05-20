@@ -15,11 +15,11 @@ class Patient {
 
   factory Patient.fromJson(Map<String, dynamic> json) {
     return Patient(
-      id: json['id'],
-      lastName: json['lastName'],
-      firstName: json['firstName'],
-      email: json['email'],
-      phoneNumber: json['phoneNumber'],
+      id: json['id'] ?? '',
+      lastName: json['lastName'] ?? '',
+      firstName: json['firstName'] ?? '',
+      email: json['email'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
     );
   }
 }

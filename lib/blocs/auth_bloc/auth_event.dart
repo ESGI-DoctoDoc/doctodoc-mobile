@@ -18,3 +18,5 @@ class OnSecondFactorAuthentication extends AuthEvent {
     required this.doubleAuthCode,
   });
 }
+
+class OnLogout extends AuthEvent {}

@@ -32,9 +32,9 @@ class AuthRepository {
       User user = await authDataSource.validateDoubleAuthCode(doubleAuthCode);
       localAuthDataSource.saveUser(
         user.hasOnBoardingDone,
-        user.patientId.toString(),
+        user.patientInfos.id.toString(),
       );
-      localAuthDataSource.saveToken(user.auth.token);
+      localAuthDataSource.saveToken(user.token);
     } on DioException catch (error) {
       print(error.response?.data);
       throw UnknownException();

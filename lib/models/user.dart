@@ -1,34 +1,24 @@
-import 'package:doctodoc_mobile/models/auth.dart';
+import 'package:doctodoc_mobile/models/patient.dart';
 
 class User {
-  final Auth auth;
-  final String patientId;
-  final String lastName;
-  final String firstName;
-  final String email;
-  final String phoneNumber;
+  final String token;
+  final Patient patientInfos;
   final bool hasOnBoardingDone;
+  final List<Patient> closeMembers;
 
   User({
-    required this.auth,
-    required this.patientId,
-    required this.lastName,
-    required this.firstName,
-    required this.email,
-    required this.phoneNumber,
+    required this.token,
+    required this.patientInfos,
     required this.hasOnBoardingDone,
+    this.closeMembers = const [],
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    Auth auth = Auth.fromJson(json);
+    Patient patient = Patient.fromJson(json);
 
     return User(
-      auth: auth,
-      patientId: json['id'] ?? '',
-      lastName: json['lastName'] ?? '',
-      firstName: json['firstName'] ?? '',
-      email: json['email'] ?? '',
-      phoneNumber: json['phoneNumber'] ?? '',
+      token: json['token'] ?? '',
+      patientInfos: patient,
       hasOnBoardingDone: json['hasOnBoardingDone'] ?? false,
     );
   }

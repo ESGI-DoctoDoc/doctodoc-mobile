@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/local_auth_data_source.dart';
 import 'package:meta/meta.dart';
 
 import '../../exceptions/app_exception.dart';
@@ -10,12 +11,15 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
+  final LocalAuthDataSource localAuthDataSource;
 
   AuthBloc({
     required this.authRepository,
+    required this.localAuthDataSource,
   }) : super(AuthState()) {
     on<OnFirstFactorAuthentication>(_onFirstFactorAuthentication);
     on<OnSecondFactorAuthentication>(_onSecondFactorAuthentication);
+    on<OnLogout>(_onLogout);
   }
 
   Future<void> _onFirstFactorAuthentication(
@@ -55,5 +59,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         exception: AppException.from(error),
       ));
     }
+  }
+
+  Future<void> _onLogout(OnLogout event, Emitter<AuthState> emit) async {
+    await localAuthDataSource.reset();
+    emit(state.copyWith(status: AuthStatus.notAuthenticated));
   }
 }

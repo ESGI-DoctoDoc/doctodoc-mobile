@@ -14,4 +14,6 @@ abstract class LocalAuthDataSource {
   Future<void> saveUser(bool hasOnboarded, String patientId);
 
   Future<void> reset();
+
+  Future<String?> retrieveUserPatientId();
 }
