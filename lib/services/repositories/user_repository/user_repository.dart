@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/local_auth_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/user_data_source/user_data_source.dart';
 
@@ -20,6 +21,19 @@ class UserRepository {
         throw UnknownException();
       } else {
         return await userDataSource.getUserPatient(userPatientId);
+      }
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<List<Patient>> getCloseMembers() async {
+    try {
+      String? userPatientId = await localAuthDataSource.retrieveUserPatientId();
+      if (userPatientId == null) {
+        throw UnknownException();
+      } else {
+        return await userDataSource.getUserCloseMembers(userPatientId);
       }
     } catch (error) {
       throw UnknownException();

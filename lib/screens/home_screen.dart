@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           return switch (state) {
-            UserLoading() || UserLoading() => _buildLoading(context),
+            UserLoading() || UserInitial() => _buildLoading(context),
             UserLoaded() => _buildSuccess(context, state.user),
             UserError() || UserState() => _buildError(),
           };
@@ -76,18 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           PrimaryButton(
             label: "prendre rendez-vous",
-            onTap: () {
-              AppointmentScreen.navigateTo(
-                context,
-                doctorId: "doctorId",
-                doctorFirstName: "Corentin",
-                doctorLastName: "LECHENE",
-                doctorPictureUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
-                latitude: 48.860640,
-                longitude: 2.510171,
-              );
-            },
-          )
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<UserBloc>(), // on propage l'instance existante
+                      child: const AppointmentScreen(
+                        doctorId: "doctorId",
+                        doctorFirstName: "Corentin",
+                        doctorLastName: "LECHENE",
+                        doctorPictureUrl:
+                            "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
+                        latitude: 48.860640,
+                        longitude: 2.510171,
+                      ),
+                    ),
+                  ),
+                );
+              })
         ],
       ),
     );

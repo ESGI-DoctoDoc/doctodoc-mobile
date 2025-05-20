@@ -14,17 +14,44 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({
     required this.userRepository,
   }) : super(UserInitial()) {
-    on<OnUserLoaded>(_onUserLoaded);
-    add(OnUserLoaded());
+    on<OnUserLoadedBasicInfos>(_onUserLoadedBasicInfos);
+    add(OnUserLoadedBasicInfos());
+
+    on<OnUserLoadedCloseMembers>(_onUserLoadedCloseMembers);
   }
 
-  Future<void> _onUserLoaded(OnUserLoaded event, Emitter<UserState> emit) async {
+  Future<void> _onUserLoadedBasicInfos(
+      OnUserLoadedBasicInfos event, Emitter<UserState> emit) async {
     try {
       emit(UserLoading());
       final user = await userRepository.getUser();
       emit(UserLoaded(user));
     } catch (error) {
       emit(UserError(exception: AppException.from(error)));
+    }
+  }
+
+  Future<void> _onUserLoadedCloseMembers(
+      OnUserLoadedCloseMembers event, Emitter<UserState> emit) async {
+    if (state is! UserLoaded) return;
+
+    final currentState = state as UserLoaded;
+
+    try {
+      emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.loading));
+      final closesMembers = await userRepository.getCloseMembers();
+
+      final user = currentState.user;
+      user.closeMembers = closesMembers;
+
+      emit(currentState.copyWith(user: user, getCloseMembersStatus: GetCloseMembersStatus.success));
+    } catch (error) {
+      if (state is! UserLoaded) {
+        emit(UserError(exception: AppException.from(error)));
+      } else {
+        final currentState = state as UserLoaded;
+        emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.error));
+      }
     }
   }
 }

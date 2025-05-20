@@ -4,7 +4,7 @@ class User {
   final String token;
   final Patient patientInfos;
   final bool hasOnBoardingDone;
-  final List<Patient> closeMembers;
+  List<Patient> closeMembers;
 
   User({
     required this.token,

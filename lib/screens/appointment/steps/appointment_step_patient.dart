@@ -1,8 +1,11 @@
+import 'package:doctodoc_mobile/blocs/user_bloc/user_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../models/user.dart';
 import '../../../shared/widgets/inputs/patient_selection.dart';
 import '../widgets/onboarding_loading.dart';
 
@@ -22,31 +25,11 @@ class AppointmentStepPatient extends StatefulWidget {
 
 class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
   final TextEditingController _patientController = TextEditingController();
-  List<PatientItem> patients = [
-    PatientItem(
-      patientId: "patientId1",
-      firstname: "Corentin",
-      lastname: "Lechene",
-    ),
-    PatientItem(
-      patientId: "patientId2",
-      firstname: "Bernard",
-      lastname: "Lechene",
-    ),
-  ];
-
-  //todo mélissa
-  bool _isLoading = true;
-  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 150), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _fetchCloseMembers();
   }
 
   @override
@@ -57,16 +40,38 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const OnboardingLoading();
-    } else if (_hasError) {
-      return _buildError();
-    } else {
-      return _buildSuccess();
-    }
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        return switch (state) {
+          UserLoaded() => _buildUserLoadedSuccess(state),
+          UserState() => _buildError(),
+        };
+      },
+    );
   }
 
-  Widget _buildSuccess() {
+  Widget _buildUserLoadedSuccess(UserLoaded state) {
+    return switch (state.getCloseMembersStatus) {
+      GetCloseMembersStatus.initial || GetCloseMembersStatus.loading => const OnboardingLoading(),
+      GetCloseMembersStatus.success => _buildSuccess(state.user),
+      GetCloseMembersStatus.error => _buildError(),
+    };
+  }
+
+  Widget _buildSuccess(User user) {
+    final patients = [...user.closeMembers, user.patientInfos];
+    List<PatientItem> patientItems = [];
+
+    patientItems.addAll(
+      patients.map(
+        (patient) => PatientItem(
+          patientId: patient.id,
+          firstname: patient.firstName,
+          lastname: patient.lastName,
+        ),
+      ),
+    );
+
     return SingleChildScrollView(
       child: Form(
         key: widget.formKey,
@@ -86,14 +91,14 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
                     );
 
                     setState(() {
-                      patients.add(newPatient);
+                      patientItems.add(newPatient);
                     });
                   }
                 },
               ),
               PatientSelection(
                 controller: _patientController,
-                patients: patients,
+                patients: patientItems,
                 onChange: (patient) {
                   widget.onNext(patient);
                 },
@@ -109,5 +114,10 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
     return const Center(
       child: Text("Une erreur s'est produite."),
     );
+  }
+
+  void _fetchCloseMembers() {
+    final userBloc = context.read<UserBloc>();
+    userBloc.add(OnUserLoadedCloseMembers());
   }
 }

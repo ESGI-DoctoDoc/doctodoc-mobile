@@ -93,12 +93,13 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
     });
     // Simulate returning patient after creation
     Future.delayed(Duration.zero, () {
-      Navigator.of(context).pop(Patient(firstNameController.text, lastNameController.text, "mockedId"));
+      Navigator.of(context)
+          .pop(CreatePatientRequest(firstNameController.text, lastNameController.text, "mockedId"));
     });
   }
 }
 
-Future<Patient?> showCreatePatientModal(BuildContext context) {
+Future<CreatePatientRequest?> showCreatePatientModal(BuildContext context) {
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -132,10 +133,10 @@ Future<Patient?> showCreatePatientModal(BuildContext context) {
 }
 
 //todo remove this class and create the real one
-class Patient {
+class CreatePatientRequest {
   final String firstName;
   final String lastName;
   final String id;
 
-  Patient(this.firstName, this.lastName, this.id);
+  CreatePatientRequest(this.firstName, this.lastName, this.id);
 }
