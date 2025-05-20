@@ -1,15 +1,20 @@
+import 'package:doctodoc_mobile/blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
+import 'package:doctodoc_mobile/models/appointment/medical_concern.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../shared/widgets/inputs/medical_concern_selection.dart';
 import '../widgets/onboarding_loading.dart';
 
 class AppointmentStepMedicalConcern extends StatefulWidget {
+  final String doctorId;
   final GlobalKey<FormState> formKey;
   final Function(String) onNext;
 
   const AppointmentStepMedicalConcern({
     super.key,
+    required this.doctorId,
     required this.formKey,
     required this.onNext,
   });
@@ -21,20 +26,33 @@ class AppointmentStepMedicalConcern extends StatefulWidget {
 class _AppointmentStepMedicalConcernState extends State<AppointmentStepMedicalConcern> {
   final TextEditingController _medicalConcernController = TextEditingController();
 
-  bool _isLoading = true;
-  bool _hasError = false;
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 150), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _fetchMedicalConcerns();
   }
 
-  Widget _buildSuccess() {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
+      builder: (context, state) {
+        return switch (state.getMedicalConcernsStatus) {
+          GetMedicalConcernsStatus.initial ||
+          GetMedicalConcernsStatus.loading =>
+            const OnboardingLoading(),
+          GetMedicalConcernsStatus.success => _buildSuccess(state.medicalConcerns),
+          GetMedicalConcernsStatus.error => _buildError(),
+        };
+      },
+    );
+  }
+
+  Widget _buildSuccess(List<MedicalConcern> medicalConcerns) {
+    List<MedicalConcernItem> medicalConcernItems = medicalConcerns
+        .map((medicalConcern) =>
+            MedicalConcernItem(medicalConcernId: medicalConcern.id, name: medicalConcern.name))
+        .toList();
+
     return SingleChildScrollView(
       child: Form(
         key: widget.formKey,
@@ -45,20 +63,7 @@ class _AppointmentStepMedicalConcernState extends State<AppointmentStepMedicalCo
               const AppointmentLabel(label: "Sélectionner le motif de consultation"),
               MedicalConcernSelection(
                 controller: _medicalConcernController,
-                medicalConcerns: const [
-                  MedicalConcernItem(
-                    medicalConcernId: "medicalConcernId1",
-                    name: "Consultation de routine",
-                  ),
-                  MedicalConcernItem(
-                    medicalConcernId: "medicalConcernId2",
-                    name: "Suivi de traitement",
-                  ),
-                  MedicalConcernItem(
-                    medicalConcernId: "medicalConcernId3",
-                    name: "Urgence médicale",
-                  ),
-                ],
+                medicalConcerns: medicalConcernItems,
                 onChange: (item) {
                   print("Selected medical concern: ${item.label}");
                   widget.onNext(item.value);
@@ -77,14 +82,8 @@ class _AppointmentStepMedicalConcernState extends State<AppointmentStepMedicalCo
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const OnboardingLoading();
-    } else if (_hasError) {
-      return _buildError();
-    } else {
-      return _buildSuccess();
-    }
+  void _fetchMedicalConcerns() {
+    final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
+    appointmentFlowBloc.add(GetMedicalConcerns(doctorId: widget.doctorId));
   }
 }

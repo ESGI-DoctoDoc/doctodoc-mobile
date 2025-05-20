@@ -22,10 +22,12 @@ class SelectHourValidator extends Validator {
 class SelectHourItem extends InputChoiceItem {
   final String startTime;
   final String slotId;
+  final bool isBooked;
 
   const SelectHourItem({
     required this.startTime,
     required this.slotId,
+    required this.isBooked,
   }) : super(label: startTime, value: slotId);
 }
 

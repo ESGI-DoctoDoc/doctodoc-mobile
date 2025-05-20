@@ -5,10 +5,8 @@ import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_medic
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_patient.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_confirm_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/patient.dart';
 import '../../shared/widgets/inputs/patient_selection.dart';
 import 'widgets/appointment_app_bar.dart';
 
@@ -119,12 +117,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 },
               ),
               AppointmentStepMedicalConcern(
+                doctorId: _appointmentData.doctorId,
                 formKey: forms[1],
                 onNext: (String concern) {
                   _appointmentData.consultationConcern = concern;
                 },
               ),
               AppointmentStepDoctorQuestions(
+                medicalConcernId: _appointmentData.consultationConcern ??
+                    '00000000-0000-0000-0000-000000000001', // todo Corentin
                 formKey: forms[2],
                 onEmpty: () {
                   // handleNextPage();
@@ -140,6 +141,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 },
               ),
               AppointmentStepDate(
+                medicalConcernId: _appointmentData.consultationConcern ??
+                    '00000000-0000-0000-0000-000000000001', // todo Corentin
                 formKey: forms[4],
               ),
             ],
@@ -155,11 +158,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               ),
             ),
             child: PrimaryButton(
-              label: "Continuer",
-              onTap: () {
-                handleNextPage();
-              }
-            ),
+                label: "Continuer",
+                onTap: () {
+                  // todo : call a route to lock the appointment
+                  handleNextPage();
+                }),
           ),
         ),
       ),
@@ -178,13 +181,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
     final formKey = forms[currentPage];
     final formState = formKey.currentState;
-    if(formState == null) {
+    if (formState == null) {
       nextPage();
       return;
     }
 
     canGoNext = formState.validate();
-    if(!canGoNext) {
+    if (!canGoNext) {
       print("Form is not valid");
       return;
     }

@@ -1,17 +1,21 @@
+import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_selection.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/doctor_question_input.dart';
-import 'package:doctodoc_mobile/shared/widgets/inputs/gender_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import '../widgets/appointment_label.dart';
 import '../widgets/onboarding_loading.dart';
 
 class AppointmentStepDoctorQuestions extends StatefulWidget {
+  final String medicalConcernId;
   final GlobalKey<FormState> formKey;
   final VoidCallback onEmpty;
 
   const AppointmentStepDoctorQuestions({
     super.key,
+    required this.medicalConcernId,
     required this.formKey,
     required this.onEmpty,
   });
@@ -22,61 +26,26 @@ class AppointmentStepDoctorQuestions extends StatefulWidget {
 
 class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQuestions> {
   late List<TextEditingController> _controllers;
-  bool _isLoading = true;
-  bool _hasError = false;
-  List<DoctorQuestion> _questions = [
-    DoctorQuestion(
-      type: DoctorQuestionType.list,
-      question: "Quel est votre sexe ?",
-      required: true,
-      options: const [
-        InputSelectionItem(label: "Homme", value: "man"),
-        InputSelectionItem(label: "Femme", value: "woman"),
-      ],
-    ),
-    DoctorQuestion(
-      type: DoctorQuestionType.yesNo,
-      question: "Tu aimes ce design ?",
-      required: true,
-    ),
-    DoctorQuestion(
-      type: DoctorQuestionType.text,
-      question: "La question qui fache !",
-      required: true,
-    ),
-    DoctorQuestion(
-      type: DoctorQuestionType.list,
-      question: "Quel est votre sexe ?",
-      required: false,
-      options: const [
-        InputSelectionItem(label: "Homme", value: "man"),
-        InputSelectionItem(label: "Femme", value: "woman"),
-      ],
-    ),
-    DoctorQuestion(
-      type: DoctorQuestionType.yesNo,
-      question: "Tu aimes ce design ?",
-      required: false,
-    ),
-    DoctorQuestion(
-      type: DoctorQuestionType.text,
-      question: "La question qui fache !",
-      required: false,
-    ),
-  ];
+  List<DoctorQuestion> _questions = [];
 
   @override
   void initState() {
     super.initState();
     _controllers = List.generate(_questions.length, (_) => TextEditingController());
-    Future.delayed(const Duration(milliseconds: 150), () {
-      setState(() {
-        _isLoading = false;
-      });
-      if (_questions.isEmpty) {
-        widget.onEmpty();
-      }
-    });
+    _fetchQuestions();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
+      builder: (context, state) {
+        return switch (state.getQuestionStatus) {
+          GetQuestionStatus.initial || GetQuestionStatus.loading => const OnboardingLoading(),
+          GetQuestionStatus.success => _buildSuccess(state.questions),
+          GetQuestionStatus.error => _buildError(),
+        };
+      },
+    );
   }
 
   List<Widget> _buildQuestions() {
@@ -100,7 +69,23 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
     }
   }
 
-  Widget _buildSuccess() {
+  Widget _buildSuccess(List<MedicalConcernQuestion> questions) {
+    if (questions.isEmpty) {
+      widget.onEmpty;
+    } else {
+      _questions = questions
+          .map((question) => DoctorQuestion(
+              type: question.type,
+              question: question.question,
+              required: question.required,
+              options: question.options
+                  .map((option) => InputSelectionItem(label: option, value: option))
+                  .toList()))
+          .toList();
+
+      _controllers = List.generate(_questions.length, (_) => TextEditingController());
+    }
+
     return SingleChildScrollView(
       child: Form(
         key: widget.formKey,
@@ -120,14 +105,8 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const OnboardingLoading();
-    } else if (_hasError) {
-      return _buildError();
-    } else {
-      return _buildSuccess();
-    }
+  void _fetchQuestions() {
+    final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
+    appointmentFlowBloc.add(GetQuestions(medicalConcernId: widget.medicalConcernId));
   }
 }

@@ -15,8 +15,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     required this.userRepository,
   }) : super(UserInitial()) {
     on<OnUserLoadedBasicInfos>(_onUserLoadedBasicInfos);
-    add(OnUserLoadedBasicInfos());
-
     on<OnUserLoadedCloseMembers>(_onUserLoadedCloseMembers);
   }
 

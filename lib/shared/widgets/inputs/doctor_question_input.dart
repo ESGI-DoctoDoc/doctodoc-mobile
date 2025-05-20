@@ -1,13 +1,12 @@
+import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_selection.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_text.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/yes_no_input.dart';
 import 'package:flutter/material.dart';
 
-enum DoctorQuestionType { list, yesNo, text }
-
 class DoctorQuestion {
-  final DoctorQuestionType type;
+  final MedicalConcernQuestionType type;
   final String question;
   final bool required;
   final List<InputSelectionItem> options;
@@ -42,7 +41,7 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
 
   Column _buildInput() {
     switch (widget.question.type) {
-      case DoctorQuestionType.list:
+      case MedicalConcernQuestionType.list:
         return Column(
           children: [
             AppointmentLabel(label: widget.question.question),
@@ -54,14 +53,14 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
             ),
           ],
         );
-      case DoctorQuestionType.yesNo:
+      case MedicalConcernQuestionType.yesNo:
         return Column(
           children: [
             AppointmentLabel(label: widget.question.question),
             YesNoInput(controller: widget.controller, required: widget.question.required),
           ],
         );
-      case DoctorQuestionType.text:
+      case MedicalConcernQuestionType.text:
         return Column(
           children: [
             AppointmentLabel(label: widget.question.question),
