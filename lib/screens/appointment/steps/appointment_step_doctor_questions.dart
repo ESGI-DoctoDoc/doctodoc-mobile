@@ -9,15 +9,15 @@ import '../widgets/appointment_label.dart';
 import '../widgets/onboarding_loading.dart';
 
 class AppointmentStepDoctorQuestions extends StatefulWidget {
-  final String medicalConcernId;
+  final String? medicalConcernId;
   final GlobalKey<FormState> formKey;
   final VoidCallback onEmpty;
 
   const AppointmentStepDoctorQuestions({
     super.key,
-    required this.medicalConcernId,
     required this.formKey,
     required this.onEmpty,
+    this.medicalConcernId,
   });
 
   @override
@@ -31,7 +31,6 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(_questions.length, (_) => TextEditingController());
     _fetchQuestions();
   }
 
@@ -72,6 +71,8 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
   Widget _buildSuccess(List<MedicalConcernQuestion> questions) {
     if (questions.isEmpty) {
       widget.onEmpty;
+      _questions = [];
+      _controllers = [];
     } else {
       _questions = questions
           .map((question) => DoctorQuestion(
@@ -107,6 +108,8 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
 
   void _fetchQuestions() {
     final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
-    appointmentFlowBloc.add(GetQuestions(medicalConcernId: widget.medicalConcernId));
+    if(widget.medicalConcernId != null) {
+      appointmentFlowBloc.add(GetQuestions(medicalConcernId: widget.medicalConcernId!));
+    }
   }
 }

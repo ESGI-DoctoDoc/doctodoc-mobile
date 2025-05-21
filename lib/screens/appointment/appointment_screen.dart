@@ -7,7 +7,6 @@ import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_confirm_
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/widgets/inputs/patient_selection.dart';
 import 'widgets/appointment_app_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -106,46 +105,53 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               }
             },
           ),
-          body: PageView(
+          body: PageView.builder(
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
-            children: [
-              AppointmentStepPatient(
-                formKey: forms[0],
-                onNext: (PatientItem patient) {
-                  _appointmentData.patientId = patient.patientId;
-                },
-              ),
-              AppointmentStepMedicalConcern(
-                doctorId: _appointmentData.doctorId,
-                formKey: forms[1],
-                onNext: (String concern) {
-                  _appointmentData.consultationConcern = concern;
-                },
-              ),
-              AppointmentStepDoctorQuestions(
-                medicalConcernId: _appointmentData.consultationConcern ??
-                    '00000000-0000-0000-0000-000000000001', // todo Corentin
-                formKey: forms[2],
-                onEmpty: () {
-                  // handleNextPage();
-                },
-              ),
-              AppointmentStepCareTracking(
-                formKey: forms[3],
-                onEmpty: () {
-                  // handleNextPage();
-                },
-                onNext: (String careTrackingId) {
-                  _appointmentData.careTrackingId = careTrackingId;
-                },
-              ),
-              AppointmentStepDate(
-                medicalConcernId: _appointmentData.consultationConcern ??
-                    '00000000-0000-0000-0000-000000000001', // todo Corentin
-                formKey: forms[4],
-              ),
-            ],
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              switch (index) {
+                case 0:
+                  return AppointmentStepPatient(
+                    formKey: forms[0],
+                    onNext: (patient) {
+                      _appointmentData.patientId = patient.patientId;
+                    },
+                  );
+                case 1:
+                  return AppointmentStepMedicalConcern(
+                    doctorId: _appointmentData.doctorId,
+                    formKey: forms[1],
+                    onNext: (concern) {
+                      setState(() {
+                        _appointmentData.consultationConcern = concern;
+                      });
+                    },
+                  );
+                case 2:
+                  return AppointmentStepDoctorQuestions(
+                    medicalConcernId: _appointmentData.consultationConcern,
+                    formKey: forms[2],
+                    onEmpty: () {},
+                  );
+                case 3:
+                  return AppointmentStepCareTracking(
+                    formKey: forms[3],
+                    onEmpty: () {},
+                    onNext: (careTrackingId) {
+                      _appointmentData.careTrackingId = careTrackingId;
+                    },
+                  );
+                case 4:
+                  return AppointmentStepDate(
+                    medicalConcernId: _appointmentData.consultationConcern ??
+                        '00000000-0000-0000-0000-000000000001',
+                    formKey: forms[4],
+                  );
+                default:
+                  return Container();
+              }
+            },
           ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
