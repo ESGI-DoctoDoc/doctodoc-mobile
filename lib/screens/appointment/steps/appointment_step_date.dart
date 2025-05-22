@@ -51,7 +51,7 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
   Widget _buildSuccess(List<MedicalConcernAppointmentAvailability> appointmentsAvailability) {
     List<SelectHourItem> hours = appointmentsAvailability
         .map((appointmentAvailability) => SelectHourItem(
-              slotId: appointmentAvailability.slotId,
+              slotId: appointmentAvailability.start,
               startTime: appointmentAvailability.start,
               isBooked: appointmentAvailability.isBooked,
             ))

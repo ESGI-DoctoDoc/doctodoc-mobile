@@ -27,8 +27,8 @@ class SelectHourItem extends InputChoiceItem {
   const SelectHourItem({
     required this.startTime,
     required this.slotId,
-    required this.isBooked,
-  }) : super(label: startTime, value: slotId);
+    this.isBooked = false,
+  }) : super(label: startTime, value: slotId, disabled: isBooked);
 }
 
 class SelectHourInput extends StatefulWidget {

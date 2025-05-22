@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class InputChoiceItem {
   final String label;
   final String value;
+  final bool disabled;
 
-  const InputChoiceItem({required this.label, required this.value});
+  const InputChoiceItem({
+    required this.label,
+    required this.value,
+    this.disabled = false,
+  });
 }
 
 class InputChoice extends StatefulWidget {
@@ -70,9 +75,11 @@ class _InputChoiceState extends State<InputChoice> {
                               child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: _isSelected(item)
-                                      ? Theme.of(context).primaryColor.withAlpha(77)
-                                      : Colors.white,
+                                  color: item.disabled
+                                      ? Colors.grey[300]
+                                      : _isSelected(item)
+                                          ? Theme.of(context).primaryColor.withAlpha(77)
+                                          : Colors.white,
                                   border: Border.all(
                                     color: Theme.of(context).dividerColor.withAlpha(90),
                                   ),
@@ -81,19 +88,22 @@ class _InputChoiceState extends State<InputChoice> {
                                 child: Center(
                                   child: Text(
                                     item.label,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      color: item.disabled ? Colors.grey : null,
                                     ),
                                   ),
                                 ),
                               ),
-                              onTap: () {
-                                formFieldState.didChange(item.value); // pour validation
-                                setState(() {
-                                  widget.controller.text = item.value;
-                                });
-                                widget.onChange(item);
-                              },
+                              onTap: item.disabled
+                                  ? null
+                                  : () {
+                                      formFieldState.didChange(item.value); // pour validation
+                                      setState(() {
+                                        widget.controller.text = item.value;
+                                      });
+                                      widget.onChange(item);
+                                    },
                             ),
                           );
                         },
