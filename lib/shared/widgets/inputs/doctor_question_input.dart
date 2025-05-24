@@ -7,14 +7,18 @@ import 'package:flutter/material.dart';
 
 class DoctorQuestion {
   final MedicalConcernQuestionType type;
+  final String questionId;
   final String question;
   final bool required;
   final List<InputSelectionItem> options;
+  final Function(InputSelectionItem) onChange;
 
   DoctorQuestion({
     required this.type,
     required this.question,
+    required this.questionId,
     required this.required,
+    required this.onChange,
     this.options = const [],
   });
 }
@@ -49,7 +53,9 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
               controller: widget.controller,
               items: widget.question.options,
               required: widget.question.required,
-              onChange: (InputSelectionItem item) {},
+              onChange: (InputSelectionItem item) {
+                widget.question.onChange(item);
+              },
             ),
           ],
         );

@@ -99,9 +99,6 @@ class _InputDateState extends State<InputDate> {
   }
 }
 
-// todo add primary color,
-// todo add reactivity
-// todo add props
 class InputDateNoModal extends StatefulWidget {
   final DateTime min;
   final DateTime max;
@@ -121,10 +118,10 @@ class InputDateNoModal extends StatefulWidget {
 }
 
 class _InputDateNoModalState extends State<InputDateNoModal> {
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    DateTime selectedDate = DateTime.now();
-    widget.controller.text = "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year}";
     const inputBorderRadius = 12.0;
 
     return FormField<String>(
@@ -150,12 +147,15 @@ class _InputDateNoModalState extends State<InputDateNoModal> {
                   firstDate: widget.min,
                   lastDate: widget.max,
                   onDateChanged: (date) {
-                    final formattedDate = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+                    print(date.toString());
+                    final dateTime = DateTime(date.year, date.month, date.day);
+                    final formattedDate =
+                        Jiffy.parseFromDateTime(dateTime).format(pattern: 'yyyy-MM-dd').toString();
                     setState(() {
-                      formFieldState.didChange(formattedDate);
                       selectedDate = date;
-                      widget.controller.text = formattedDate;
                     });
+                    formFieldState.didChange(formattedDate);
+                    widget.controller.text = formattedDate;
                   },
                 ),
               ),

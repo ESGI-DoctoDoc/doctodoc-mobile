@@ -1,19 +1,19 @@
 import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../shared/widgets/maps/maps_viewer.dart';
-import '../appointment_screen.dart';
 
 class _AppointmentConfirmWidget extends StatefulWidget {
-  final AppointmentData appointmentData;
+  final AppointmentFlowDataReview appointmentData;
 
   const _AppointmentConfirmWidget({
-    super.key,
     required this.appointmentData,
   });
 
@@ -62,16 +62,17 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                       "Médecin",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text("Dr. Jean Dupont"),
+                    subtitle: Text("Dr. ${widget.appointmentData.doctorData.firstName} ${widget.appointmentData.doctorData.lastName}"),
                   ),
                   Divider(color: const Color(0xFFe0e0e0), thickness: 2),
                   ListTile(
                     leading: Icon(Icons.person),
-                    title: Text(
-                      "Patient",
+                    title: Text("Patient",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text("Oihana LECHENE"),
+                    subtitle: Text(
+                      "${widget.appointmentData.patientData.firstName} ${widget.appointmentData.patientData.lastName}",
+                    ),
                   ),
                   Divider(color: const Color(0xFFe0e0e0), thickness: 2),
                   Padding(
@@ -84,12 +85,12 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                     child: MapsViewer(
                       zoom: 15,
                       center: LatLng(
-                        widget.appointmentData.latitude,
-                        widget.appointmentData.longitude,
+                        widget.appointmentData.doctorData.address.latitude,
+                        widget.appointmentData.doctorData.address.longitude,
                       ),
                       marker: CircleAvatar(
                         radius: 22,
-                        backgroundImage: NetworkImage(widget.appointmentData.doctorPictureUrl),
+                        backgroundImage: NetworkImage(widget.appointmentData.doctorData.pictureUrl),
                       ),
                     ),
                   ),
@@ -114,12 +115,19 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   }
 
   String _formatDate() {
-    final date = widget.appointmentData.date;
-    if (date == null) {
-      return "Date non spécifiée";
+    final date = widget.appointmentData.slotData.date;
+    final time = widget.appointmentData.slotData.time;
+    final parsedDate = Jiffy.parse(date, pattern: 'yyyy-MM-dd');
+    final parsedTime = Jiffy.parse(time, pattern: 'HH:mm');
+
+    Jiffy.setLocale('fr-FR');
+
+    final dateFormatted = parsedDate.format(pattern: 'EEEE d MMMM yyyy');
+    final hour = parsedTime.hour.toString().padLeft(2, '0');
+    final minute = parsedTime.minute.toString().padLeft(2, '0');
+
+    return "$dateFormatted à ${hour}h$minute";
     }
-    return "Mardi 15 Août 2023 à 14h30";
-  }
 
   _onConfirmAppointment() {
     final appointmentBloc = context.read<AppointmentBloc>();
@@ -127,7 +135,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   }
 }
 
-void showAppointmentConfirmationModal(BuildContext context, AppointmentData appointmentData) {
+void showAppointmentConfirmationModal(BuildContext context, AppointmentFlowDataReview appointmentData) {
   void onClosedPopUp() {
     final appointmentBloc = context.read<AppointmentBloc>();
     appointmentBloc.add(OnUnlockedAppointment());

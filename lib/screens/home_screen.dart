@@ -1,3 +1,5 @@
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_doctor_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,14 +83,18 @@ class _HomeScreenState extends State<HomeScreen> {
             label: "prendre rendez-vous",
             onTap: () {
               AppointmentScreen.navigateTo(
-                context,
-                doctorId: "00000000-0000-0000-0000-000000000001",
-                doctorFirstName: "Corentin",
-                doctorLastName: "LECHENE",
-                doctorPictureUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
-                latitude: 48.860640,
-                longitude: 2.510171,
-              );
+                  context,
+                  const AppointmentFlowDoctorData(
+                    doctorId: "00000000-0000-0000-0000-000000000001",
+                    firstName: "Corentin",
+                    lastName: "LECHENE",
+                    pictureUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
+                    address: AppointmentFlowAddressData(
+                      addressId: "addressId",
+                      latitude: 48.860640,
+                      longitude: 2.510171,
+                    ),
+                  ));
             },
           )
         ],

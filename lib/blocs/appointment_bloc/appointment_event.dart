@@ -10,8 +10,7 @@ class OnLockedAppointment extends AppointmentEvent {
   final String slotId;
   final String date;
   final String time;
-
-// todo answers
+  final List<PreAppointmentAnswers> answers;
 
   OnLockedAppointment({
     required this.doctorId,
@@ -20,6 +19,7 @@ class OnLockedAppointment extends AppointmentEvent {
     required this.slotId,
     required this.date,
     required this.time,
+    required this.answers,
   });
 }
 

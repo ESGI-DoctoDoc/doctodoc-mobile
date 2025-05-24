@@ -1,11 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/services/dtos/locked_appointment_request.dart';
+import 'package:doctodoc_mobile/services/dtos/pre_appointment_answers.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
 import 'package:meta/meta.dart';
 
 import '../../exceptions/app_exception.dart';
 
 part 'appointment_event.dart';
+
 part 'appointment_state.dart';
 
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
@@ -27,12 +29,15 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
         slotId: event.slotId,
         date: event.date,
         time: event.time,
+        answers: event.answers,
       );
 
       String appointmentLockedId = await appointmentRepository.lockedAppointment(request);
       print(appointmentLockedId);
       emit(AppointmentLocked(
-          status: AppointmentLockedStatus.success, appointmentLockedId: appointmentLockedId));
+        status: AppointmentLockedStatus.success,
+        appointmentLockedId: appointmentLockedId,
+      ));
     } catch (error) {
       emit(AppointmentLocked(
         status: AppointmentLockedStatus.error,

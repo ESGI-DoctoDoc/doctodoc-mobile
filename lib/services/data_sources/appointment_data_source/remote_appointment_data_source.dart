@@ -21,6 +21,10 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
         "slotId": request.slotId,
         "date": request.date,
         "time": request.time,
+        "responses": request.answers.map((answer) => {
+          "questionId": answer.questionId,
+          "answer": answer.answer,
+        }).toList(),
       }),
     );
 

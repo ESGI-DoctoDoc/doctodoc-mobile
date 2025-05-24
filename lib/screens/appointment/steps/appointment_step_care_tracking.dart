@@ -32,20 +32,7 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
         _isLoading = false;
-        _careTrackings = const [
-          CareTrackingItem(
-            careTrackingId: "careTrackingId1",
-            careTrackingName: "dossier 1",
-          ),
-          CareTrackingItem(
-            careTrackingId: "careTrackingId2",
-            careTrackingName: "dossier 2",
-          ),
-          CareTrackingItem(
-            careTrackingId: "careTrackingId3",
-            careTrackingName: "dossier 1",
-          ),
-        ];
+        _careTrackings = const [];
       });
 
       if (_careTrackings.isEmpty) {
@@ -66,9 +53,14 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
                 label: "Souhaitez-vous lier ce rendez-vous avec votre suivi de dossier ?",
               ),
               const SizedBox(height: 10),
+              if (_careTrackings.isEmpty)
+                const Text(
+                  "Aucun suivi de dossier n'est disponible pour le moment.",
+                ),
               CareTrackingSelection(
                 controller: _careTrackingController,
                 careTrackings: _careTrackings,
+                required: false,
                 onChange: (item) {
                   print("Selected care tracking: ${item.label}");
                   widget.onNext(item.value);

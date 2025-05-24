@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/user_bloc/user_bloc.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_patient_data.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,7 @@ import '../widgets/onboarding_loading.dart';
 
 class AppointmentStepPatient extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  final Function(PatientItem) onNext;
+  final Function(AppointmentFlowPatientData) onNext;
 
   const AppointmentStepPatient({
     super.key,
@@ -100,7 +101,13 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
                 controller: _patientController,
                 patients: patientItems,
                 onChange: (patient) {
-                  widget.onNext(patient);
+                  widget.onNext(
+                    AppointmentFlowPatientData(
+                      patientId: patient.patientId,
+                      firstName: patient.firstname,
+                      lastName: patient.lastname,
+                    ),
+                  );
                 },
               )
             ],

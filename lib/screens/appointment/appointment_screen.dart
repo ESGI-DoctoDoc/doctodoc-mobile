@@ -4,55 +4,37 @@ import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_date.
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_doctor_questions.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_medical_concern.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_patient.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_doctor_data.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_slot_data.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_confirm_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../services/dtos/pre_appointment_answers.dart';
 import 'widgets/appointment_app_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {
   static const String routeName = '/appointment';
 
   static void navigateTo(
-    BuildContext context, {
-    required String doctorId,
-    required String doctorFirstName,
-    required String doctorLastName,
-    required String doctorPictureUrl,
-    required double latitude,
-    required double longitude,
-  }) {
+    BuildContext context,
+    AppointmentFlowDoctorData doctorData,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AppointmentScreen(
-          doctorId: doctorId,
-          doctorFirstName: doctorFirstName,
-          doctorLastName: doctorLastName,
-          doctorPictureUrl: doctorPictureUrl,
-          latitude: latitude,
-          longitude: longitude,
-        ),
+        builder: (context) => AppointmentScreen(doctorData: doctorData),
       ),
     );
   }
 
   const AppointmentScreen({
     super.key,
-    required this.doctorId,
-    required this.doctorFirstName,
-    required this.doctorLastName,
-    required this.doctorPictureUrl,
-    required this.latitude,
-    required this.longitude,
+    required this.doctorData,
   });
 
-  final String doctorId;
-  final String doctorFirstName;
-  final String doctorLastName;
-  final String doctorPictureUrl;
-  final double latitude;
-  final double longitude;
+  final AppointmentFlowDoctorData doctorData;
 
   @override
   State<AppointmentScreen> createState() => _AppointmentScreenState();
@@ -68,7 +50,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     GlobalKey<FormState>(),
   ];
 
-  final AppointmentData _appointmentData = AppointmentData();
+  final AppointmentFlowData _appointmentData = AppointmentFlowData();
 
   bool isLoading = false;
   bool canGoNext = false;
@@ -76,12 +58,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     super.initState();
-    _appointmentData.doctorId = widget.doctorId;
-    _appointmentData.doctorPictureUrl = widget.doctorPictureUrl;
-    _appointmentData.doctorFirstName = widget.doctorFirstName;
-    _appointmentData.doctorLastName = widget.doctorLastName;
-    _appointmentData.latitude = widget.latitude;
-    _appointmentData.longitude = widget.longitude;
+    _appointmentData.doctorData = widget.doctorData;
   }
 
   @override
@@ -93,9 +70,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         child: Scaffold(
           backgroundColor: Color(0xFFEFEFEF),
           appBar: AppointmentAppBar(
-            firstname: widget.doctorFirstName,
-            lastname: widget.doctorLastName,
-            avatarUrl: widget.doctorPictureUrl,
+            firstname: widget.doctorData.firstName,
+            lastname: widget.doctorData.lastName,
+            avatarUrl: widget.doctorData.pictureUrl,
             onBack: () {
               if (_pageController.page != 0) {
                 _pageController.previousPage(
@@ -117,25 +94,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   return AppointmentStepPatient(
                     formKey: forms[0],
                     onNext: (patient) {
-                      _appointmentData.patientId = patient.patientId;
+                      _appointmentData.patientData = patient;
                     },
                   );
                 case 1:
                   return AppointmentStepMedicalConcern(
-                    doctorId: _appointmentData.doctorId,
+                    doctorId: widget.doctorData.doctorId,
                     formKey: forms[1],
-                    onNext: (concern) {
+                    onNext: (medicalConcernId) {
                       setState(() {
-                        _appointmentData.consultationConcern = concern;
+                        _appointmentData.medicalConcernId = medicalConcernId;
                       });
                     },
                   );
                 case 2:
                   return AppointmentStepDoctorQuestions(
-                    medicalConcernId: _appointmentData.consultationConcern,
+                    medicalConcernId: _appointmentData.medicalConcernId,
                     formKey: forms[2],
-                    // todo : get appointment answers (questionId, answer)
                     onEmpty: () {},
+                    onNext: (answers) {
+                      _appointmentData.answers = answers;
+                    },
                   );
                 case 3:
                   return AppointmentStepCareTracking(
@@ -147,9 +126,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   );
                 case 4:
                   return AppointmentStepDate(
-                    medicalConcernId: _appointmentData.consultationConcern ??
-                        '00000000-0000-0000-0000-000000000001',
+                    medicalConcernId: _appointmentData.medicalConcernId,
                     formKey: forms[4],
+                    onNext: (AppointmentFlowSlotData slotData) {
+                      _appointmentData.slotData = slotData;
+                    },
                   );
                 default:
                   return Container();
@@ -202,11 +183,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
     final isLastPage = currentPage == forms.length - 1;
     if (isLastPage) {
-      _appointmentData.date = "2025-05-19"; // todo Corentin update
-      _appointmentData.time = "08:45"; // todo Corentin update
-      _appointmentData.slotId = "00000000-0000-0000-0000-000000000001"; // todo Corentin update
       _onLockedAppointment();
-      showAppointmentConfirmationModal(context, _appointmentData);
+      try {
+        showAppointmentConfirmationModal(context, _appointmentData.toReview());
+      } catch (e) {
+        print("Error showing confirmation modal: $e");
+      }
     } else {
       nextPage();
     }
@@ -214,35 +196,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   _onLockedAppointment() {
     final appointmentBloc = context.read<AppointmentBloc>();
-    // todo : les ! à revoir
-    appointmentBloc.add(OnLockedAppointment(
-      doctorId: _appointmentData.doctorId,
-      patientId: _appointmentData.patientId!,
-      medicalConcernId: _appointmentData.consultationConcern!,
-      slotId: _appointmentData.slotId,
-      date: _appointmentData.date!,
-      time: _appointmentData.time!,
-    ));
+    try {
+      final appointmentData = _appointmentData.toReview();
+      appointmentBloc.add(OnLockedAppointment(
+        doctorId: appointmentData.doctorData.doctorId,
+        patientId: appointmentData.patientData.patientId,
+        medicalConcernId: appointmentData.medicalConcernId!,
+        slotId: appointmentData.slotData.slotId,
+        date: appointmentData.slotData.date,
+        time: appointmentData.slotData.time,
+        answers: appointmentData.answers.map(
+          (answer) {
+            return PreAppointmentAnswers(
+              questionId: answer.questionId,
+              answer: answer.answer,
+            );
+          },
+        ).toList(),
+      ));
+    } catch (e) {
+      print("Error converting appointment data to review: $e");
+      return;
+    }
   }
-}
-
-class Question {
-  String? questionName;
-  String? answer;
-}
-
-class AppointmentData {
-  String doctorId = '';
-  String doctorPictureUrl = '';
-  String doctorFirstName = '';
-  String doctorLastName = '';
-  double latitude = 0.0;
-  double longitude = 0.0;
-  String? date;
-  String? time;
-  String slotId = '';
-  String? consultationConcern;
-  String? patientId;
-  List<Question> questions = [];
-  String? careTrackingId;
 }

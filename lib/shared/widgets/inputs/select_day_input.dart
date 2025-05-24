@@ -16,8 +16,8 @@ class SelectDayValidator extends Validator {
       print("value is null or empty");
       return required ? "La date est requise" : null;
     }
-
-    final date = Jiffy.parse(value, pattern: 'dd/MM/yyyy');
+    
+    final date = Jiffy.parse(value, pattern: 'yyyy-MM-dd');
     final now = Jiffy.now();
     if (!date.isSameOrAfter(now, unit: Unit.day)) {
       return errorMessage;

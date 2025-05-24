@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_answer_data.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_selection.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/doctor_question_input.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,13 @@ class AppointmentStepDoctorQuestions extends StatefulWidget {
   final String? medicalConcernId;
   final GlobalKey<FormState> formKey;
   final VoidCallback onEmpty;
+  final Function(List<AppointmentFlowAnswerData>) onNext;
 
   const AppointmentStepDoctorQuestions({
     super.key,
     required this.formKey,
     required this.onEmpty,
+    required this.onNext,
     this.medicalConcernId,
   });
 
@@ -75,13 +78,26 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
       _controllers = [];
     } else {
       _questions = questions
-          .map((question) => DoctorQuestion(
+          .map(
+            (question) => DoctorQuestion(
               type: question.type,
               question: question.question,
+              questionId: question.id,
               required: question.required,
               options: question.options
                   .map((option) => InputSelectionItem(label: option, value: option))
-                  .toList()))
+                  .toList(),
+              onChange: (InputSelectionItem item) {
+                final answers = _questions.map((q) {
+                  return AppointmentFlowAnswerData(
+                    questionId: q.questionId,
+                    answer: _controllers[_questions.indexOf(q)].text,
+                  );
+                }).toList();
+                widget.onNext(answers);
+              },
+            ),
+          )
           .toList();
 
       _controllers = List.generate(_questions.length, (_) => TextEditingController());
@@ -108,7 +124,7 @@ class _AppointmentStepDoctorQuestionsState extends State<AppointmentStepDoctorQu
 
   void _fetchQuestions() {
     final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
-    if(widget.medicalConcernId != null) {
+    if (widget.medicalConcernId != null) {
       appointmentFlowBloc.add(GetQuestions(medicalConcernId: widget.medicalConcernId!));
     }
   }
