@@ -31,4 +31,9 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   Future<void> confirm(String appointmentLockedId) async {
     await dio.patch("/patients/appointments/$appointmentLockedId");
   }
+
+  @override
+  Future<void> unlockedAppointment(String appointmentLockedId) async {
+    await dio.delete("/patients/appointments/$appointmentLockedId");
+  }
 }

@@ -19,6 +19,14 @@ class AppointmentRepository {
     }
   }
 
+  Future<void> unlocked(String appointmentLockedId) async {
+    try {
+      return await appointmentDataSource.unlockedAppointment(appointmentLockedId);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
   Future<void> confirm(String appointmentLockedId) async {
     try {
       await appointmentDataSource.confirm(appointmentLockedId);

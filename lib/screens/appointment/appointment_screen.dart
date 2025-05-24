@@ -215,12 +215,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     final appointmentBloc = context.read<AppointmentBloc>();
     // todo : les ! à revoir
     appointmentBloc.add(OnLockedAppointment(
-        doctorId: _appointmentData.doctorId,
-        patientId: _appointmentData.patientId!,
-        medicalConcernId: _appointmentData.consultationConcern!,
-        slotId: _appointmentData.slotId,
-        date: _appointmentData.date!,
-        time: _appointmentData.time!));
+      doctorId: _appointmentData.doctorId,
+      patientId: _appointmentData.patientId!,
+      medicalConcernId: _appointmentData.consultationConcern!,
+      slotId: _appointmentData.slotId,
+      date: _appointmentData.date!,
+      time: _appointmentData.time!,
+    ));
   }
 }
 

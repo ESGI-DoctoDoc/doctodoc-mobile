@@ -127,6 +127,12 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
 }
 
 void showAppointmentConfirmationModal(BuildContext context, AppointmentData appointmentData) {
+  void onClosedPopUp() {
+    final appointmentBloc = context.read<AppointmentBloc>();
+    appointmentBloc.add(OnUnlockedAppointment());
+    Navigator.of(context).pop();
+  }
+
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -149,10 +155,10 @@ void showAppointmentConfirmationModal(BuildContext context, AppointmentData appo
           trailingNavBarWidget: IconButton(
             padding: const EdgeInsets.all(20),
             icon: const Icon(Icons.close),
-            onPressed: Navigator.of(context).pop,
+            onPressed: onClosedPopUp,
           ),
           child: _AppointmentConfirmWidget(appointmentData: appointmentData),
-        )
+        ),
       ];
     },
   );

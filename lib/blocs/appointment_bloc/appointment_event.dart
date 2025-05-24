@@ -23,4 +23,6 @@ class OnLockedAppointment extends AppointmentEvent {
   });
 }
 
+class OnUnlockedAppointment extends AppointmentEvent {}
+
 class OnConfirmAppointment extends AppointmentEvent {}
