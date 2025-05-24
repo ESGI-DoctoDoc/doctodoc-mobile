@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_care_tracking.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_date.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_doctor_questions.dart';
@@ -6,6 +7,7 @@ import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_patie
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_confirm_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/appointment_app_bar.dart';
 
@@ -166,7 +168,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             child: PrimaryButton(
                 label: "Continuer",
                 onTap: () {
-                  // todo : call a route to lock the appointment
                   handleNextPage();
                 }),
           ),
@@ -200,20 +201,26 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
     final isLastPage = currentPage == forms.length - 1;
     if (isLastPage) {
-      _appointmentData.date = DateTime.now();
-      _appointmentData.time = "10:00";
-      _appointmentData.consultationConcern = "Consultation concern";
-      _appointmentData.patientId = "patientId";
-      _appointmentData.careTrackingId = "careTrackingId";
-      _appointmentData.questions = [
-        Question()..questionName = "Question 1",
-        Question()..questionName = "Question 2",
-      ];
-
+      _appointmentData.date = "2025-05-19"; // todo Corentin update
+      _appointmentData.time = "08:45"; // todo Corentin update
+      _appointmentData.slotId = "00000000-0000-0000-0000-000000000001"; // todo Corentin update
+      _onLockedAppointment();
       showAppointmentConfirmationModal(context, _appointmentData);
     } else {
       nextPage();
     }
+  }
+
+  _onLockedAppointment() {
+    final appointmentBloc = context.read<AppointmentBloc>();
+    // todo : les ! à revoir
+    appointmentBloc.add(OnLockedAppointment(
+        doctorId: _appointmentData.doctorId,
+        patientId: _appointmentData.patientId!,
+        medicalConcernId: _appointmentData.consultationConcern!,
+        slotId: _appointmentData.slotId,
+        date: _appointmentData.date!,
+        time: _appointmentData.time!));
   }
 }
 
@@ -229,8 +236,9 @@ class AppointmentData {
   String doctorLastName = '';
   double latitude = 0.0;
   double longitude = 0.0;
-  DateTime? date;
+  String? date;
   String? time;
+  String slotId = '';
   String? consultationConcern;
   String? patientId;
   List<Question> questions = [];

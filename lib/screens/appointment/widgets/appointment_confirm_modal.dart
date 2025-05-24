@@ -1,9 +1,10 @@
+import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
+import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../shared/widgets/maps/maps_viewer.dart';
 import '../appointment_screen.dart';
@@ -23,77 +24,92 @@ class _AppointmentConfirmWidget extends StatefulWidget {
 class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color(0xFFe0e0e0),
-                width: 2,
+    return BlocListener<AppointmentBloc, AppointmentState>(
+      listenWhen: appointmentListener,
+      listener: (context, state) {
+        HomeScreen.navigateTo(context);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color(0xFFe0e0e0),
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(8),
               ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.calendar_today),
-                  title: Text(
-                    "Date et heure",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text(_formatDate()),
-                ),
-                Divider(color: const Color(0xFFe0e0e0), thickness: 2),
-                ListTile(
-                  leading: Icon(Icons.medical_services),
-                  title: Text(
-                    "Médecin",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text("Dr. Jean Dupont"),
-                ),
-                Divider(color: const Color(0xFFe0e0e0), thickness: 2),
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text(
-                    "Patient",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text("Oihana LECHENE"),
-                ),
-                Divider(color: const Color(0xFFe0e0e0), thickness: 2),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8.0,
-                    right: 8.0,
-                    bottom: 8.0,
-                    top: 4.0,
-                  ),
-                  child: MapsViewer(
-                    zoom: 15,
-                    center: LatLng(
-                      widget.appointmentData.latitude,
-                      widget.appointmentData.longitude,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.calendar_today),
+                    title: Text(
+                      "Date et heure",
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    marker: CircleAvatar(
-                      radius: 22,
-                      backgroundImage: NetworkImage(widget.appointmentData.doctorPictureUrl),
+                    subtitle: Text(_formatDate()),
+                  ),
+                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  ListTile(
+                    leading: Icon(Icons.medical_services),
+                    title: Text(
+                      "Médecin",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text("Dr. Jean Dupont"),
+                  ),
+                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  ListTile(
+                    leading: Icon(Icons.person),
+                    title: Text(
+                      "Patient",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text("Oihana LECHENE"),
+                  ),
+                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      bottom: 8.0,
+                      top: 4.0,
+                    ),
+                    child: MapsViewer(
+                      zoom: 15,
+                      center: LatLng(
+                        widget.appointmentData.latitude,
+                        widget.appointmentData.longitude,
+                      ),
+                      marker: CircleAvatar(
+                        radius: 22,
+                        backgroundImage: NetworkImage(widget.appointmentData.doctorPictureUrl),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          PrimaryButton(label: "Confirmer le rendez-vous", onTap: () {}),
-        ],
+            const SizedBox(height: 20),
+            PrimaryButton(
+                label: "Confirmer le rendez-vous",
+                onTap: () {
+                  _onConfirmAppointment();
+                }),
+          ],
+        ),
       ),
     );
+  }
+
+  bool appointmentListener(previous, current) {
+    return previous is AppointmentLocked &&
+        (current is AppointmentConfirm && current.status == AppointmentConfirmStatus.success);
   }
 
   String _formatDate() {
@@ -102,6 +118,11 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
       return "Date non spécifiée";
     }
     return "Mardi 15 Août 2023 à 14h30";
+  }
+
+  _onConfirmAppointment() {
+    final appointmentBloc = context.read<AppointmentBloc>();
+    appointmentBloc.add(OnConfirmAppointment());
   }
 }
 

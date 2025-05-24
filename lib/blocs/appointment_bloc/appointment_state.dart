@@ -1,11 +1,53 @@
 part of 'appointment_bloc.dart';
 
-final class AppointmentState {
-  final MedicalConcern? medicalConcern;
+abstract class AppointmentState {}
+
+class AppointmentInitial extends AppointmentState {}
+
+enum AppointmentLockedStatus { success, error }
+
+final class AppointmentLocked extends AppointmentState {
+  final AppointmentLockedStatus status;
+  final String? appointmentLockedId;
   final AppException? exception;
 
-  AppointmentState({
-    this.medicalConcern,
+  AppointmentLocked({
+    required this.status,
+    this.appointmentLockedId,
     this.exception,
   });
+
+  AppointmentLocked copyWith({
+    AppointmentLockedStatus? status,
+    String? appointmentLockedId,
+    AppException? exception,
+  }) {
+    return AppointmentLocked(
+      status: status ?? this.status,
+      appointmentLockedId: appointmentLockedId ?? this.appointmentLockedId,
+      exception: exception ?? this.exception,
+    );
+  }
+}
+
+enum AppointmentConfirmStatus { success, error }
+
+final class AppointmentConfirm extends AppointmentState {
+  final AppointmentConfirmStatus status;
+  final AppException? exception;
+
+  AppointmentConfirm({
+    required this.status,
+    this.exception,
+  });
+
+  AppointmentConfirm copyWith({
+    AppointmentConfirmStatus? status,
+    AppException? exception,
+  }) {
+    return AppointmentConfirm(
+      status: status ?? this.status,
+      exception: exception ?? this.exception,
+    );
+  }
 }

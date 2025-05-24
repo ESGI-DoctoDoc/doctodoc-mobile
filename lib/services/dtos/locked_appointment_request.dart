@@ -1,9 +1,4 @@
-part of 'appointment_bloc.dart';
-
-@immutable
-sealed class AppointmentEvent {}
-
-class OnLockedAppointment extends AppointmentEvent {
+class LockedAppointmentRequest {
   final String doctorId;
   final String patientId;
   final String medicalConcernId;
@@ -11,9 +6,7 @@ class OnLockedAppointment extends AppointmentEvent {
   final String date;
   final String time;
 
-// todo answers
-
-  OnLockedAppointment({
+  LockedAppointmentRequest({
     required this.doctorId,
     required this.patientId,
     required this.medicalConcernId,
@@ -22,5 +15,3 @@ class OnLockedAppointment extends AppointmentEvent {
     required this.time,
   });
 }
-
-class OnConfirmAppointment extends AppointmentEvent {}
