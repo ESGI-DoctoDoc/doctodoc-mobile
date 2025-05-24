@@ -134,6 +134,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   return AppointmentStepDoctorQuestions(
                     medicalConcernId: _appointmentData.consultationConcern,
                     formKey: forms[2],
+                    // todo : get appointment answers (questionId, answer)
                     onEmpty: () {},
                   );
                 case 3:
