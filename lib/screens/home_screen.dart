@@ -1,14 +1,13 @@
-import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
-import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_doctor_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/auth_bloc/auth_bloc.dart';
 import '../blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
-import '../shared/widgets/buttons/primary_button.dart';
-import 'appointment/appointment_screen.dart';
-import 'introduction_screen.dart';
+import '../shared/widgets/cards/appointment_card.dart';
+import '../shared/widgets/inputs/doctor_search_bar.dart';
+import '../shared/widgets/list_tile/base/list_tile_base.dart';
+import '../shared/widgets/list_tile/doctor_list_tile.dart';
+import '../shared/widgets/texts/list_title.dart';
 
 class HomeScreen extends StatefulWidget {
   static navigateTo(BuildContext context) {
@@ -44,6 +43,104 @@ class _HomeScreenState extends State<HomeScreen> {
         };
       },
     );
+
+
+  }
+
+  Widget _buildSuccess(BuildContext context, User user) {
+    return Scaffold(
+      backgroundColor: Color(0xFFEFEFEF),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            floating: true,
+            snap: true,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            expandedHeight: 100.0,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text('Doctodoc'),
+              background: Container(
+                color: Color(0xFFEFEFEF),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    // search bar
+                    const SizedBox(height: 20),
+                    DoctorSearchBar(onSearch: (search) {
+                      // Handle search action
+                      print("Searching for: $search");
+                    }),
+
+                    // incoming appointments
+                    const SizedBox(height: 10),
+                    const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
+                    const AppointmentCard(),
+
+                    const SizedBox(height: 20),
+                    const ListTitle(title: "Par spécialité"),
+                    SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 10, // Replace with your specialties count
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlue.shade100,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.medical_services, // You can change this icon
+                                    color: Colors.blue.shade800,
+                                    size: 30,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                const Text(
+                                  'Spécialité',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    const ListTitle(title: "Historique"),
+                    const DoctorListTile(),
+                    const SizedBox(height: 8),
+                    const DoctorListTile(),
+
+                    const SizedBox(height: 10),
+                    const ListTitle(title: "Vaccins à prévoir"),
+                    ListTileBase.dense(
+                      title: "AJouter un vaccin",
+                      onTap: () {},
+                      leading: const Icon(Icons.add_circle_outline),
+                    ),
+                  ],
+                ),
+              )
+            ]),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLoading(BuildContext context) {
@@ -58,53 +155,5 @@ class _HomeScreenState extends State<HomeScreen> {
         'Cannot fetch user data',
       ),
     );
-  }
-
-  Widget _buildSuccess(BuildContext context, User user) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: Text(
-              'Home Screen ${user.patientInfos.firstName}',
-              style: TextStyle(fontSize: 24),
-            ),
-          ),
-          PrimaryButton(
-            label: "prendre rendez-vous",
-            onTap: () {
-              AppointmentScreen.navigateTo(
-                  context,
-                  const AppointmentFlowDoctorData(
-                    doctorId: "00000000-0000-0000-0000-000000000001",
-                    firstName: "Corentin",
-                    lastName: "LECHENE",
-                    pictureUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
-                    address: AppointmentFlowAddressData(
-                      addressId: "addressId",
-                      latitude: 48.860640,
-                      longitude: 2.510171,
-                    ),
-                  ));
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  void _logout() {
-    final authBloc = context.read<AuthBloc>();
-    authBloc.add(OnLogout());
-    IntroductionScreen.navigateTo(context);
   }
 }

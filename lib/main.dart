@@ -1,7 +1,3 @@
-import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
-import 'package:doctodoc_mobile/blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
-import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
-import 'package:doctodoc_mobile/blocs/user_bloc/user_bloc.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
@@ -23,7 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'blocs/appointment_bloc/appointment_bloc.dart';
+import 'blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'blocs/auth_bloc/auth_bloc.dart';
+import 'blocs/register_bloc/register_bloc.dart';
+import 'blocs/user_bloc/user_bloc.dart';
+import 'layout/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +48,7 @@ void main() async {
     nextScreen = const OnboardingScreen();
   } else if (isLoggedIn && hasTwoFactor == true && hasOnboarded == true) {
     print("User is logged in and has completed onboarding");
-    nextScreen = const HomeScreen();
+    nextScreen = const MainLayout();
   }
 
   runApp(MyApp(nextScreen: nextScreen));

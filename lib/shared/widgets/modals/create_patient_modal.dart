@@ -7,6 +7,22 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../banners/info_banner.dart';
 import '../buttons/primary_button.dart';
+import 'base/modal_base.dart';
+
+Future<CreatePatientRequest?> showCreatePatientModal(BuildContext context) {
+  return WoltModalSheet.show(
+    context: context,
+    pageListBuilder: (context) {
+      return [
+        buildModalPage(
+          context: context,
+          title: "Créer un patient",
+          child: const CreatePatientModal(),
+        ),
+      ];
+    },
+  );
+}
 
 class CreatePatientModal extends StatefulWidget {
   const CreatePatientModal({super.key});
@@ -99,40 +115,6 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
   }
 }
 
-Future<CreatePatientRequest?> showCreatePatientModal(BuildContext context) {
-  return WoltModalSheet.show(
-    context: context,
-    pageListBuilder: (context) {
-      return [
-        WoltModalSheetPage(
-          hasSabGradient: false,
-          hasTopBarLayer: false,
-          pageTitle: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              "Créer un patient",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          isTopBarLayerAlwaysVisible: true,
-          trailingNavBarWidget: IconButton(
-            padding: const EdgeInsets.all(20),
-            icon: const Icon(Icons.close),
-            onPressed: Navigator.of(context).pop,
-          ),
-          child: const CreatePatientModal(),
-        ),
-      ];
-    },
-  );
-}
-
-//todo remove this class and create the real one
 class CreatePatientRequest {
   final String firstName;
   final String lastName;

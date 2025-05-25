@@ -1,60 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class ModalBase extends StatelessWidget {
-  final String title;
-  final Widget child;
-
-  const ModalBase({
-    super.key,
-    required this.title,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          alignment: Alignment.center,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Center(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-              ),
-            ],
-          ),
+WoltModalSheetPage buildModalPage({
+  required BuildContext context,
+  required Widget child,
+  String? title,
+  VoidCallback? onClose,
+}) {
+  return WoltModalSheetPage(
+    hasSabGradient: false,
+    hasTopBarLayer: false,
+    pageTitle: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: title != null ? Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: child,
-        ),
-      ),
-    );
-  }
+      ) : null,
+    ),
+    isTopBarLayerAlwaysVisible: true,
+    trailingNavBarWidget: IconButton(
+      padding: const EdgeInsets.all(20),
+      icon: const Icon(Icons.close),
+      onPressed: onClose ?? () => Navigator.of(context).pop(),
+    ),
+    child: child,
+  );
 }

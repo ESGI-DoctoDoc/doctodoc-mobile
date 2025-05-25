@@ -29,6 +29,10 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
+  # To disable pickers you don't use, uncomment and set to false, e.g.:
+  # Pod::PICKER_MEDIA = false
+  # Pod::PICKER_AUDIO = false
+  # Pod::PICKER_DOCUMENT = false
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))

@@ -44,16 +44,21 @@ class _InputDropdownState extends State<InputDropdown> {
         maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: widget.items.map((item) {
-              return ListTile(
-                title: Text(item.label),
-                leading: Icon(item.icon),
-                onTap: () => Navigator.of(context).pop(item),
-              );
-            }).toList(),
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: widget.items.map((item) {
+                  return ListTile(
+                    title: Text(item.label),
+                    leading: Icon(item.icon),
+                    onTap: () => Navigator.of(context).pop(item),
+                  );
+                }).toList(),
+              ),
+            ),
           ),
         );
       },
