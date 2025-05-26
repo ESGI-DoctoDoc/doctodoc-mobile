@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
+import 'package:doctodoc_mobile/layout/main_layout.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboading_general_practitioner_step.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_birth_date_step.dart';
@@ -148,7 +149,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onBoardingListener(BuildContext context, RegisterState state) {
     if (state.onBoardingStatus == OnBoardingStatus.onBoarded) {
       print('on boarded ok');
-      HomeScreen.navigateTo(context);
+      MainLayout.navigateTo(context);
     } else if (state.onBoardingStatus == OnBoardingStatus.loading) {
       print('loading');
     } else if (state.onBoardingStatus == OnBoardingStatus.error) {

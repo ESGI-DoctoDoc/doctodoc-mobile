@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/layout/main_layout.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
@@ -110,7 +111,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
       final hasOnboarded = await sharedPreferences.hasCompletedOnboarding();
       if(hasOnboarded) {
-        HomeScreen.navigateTo(context);
+        MainLayout.navigateTo(context);
       } else {
         OnboardingScreen.navigateTo(context);
       }

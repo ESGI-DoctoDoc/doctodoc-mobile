@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
+import 'package:doctodoc_mobile/layout/main_layout.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
 import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
@@ -27,7 +28,6 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
     return BlocListener<AppointmentBloc, AppointmentState>(
       listenWhen: appointmentListener,
       listener: (context, state) {
-        HomeScreen.navigateTo(context);
       },
       child: Padding(
         padding: const EdgeInsets.all(20.0),

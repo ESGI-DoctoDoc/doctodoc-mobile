@@ -10,14 +10,6 @@ import '../shared/widgets/list_tile/doctor_list_tile.dart';
 import '../shared/widgets/texts/list_title.dart';
 
 class HomeScreen extends StatefulWidget {
-  static navigateTo(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      ),
-    );
-  }
-
   const HomeScreen({super.key});
 
   @override

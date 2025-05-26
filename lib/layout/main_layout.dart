@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
 
 class MainLayout extends StatefulWidget {
+  static navigateTo(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const MainLayout(),
+      ),
+    );
+  }
   const MainLayout({super.key});
 
   @override

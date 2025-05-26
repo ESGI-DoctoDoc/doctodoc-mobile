@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/expansion_tile_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/care_tracking_menu_modal.dart';
