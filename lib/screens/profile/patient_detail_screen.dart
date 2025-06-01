@@ -126,6 +126,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                     id: "id",
                     lastName: "lastName",
                     firstName: "firstName",
+                    gender: "gender",
                     email: "email",
                     phoneNumber: "phoneNumber",
                   );
