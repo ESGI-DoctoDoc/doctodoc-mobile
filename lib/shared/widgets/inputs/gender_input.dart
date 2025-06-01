@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class GenderValidator extends Validator {
   final bool required;
-  final RegExp genderRegex = RegExp(r"^(man|woman|indifferent)$");
+  final RegExp genderRegex = RegExp(r"^(MALE|FEMALE)$");
 
   GenderValidator({
     this.required = true,
@@ -40,9 +40,8 @@ class GenderInput extends StatefulWidget {
 
 class _GenderInputState extends State<GenderInput> {
   final List<InputChoiceItem> items = const [
-    InputChoiceItem(label: "Homme", value: "man"),
-    InputChoiceItem(label: "Femme", value: "woman"),
-    InputChoiceItem(label: "Indifférent", value: "indifferent"),
+    InputChoiceItem(label: "Homme", value: "MALE"),
+    InputChoiceItem(label: "Femme", value: "FEMALE"),
   ];
   late final GenderValidator _validator;
 

@@ -45,12 +45,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       String firstName = event.firstName;
       String lastName = event.lastName;
       String birthdate = event.birthdate;
+      String gender = event.gender;
       String? referentDoctorId = event.referentDoctorId;
 
       await registerRepository.onBoarding(
         firstName,
         lastName,
         birthdate,
+        gender,
         referentDoctorId,
       );
 

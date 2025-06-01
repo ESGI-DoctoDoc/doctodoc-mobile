@@ -1,14 +1,14 @@
-import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
-import 'package:doctodoc_mobile/layout/main_layout.dart';
-import 'package:doctodoc_mobile/screens/home_screen.dart';
-import 'package:doctodoc_mobile/screens/onboarding/steps/onboading_general_practitioner_step.dart';
-import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_birth_date_step.dart';
-import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_name_step.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:doctodoc_mobile/screens/onboarding/widgets/onboarding_app_bar.dart';
-import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
+import 'package:doctodoc_mobile/layout/main_layout.dart';
+import 'package:doctodoc_mobile/screens/onboarding/steps/onboading_general_practitioner_step.dart';
+import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_birth_date_step.dart';
+import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_gender_step.dart';
+import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_name_step.dart';
+import 'package:doctodoc_mobile/screens/onboarding/widgets/onboarding_app_bar.dart';
+import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 
 class OnboardingScreen extends StatefulWidget {
   static const String routeName = '/on-boarding';
@@ -29,7 +29,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
-  final numberOfPages = 4;
+  final numberOfPages = 5;
   bool isLoading = false;
 
   String code = "";
@@ -43,7 +43,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-    canGoNext = false;
+    setState(() {
+      canGoNext = false;
+    });
   }
 
   @override
@@ -76,13 +78,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               step: _currentStep,
               numberOfPages: numberOfPages,
               onBackButtonPressed: () {
-                print("->>");
-                print(_pageController.page);
-                if(_pageController.page != 0) {
+                if (_pageController.page != 0) {
                   _pageController.previousPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
+                  setState(() {
+                    canGoNext = false;
+                  });
                 } else {
                   //todo mélissa ici il faut déco le gars
                 }
@@ -96,6 +99,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onNext: (isValid, firstName, lastName) {
                     _userData.firstName = firstName;
                     _userData.lastName = lastName;
+                    setState(() {
+                      canGoNext = isValid;
+                    });
+                  },
+                ),
+                OnboardingGenderStep(
+                  onNext: (isValid, gender) {
+                    _userData.gender = gender;
                     setState(() {
                       canGoNext = isValid;
                     });
@@ -176,6 +187,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     registerBloc.add(OnBoarding(
       firstName: _userData.firstName ?? "",
       lastName: _userData.lastName ?? "",
+      gender: _userData.gender ?? "",
       birthdate: birthDate,
       referentDoctorId: _userData.generalPractitioner ?? "",
     ));
@@ -185,6 +197,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 class _UserData {
   String? firstName = "";
   String? lastName = "";
+  String? gender = "FEMALE";
   String? birthDate = "";
   String? generalPractitioner = "";
 

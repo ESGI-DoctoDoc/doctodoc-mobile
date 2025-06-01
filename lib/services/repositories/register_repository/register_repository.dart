@@ -28,6 +28,7 @@ class RegisterRepository {
     String firstName,
     String lastName,
     String birthdate,
+    String gender,
     String? referentDoctorId,
   ) async {
     try {
@@ -35,6 +36,7 @@ class RegisterRepository {
         firstName,
         lastName,
         birthdate,
+        gender,
         referentDoctorId,
       );
 

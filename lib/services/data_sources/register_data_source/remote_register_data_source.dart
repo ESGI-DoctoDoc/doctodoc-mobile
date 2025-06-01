@@ -28,6 +28,7 @@ class RemoteRegisterDataSource extends RegisterDataSource {
     String firstName,
     String lastName,
     String birthdate,
+    String gender,
     String? referentDoctorId,
   ) async {
     final response = await dio.post(
@@ -37,6 +38,7 @@ class RemoteRegisterDataSource extends RegisterDataSource {
         "lastName": lastName,
         "birthdate": birthdate,
         "doctorId": referentDoctorId,
+        "gender": gender,
       }),
     );
 

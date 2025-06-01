@@ -19,12 +19,14 @@ class OnBoarding extends RegisterEvent {
   final String firstName;
   final String lastName;
   final String birthdate;
+  final String gender;
   final String? referentDoctorId;
 
   OnBoarding({
     required this.firstName,
     required this.lastName,
     required this.birthdate,
+    required this.gender,
     this.referentDoctorId,
   });
 }
