@@ -1,7 +1,12 @@
+import 'package:doctodoc_mobile/models/user.dart';
 import 'package:doctodoc_mobile/screens/profile/patient_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PatientsScreen extends StatelessWidget {
+import '../../blocs/user_bloc/user_bloc.dart';
+import '../appointment/widgets/onboarding_loading.dart';
+
+class PatientsScreen extends StatefulWidget {
   static const String routeName = '/patients';
 
   static void navigateTo(BuildContext context) {
@@ -9,6 +14,17 @@ class PatientsScreen extends StatelessWidget {
   }
 
   const PatientsScreen({super.key});
+
+  @override
+  State<PatientsScreen> createState() => _PatientsScreenState();
+}
+
+class _PatientsScreenState extends State<PatientsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadCloseMembers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +73,11 @@ class PatientsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.person),
-                title: const Text('Corentin LECHENE'), //Todo me
+                title: const Text('Corentin LECHENE'),
+                //Todo me
                 trailing: const Icon(Icons.chevron_right),
-                subtitle: const Text('c.lechene@myges.fr'), //Todo me
+                subtitle: const Text('c.lechene@myges.fr'),
+                //Todo me
                 onTap: () => PatientDetailsScreen.navigateTo(context, patientId: "0"), //Todo me
               ),
               const Padding(
@@ -69,17 +87,53 @@ class PatientsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              ...[1, 2, 3].map((patient) => ListTile(
-                    leading: const Icon(Icons.person),
-                    title: const Text('Patient Name'), //Todo me
-                    subtitle: Text('c.lechene+$patient@gmail.com'), //Todo me
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => PatientDetailsScreen.navigateTo(context, patientId: "$patient"), //Todo me
-                  )),
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    UserLoaded() => _buildUserLoadedSuccess(state),
+                    UserState() => _buildError(),
+                  };
+                },
+              )
             ]),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildUserLoadedSuccess(UserLoaded state) {
+    return switch (state.getCloseMembersStatus) {
+      GetCloseMembersStatus.initial || GetCloseMembersStatus.loading => const OnboardingLoading(),
+      GetCloseMembersStatus.success => _buildSuccess(state.user),
+      GetCloseMembersStatus.error => _buildError(),
+    };
+  }
+
+  Widget _buildSuccess(User user) {
+    final closeMembers = user.closeMembers;
+
+    return Column(
+      children: closeMembers.map((member) {
+        return ListTile(
+          leading: const Icon(Icons.person),
+          title: Text('${member.firstName} ${member.lastName}'),
+          subtitle: Text(member.email),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => PatientDetailsScreen.navigateTo(context, patientId: member.id),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  _loadCloseMembers() {
+    final userBloc = context.read<UserBloc>();
+    userBloc.add(OnUserLoadedCloseMembers());
   }
 }
