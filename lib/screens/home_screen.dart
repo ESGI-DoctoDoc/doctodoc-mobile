@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -142,9 +143,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildError() {
-    return const Center(
-      child: Text(
-        'Cannot fetch user data',
+    return Scaffold(
+      backgroundColor: Color(0xFFEFEFEF),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Impossible de récupérer les données utilisateur.',
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              PrimaryButton(label: "Réessayer", onTap: () {
+                // Retry logic can be added here
+                context.read<UserBloc>().add(OnUserLoadedBasicInfos());
+              }),
+              const SizedBox(height: 10),
+              TextButton.icon(
+                onPressed: () {
+                },
+                icon: const Icon(Icons.logout),
+                label: const Text('Se déconnecter'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
