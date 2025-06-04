@@ -2,6 +2,7 @@ import 'package:doctodoc_mobile/screens/profile/patient_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../medicals/medical_screen.dart';
 
@@ -137,14 +138,21 @@ class AccountScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              Center(
-                child: Text(
-                  'Version 0.0.1',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary.withAlpha(77),
-                    fontSize: 12,
-                  ),
-                ),
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const Center(child: Text("Version indisponible"));
+                  final version = snapshot.data!.version;
+                  return Center(
+                    child: Text(
+                      'Version $version',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary.withAlpha(77),
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 16),
