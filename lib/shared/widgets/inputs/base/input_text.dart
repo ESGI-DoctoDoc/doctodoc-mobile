@@ -44,6 +44,7 @@ class InputText extends StatefulWidget {
 
 class _InputTextState extends State<InputText> {
   bool isValueEmpty = true;
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -70,17 +71,25 @@ class _InputTextState extends State<InputText> {
           context: context,
           label: widget.label,
           hintText: widget.placeholder,
-          icon: !isValueEmpty ? Icons.clear : null,
-          onTap: () {
-            if (!isValueEmpty) {
-              widget.controller.clear();
-              setState(() {
-                isValueEmpty = true;
-              });
-            }
-          },
+          icon: widget.type == InputTextType.password
+              ? (_obscureText ? Icons.visibility_off : Icons.visibility)
+              : (!isValueEmpty ? Icons.clear : null),
+          onTap: widget.type == InputTextType.password
+              ? () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                }
+              : () {
+                  if (!isValueEmpty) {
+                    widget.controller.clear();
+                    setState(() {
+                      isValueEmpty = true;
+                    });
+                  }
+                },
         ),
-        obscureText: widget.type == InputTextType.password,
+        obscureText: widget.type == InputTextType.password ? _obscureText : false,
         onChanged: (value) {
           setState(() {
             isValueEmpty = value.isEmpty;
