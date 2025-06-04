@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
+import 'package:doctodoc_mobile/exceptions/auth_exception.dart';
 import 'package:doctodoc_mobile/models/user.dart';
 
 import '../../../models/auth.dart';
@@ -23,7 +24,7 @@ class AuthRepository {
       await localAuthDataSource.saveToken(auth.token);
       await localAuthDataSource.saveHasCompletedTwoFactorAuthentication(false);
     } catch (error) {
-      throw UnknownException();
+      throw AuthException.from(error);
     }
   }
 
@@ -35,9 +36,8 @@ class AuthRepository {
         user.patientInfos.id.toString(),
       );
       localAuthDataSource.saveToken(user.token);
-    } on DioException catch (error) {
-      print(error.response?.data);
-      throw UnknownException();
+    } catch (error) {
+      throw AuthException.from(error);
     }
   }
 }

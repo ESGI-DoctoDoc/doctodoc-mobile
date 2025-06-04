@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/otp_input.dart';
 
@@ -85,13 +86,15 @@ class _OtpScreenState extends State<OtpScreen> {
                 ],
               ),
             ),
-            bottomNavigationBar: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: PrimaryButton(
-                label: "Continuer",
-                isLoading: isLoading,
-                disabled: !canGoNext,
-                onTap: () => _validateCode(context, code),
+            bottomNavigationBar: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: PrimaryButton(
+                  label: "Continuer",
+                  isLoading: isLoading,
+                  disabled: !canGoNext,
+                  onTap: () => _validateCode(context, code),
+                ),
               ),
             ),
           ),
@@ -102,7 +105,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _authListener(BuildContext context, AuthState state) async {
     if (state.status == AuthStatus.secondFactorAuthenticationError) {
-      print(state.exception?.code);
+      showErrorSnackbar(context, state.exception);
     } else if (state.status == AuthStatus.authenticated) {
       //Todo remove this
       print("login completed");

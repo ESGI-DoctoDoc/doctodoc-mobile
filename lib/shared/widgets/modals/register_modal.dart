@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
+import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/login_modal.dart';
 import 'package:flutter/foundation.dart';
@@ -118,8 +119,8 @@ class _RegisterModalState extends State<RegisterModal> {
   }
 
   void _fastRegister() {
-    emailController.text = "m.laurant@mail.fr";
-    passwordController.text = "mypassword@1Z";
+    emailController.text = "c.lecqds@fmiqsd.cr";
+    passwordController.text = "Abdcd76@";
     phoneController.text = "06 06 06 06 06";
   }
 
@@ -130,7 +131,7 @@ class _RegisterModalState extends State<RegisterModal> {
     } else if (state.registerStatus == RegisterStatus.loading) {
       print('loading');
     } else if (state.registerStatus == RegisterStatus.error) {
-      print(state.exception?.code);
+      showErrorSnackbar(context, state.exception);
     }
     setState(() {
       isLoading = false;

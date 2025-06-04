@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/auth/otp_screen.dart';
+import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/forgot_password_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
 import 'package:flutter/foundation.dart';
@@ -152,7 +153,7 @@ class _LoginModalState extends State<LoginModal> {
 
   void _authListener(BuildContext context, AuthState state) async {
     if (state.status == AuthStatus.firstFactorAuthenticationError) {
-      print(state.exception?.code);
+      showErrorSnackbar(context, state.exception);
     } else if (state.status == AuthStatus.firstFactorAuthenticationValidate) {
       print("login successful");
       final sharedPreferences = SharedPreferencesAuthDataSource();
