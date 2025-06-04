@@ -121,7 +121,7 @@ class AccountScreen extends StatelessWidget {
                 leading: const Icon(Icons.logout),
                 title: const Text('Déconnexion'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo me
+                onTap: () {}, //Todo mélissa se déconnecter
               ),
 
               const SizedBox(height: 16),
@@ -132,7 +132,7 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo me
+                onTap: () {}, //Todo mélissa supprimer le compte
               ),
 
               const SizedBox(height: 16),

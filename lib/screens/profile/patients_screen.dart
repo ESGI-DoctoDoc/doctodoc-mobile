@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/models/user.dart';
 import 'package:doctodoc_mobile/screens/profile/patient_detail_screen.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,6 +55,17 @@ class _PatientsScreenState extends State<PatientsScreen> {
                   const Text(
                     'Mes patients',
                     style: TextStyle(fontSize: 20),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      // todo mélissa ici pour créer un patient
+                      showCreatePatientModal(context);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.add),
+                    ),
                   ),
                 ],
               ),

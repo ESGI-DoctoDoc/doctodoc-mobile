@@ -1,8 +1,9 @@
 import 'package:doctodoc_mobile/models/patient.dart';
-import 'package:doctodoc_mobile/screens/medicals/medical_screen.dart';
-import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_patient_modal.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../shared/widgets/modals/confirm_modal.dart';
 
 class PatientDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -58,6 +59,25 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                     'Mes informations',
                     style: TextStyle(fontSize: 20),
                   ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      //todo mélissa ici récup le patient en entier puis le donner à la modale
+                      final patient = Patient(
+                        id: "id",
+                        lastName: "lastName",
+                        firstName: "firstName",
+                        gender: "MALE",
+                        email: "c.lechene@myges.fr",
+                        phoneNumber: "0675704647",
+                      );
+                      showUpdatePatientModal(context, patient);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.edit, size: 18,),
+                    ),
+                  ),
                 ],
               ),
               background: Container(
@@ -104,42 +124,41 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
 
               const SizedBox(height: 24),
 
-              // Medical
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  'Dossier médical',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+              // // Medical
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+              //   child: Text(
+              //     'Dossier médical',
+              //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+              // ListTile(
+              //   title: const Text('Mes documents médicaux'),
+              //   trailing: const Icon(Icons.chevron_right),
+              //   onTap: () => MedicalScreen.navigateTo(context, patientId: widget.patientId),
+              // ),
+
+              //todo mélissa delete que si c'est pas le propriétaire du compte
+              //todo si tu veux éviter tu peux juste créer un autre fichier identique genre moi et les autres
               ListTile(
-                title: const Text('Mes documents médicaux'), //Todo me
+                leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+                title: Text(
+                  'Supprimer le proche',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => MedicalScreen.navigateTo(context, patientId: widget.patientId),
+                onTap: () async {
+                  final shouldDelete = await showConfirmModal(
+                    context,
+                    'Êtes-vous sûr de vouloir supprimer ce proche ? Cette action est irréversible.',
+                  );
+
+                  if (shouldDelete == true) {
+                    // TODO mélissa supprimer le patient
+                  }
+                },
               ),
 
-              const SizedBox(height: 50),
-              PrimaryButton(
-                label: "Modifier mes informations",
-                onTap: () {
-                  final patient = Patient(
-                    id: "id",
-                    lastName: "lastName",
-                    firstName: "firstName",
-                    gender: "gender",
-                    email: "email",
-                    phoneNumber: "phoneNumber",
-                  );
-                  showUpdatePatientModal(context, patient);
-                },
-              ),
-              const SizedBox(height: 16),
-              PrimaryButton(
-                label: "voir le dossier médical",
-                onTap: () {
-                  MedicalScreen.navigateTo(context, patientId: widget.patientId);
-                },
-              )
             ]),
           ),
         ],
