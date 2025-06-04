@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
+import 'package:doctodoc_mobile/models/patient.dart';
+import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository_event.dart';
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -10,12 +15,41 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepository userRepository;
+  final CloseMemberRepository closeMemberRepository;
+
+  late StreamSubscription _closeMemberRepositoryEventSubscription;
 
   UserBloc({
     required this.userRepository,
+    required this.closeMemberRepository,
   }) : super(UserInitial()) {
     on<OnUserLoadedBasicInfos>(_onUserLoadedBasicInfos);
     on<OnUserLoadedCloseMembers>(_onUserLoadedCloseMembers);
+
+    on<OnUserAddCloseMembers>(_onUserAddCloseMembers);
+    on<OnUserUpdateCloseMember>(_onUserUpdateCloseMember);
+    on<OnUserDeleteCloseMember>(_onUserDeleteCloseMember);
+
+    _closeMemberRepositoryEventSubscription =
+        closeMemberRepository.closeMemberRepositoryEventStream.listen((event) {
+      if (event is CreatedCloseMemberEvent) {
+        add(OnUserAddCloseMembers(
+          closeMember: event.closeMember,
+        ));
+      }
+
+      if (event is UpdatedCloseMemberEvent) {
+        add(OnUserUpdateCloseMember(
+          closeMember: event.closeMember,
+        ));
+      }
+
+      if (event is DeletedCloseMemberEvent) {
+        add(OnUserDeleteCloseMember(
+          id: event.id,
+        ));
+      }
+    });
   }
 
   Future<void> _onUserLoadedBasicInfos(
@@ -51,5 +85,62 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.error));
       }
     }
+  }
+
+  Future<void> _onUserAddCloseMembers(OnUserAddCloseMembers event, Emitter<UserState> emit) async {
+    if (state is! UserLoaded) return;
+
+    final currentState = state as UserLoaded;
+
+    emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.loading));
+
+    final closesMembers = currentState.user.closeMembers;
+    closesMembers.add(event.closeMember);
+    final user = currentState.user;
+    user.closeMembers = closesMembers;
+
+    emit(currentState.copyWith(user: user, getCloseMembersStatus: GetCloseMembersStatus.success));
+  }
+
+  Future<void> _onUserUpdateCloseMember(
+      OnUserUpdateCloseMember event, Emitter<UserState> emit) async {
+    if (state is! UserLoaded) return;
+
+    final currentState = state as UserLoaded;
+
+    emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.loading));
+
+    final closesMembers = currentState.user.closeMembers;
+    final closeMemberToUpdateIndex =
+        closesMembers.indexWhere((closeMember) => closeMember.id == event.closeMember.id);
+    closesMembers[closeMemberToUpdateIndex] = event.closeMember;
+
+    final user = currentState.user;
+    user.closeMembers = closesMembers;
+
+    emit(currentState.copyWith(user: user, getCloseMembersStatus: GetCloseMembersStatus.success));
+  }
+
+  Future<void> _onUserDeleteCloseMember(
+      OnUserDeleteCloseMember event, Emitter<UserState> emit) async {
+    if (state is! UserLoaded) return;
+
+    final currentState = state as UserLoaded;
+
+    emit(currentState.copyWith(getCloseMembersStatus: GetCloseMembersStatus.loading));
+
+    final closesMembers = currentState.user.closeMembers;
+    closesMembers.removeWhere((closeMember) => closeMember.id == event.id);
+
+    final user = currentState.user;
+    user.closeMembers = closesMembers;
+
+    emit(currentState.copyWith(user: user, getCloseMembersStatus: GetCloseMembersStatus.success));
+  }
+
+  @override
+  Future<void> close() {
+    _closeMemberRepositoryEventSubscription.cancel();
+    return super.close();
   }
 }

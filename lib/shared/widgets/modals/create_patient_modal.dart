@@ -1,8 +1,10 @@
+import 'package:doctodoc_mobile/blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/email_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/firstname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../banners/info_banner.dart';
@@ -113,6 +115,7 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
     }
     print("Patient created: ${firstNameController.text} ${lastNameController.text}");
     //todo appel create patient
+    _onCreateCloseMember();
     setState(() {
       isSubmitted = true;
     });
@@ -121,6 +124,23 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
       Navigator.of(context)
           .pop(CreatePatientRequest(firstNameController.text, lastNameController.text, "mockedId"));
     });
+  }
+
+  _onCreateCloseMember() {
+    final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
+
+    // todo Corentin fix
+    final birthdate = "2003-04-10";
+    final phoneNumber = "+33504030201";
+
+    writeCloseMemberBloc.add(OnCreateCloseMember(
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      birthdate: birthdate,
+      gender: genderController.text,
+      email: emailController.text,
+      phoneNumber: phoneNumber,
+    ));
   }
 }
 

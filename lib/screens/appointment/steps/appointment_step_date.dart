@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
-import '../../../blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
+import '../../../blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import '../../../shared/widgets/inputs/select_hour_input.dart';
 import '../types/appointment_flow_slot_data.dart';
 import '../widgets/appointment_label.dart';

@@ -4,9 +4,11 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/email_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/gender_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/firstname_input.dart';
 import '../inputs/lastname_input.dart';
@@ -55,10 +57,9 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
     firstNameController.text = widget.patient.firstName;
     lastNameController.text = widget.patient.lastName;
     emailController.text = widget.patient.email;
-    phoneController.text = widget.patient.phoneNumber;
-    //todo ajoute juste le birtdate dans le patient et mets le ici
-    //                              à la place de 2000-10-09
-    birthdateController.text = Jiffy.parse("2000-10-09", pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy");
+    phoneController.text = "07 07 07 07 07"; // todo fix Corentin
+    birthdateController.text =
+        Jiffy.parse(widget.patient.birthdate, pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy");
   }
 
   @override
@@ -104,6 +105,18 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
       //   lastName: lastNameController.text,
       // );
       Navigator.of(context).pop(/*updatedPatient*/);
+
+      final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
+      writeCloseMemberBloc.add(OnUpdateCloseMember(
+        id: widget.patient.id,
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        birthdate: widget.patient.birthdate,
+        // todo fix Corentin
+        gender: genderController.text,
+        email: emailController.text,
+        phoneNumber: widget.patient.phoneNumber, // todo fix Corentin
+      ));
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_care_tracking.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_date.dart';
 import 'package:doctodoc_mobile/screens/appointment/steps/appointment_step_doctor_questions.dart';
@@ -12,6 +11,7 @@ import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import '../../services/dtos/pre_appointment_answers.dart';
 import 'widgets/appointment_app_bar.dart';
 

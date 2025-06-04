@@ -124,7 +124,6 @@ class _PatientsScreenState extends State<PatientsScreen> {
 
   Widget _buildSuccess(User user) {
     final closeMembers = user.closeMembers;
-
     return Column(
       children: closeMembers.map((member) {
         return ListTile(

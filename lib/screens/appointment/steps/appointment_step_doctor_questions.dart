@@ -5,7 +5,7 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/doctor_question_input.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
+import '../../../blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import '../widgets/appointment_label.dart';
 import '../widgets/onboarding_loading.dart';
 
