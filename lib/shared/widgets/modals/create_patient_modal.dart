@@ -5,6 +5,7 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../banners/info_banner.dart';
@@ -114,7 +115,6 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
       return;
     }
     print("Patient created: ${firstNameController.text} ${lastNameController.text}");
-    //todo appel create patient
     _onCreateCloseMember();
     setState(() {
       isSubmitted = true;
@@ -128,18 +128,14 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
 
   _onCreateCloseMember() {
     final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
-
-    // todo Corentin fix
-    final birthdate = "2003-04-10";
-    final phoneNumber = "+33504030201";
-
     writeCloseMemberBloc.add(OnCreateCloseMember(
       firstName: firstNameController.text,
       lastName: lastNameController.text,
-      birthdate: birthdate,
+      birthdate: Jiffy.parse(birthdateController.text, pattern: "dd/MM/yyyy")
+          .format(pattern: "yyyy-MM-dd"),
       gender: genderController.text,
       email: emailController.text,
-      phoneNumber: phoneNumber,
+      phoneNumber: "+33${phoneController.text.substring(1)}".replaceAll(" ", ""),
     ));
   }
 }

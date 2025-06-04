@@ -57,7 +57,7 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
     firstNameController.text = widget.patient.firstName;
     lastNameController.text = widget.patient.lastName;
     emailController.text = widget.patient.email;
-    phoneController.text = "07 07 07 07 07"; // todo fix Corentin
+    phoneController.text = widget.patient.phoneNumber.replaceFirst(RegExp(r'^\+33\s?'), '0');
     birthdateController.text =
         Jiffy.parse(widget.patient.birthdate, pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy");
   }
@@ -111,11 +111,11 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
         id: widget.patient.id,
         firstName: firstNameController.text,
         lastName: lastNameController.text,
-        birthdate: widget.patient.birthdate,
-        // todo fix Corentin
+        birthdate: Jiffy.parse(birthdateController.text, pattern: "dd/MM/yyyy")
+            .format(pattern: "yyyy-MM-dd"),
         gender: genderController.text,
         email: emailController.text,
-        phoneNumber: widget.patient.phoneNumber, // todo fix Corentin
+        phoneNumber: "+33${phoneController.text.substring(1)}".replaceAll(" ", ""),
       ));
     }
   }

@@ -1,12 +1,12 @@
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 
 import '../../blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
 import '../../blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
 import '../../shared/widgets/modals/update_patient_modal.dart';
-import '../appointment/widgets/onboarding_loading.dart';
 
 class PatientDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -46,11 +46,20 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
         return switch (state.status) {
           DisplayDetailCloseMemberStatus.initial ||
           DisplayDetailCloseMemberStatus.loading =>
-            const OnboardingLoading(),
+            _buildLoading(),
           DisplayDetailCloseMemberStatus.success => _buildSuccess(state.closeMember),
           DisplayDetailCloseMemberStatus.error => _buildError(),
         };
       },
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Scaffold(
+      backgroundColor: Color(0xFFEFEFEF),
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
@@ -64,7 +73,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
       return _buildError();
     } else {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFEFEFEF),
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -115,7 +124,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                   ],
                 ),
                 background: Container(
-                  color: Colors.white,
+                  color: Color(0xFFEFEFEF),
                 ),
               ),
             ),
@@ -133,13 +142,42 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
+            'Genre',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListTile(
+          leading: Icon(closeMember.gender == 'MALE' ? Icons.male : Icons.female),
+          title: Text(closeMember.gender == 'MALE' ? 'Homme' : 'Femme'),
+        ),
+
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
             'Nom et prénom',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         ListTile(
-          title: Text("${closeMember.lastName} ${closeMember.firstName}"), //Todo me
-          onTap: () => PatientDetailsScreen.navigateTo(context, patientId: "0"), //Todo me
+          leading: const Icon(Icons.badge),
+          title: Text(
+            "${closeMember.lastName[0].toUpperCase()}${closeMember.lastName.substring(1).toLowerCase()} "
+            "${closeMember.firstName[0].toUpperCase()}${closeMember.firstName.substring(1).toLowerCase()}",
+          ),
+        ),
+
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Date de naissance',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.cake),
+          title: Text(
+            Jiffy.parse(closeMember.birthdate, pattern: 'yyyy-MM-dd').format(pattern: 'dd/MM/yyyy'),
+          ),
         ),
 
         const Padding(
@@ -150,7 +188,8 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
           ),
         ),
         ListTile(
-          title: Text(closeMember.email), //Todo me
+          leading: const Icon(Icons.email),
+          title: Text(closeMember.email),
         ),
 
         const Padding(
@@ -161,7 +200,8 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
           ),
         ),
         ListTile(
-          title: Text(closeMember.phoneNumber), //Todo me
+          leading: const Icon(Icons.phone),
+          title: Text(closeMember.phoneNumber),
         ),
 
         const SizedBox(height: 24),

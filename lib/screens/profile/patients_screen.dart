@@ -85,7 +85,10 @@ class _PatientsScreenState extends State<PatientsScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.person),
-                title: const Text('Corentin LECHENE'),
+                title: const Text(
+                  'Corentin Lechene',
+                  style: TextStyle(fontSize: 18, letterSpacing: 0.5),
+                ),
                 //Todo me
                 trailing: const Icon(Icons.chevron_right),
                 subtitle: const Text('c.lechene@myges.fr'),
@@ -124,11 +127,28 @@ class _PatientsScreenState extends State<PatientsScreen> {
 
   Widget _buildSuccess(User user) {
     final closeMembers = user.closeMembers;
+    if (closeMembers.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text("Vous n'avez pas encore de membres proches."),
+      );
+    }
+
     return Column(
       children: closeMembers.map((member) {
         return ListTile(
-          leading: const Icon(Icons.person),
-          title: Text('${member.firstName} ${member.lastName}'),
+          leading: Icon(
+            Icons.person,
+            color: member.gender == 'MALE'
+                ? Colors.blue
+                : member.gender == 'FEMALE'
+                    ? Colors.pink
+                    : null,
+          ),
+          title: Text(
+            '${member.firstName[0].toUpperCase()}${member.firstName.substring(1).toLowerCase()} ${member.lastName[0].toUpperCase()}${member.lastName.substring(1).toLowerCase()}',
+            style: TextStyle(fontSize: 18),
+          ),
           subtitle: Text(member.email),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => PatientDetailsScreen.navigateTo(context, patientId: member.id),
