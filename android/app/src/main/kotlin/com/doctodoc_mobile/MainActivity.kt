@@ -1,4 +1,4 @@
-package com.example.doctodoc_mobile
+package com.doctodoc_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
