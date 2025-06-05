@@ -4,10 +4,9 @@ import 'package:doctodoc_mobile/services/dtos/pre_appointment_answers.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
 import 'package:meta/meta.dart';
 
-import '../../exceptions/app_exception.dart';
+import '../../../exceptions/app_exception.dart';
 
 part 'appointment_event.dart';
-
 part 'appointment_state.dart';
 
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {

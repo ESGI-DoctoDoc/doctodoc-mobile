@@ -5,6 +5,7 @@ class Patient {
   final String gender;
   final String email;
   final String phoneNumber;
+  final String birthdate;
 
   Patient({
     required this.id,
@@ -13,6 +14,7 @@ class Patient {
     required this.gender,
     required this.email,
     required this.phoneNumber,
+    required this.birthdate,
   });
 
   factory Patient.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Patient {
       gender: json['gender'] ?? '',
       email: json['email'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
+      birthdate: json['birthdate'] ?? '',
     );
   }
 }

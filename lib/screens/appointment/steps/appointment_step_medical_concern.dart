@@ -1,9 +1,9 @@
-import 'package:doctodoc_mobile/blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import '../../../shared/widgets/inputs/medical_concern_selection.dart';
 import '../widgets/onboarding_loading.dart';
 

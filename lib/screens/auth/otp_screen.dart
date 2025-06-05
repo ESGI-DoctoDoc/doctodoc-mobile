@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/layout/main_layout.dart';
-import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
@@ -107,8 +106,6 @@ class _OtpScreenState extends State<OtpScreen> {
     if (state.status == AuthStatus.secondFactorAuthenticationError) {
       showErrorSnackbar(context, state.exception);
     } else if (state.status == AuthStatus.authenticated) {
-      //Todo remove this
-      print("login completed");
       final sharedPreferences = SharedPreferencesAuthDataSource();
       sharedPreferences.saveHasCompletedTwoFactorAuthentication(true);
 

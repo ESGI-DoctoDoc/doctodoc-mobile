@@ -1,7 +1,4 @@
-import 'package:doctodoc_mobile/blocs/appointment_bloc/appointment_bloc.dart';
-import 'package:doctodoc_mobile/layout/main_layout.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
-import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +6,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import '../../../shared/widgets/maps/maps_viewer.dart';
 
 class _AppointmentConfirmWidget extends StatefulWidget {
@@ -27,8 +25,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   Widget build(BuildContext context) {
     return BlocListener<AppointmentBloc, AppointmentState>(
       listenWhen: appointmentListener,
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -44,7 +41,6 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
-              // todo : put value of appointment data
               child: Column(
                 children: [
                   ListTile(
@@ -62,12 +58,14 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                       "Médecin",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text("Dr. ${widget.appointmentData.doctorData.firstName} ${widget.appointmentData.doctorData.lastName}"),
+                    subtitle: Text(
+                        "Dr. ${widget.appointmentData.doctorData.firstName} ${widget.appointmentData.doctorData.lastName}"),
                   ),
                   Divider(color: const Color(0xFFe0e0e0), thickness: 2),
                   ListTile(
                     leading: Icon(Icons.person),
-                    title: Text("Patient",
+                    title: Text(
+                      "Patient",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
@@ -127,7 +125,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
     final minute = parsedTime.minute.toString().padLeft(2, '0');
 
     return "$dateFormatted à ${hour}h$minute";
-    }
+  }
 
   _onConfirmAppointment() {
     final appointmentBloc = context.read<AppointmentBloc>();
@@ -135,7 +133,8 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   }
 }
 
-void showAppointmentConfirmationModal(BuildContext context, AppointmentFlowDataReview appointmentData) {
+void showAppointmentConfirmationModal(
+    BuildContext context, AppointmentFlowDataReview appointmentData) {
   void onClosedPopUp() {
     final appointmentBloc = context.read<AppointmentBloc>();
     appointmentBloc.add(OnUnlockedAppointment());

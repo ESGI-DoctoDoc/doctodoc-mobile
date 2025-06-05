@@ -3,10 +3,15 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/firstname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../banners/info_banner.dart';
 import '../buttons/primary_button.dart';
+import '../inputs/birthdate_input.dart';
+import '../inputs/gender_input.dart';
 import 'base/modal_base.dart';
 
 Future<CreatePatientRequest?> showCreatePatientModal(BuildContext context) {
@@ -33,10 +38,12 @@ class CreatePatientModal extends StatefulWidget {
 
 class _CreatePatientModalState extends State<CreatePatientModal> {
   final forgotPasswordKey = GlobalKey<FormState>();
+  final TextEditingController genderController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController birthdateController = TextEditingController();
   bool isSubmitted = false;
 
   @override
@@ -62,6 +69,8 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
                 key: forgotPasswordKey,
                 child: Column(
                   children: [
+                    GenderInput(controller: genderController, onChange: (value) {}),
+                    const SizedBox(height: 10),
                     FirstnameInput(controller: firstNameController),
                     const SizedBox(height: 10),
                     LastnameInput(controller: lastNameController),
@@ -69,6 +78,9 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
                     EmailInput(controller: emailController),
                     const SizedBox(height: 10),
                     PhoneInput(controller: phoneController),
+                    const SizedBox(height: 10),
+                    BirthdateInput(controller: birthdateController),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -103,7 +115,7 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
       return;
     }
     print("Patient created: ${firstNameController.text} ${lastNameController.text}");
-    //todo appel create patient
+    _onCreateCloseMember();
     setState(() {
       isSubmitted = true;
     });
@@ -112,6 +124,19 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
       Navigator.of(context)
           .pop(CreatePatientRequest(firstNameController.text, lastNameController.text, "mockedId"));
     });
+  }
+
+  _onCreateCloseMember() {
+    final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
+    writeCloseMemberBloc.add(OnCreateCloseMember(
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      birthdate: Jiffy.parse(birthdateController.text, pattern: "dd/MM/yyyy")
+          .format(pattern: "yyyy-MM-dd"),
+      gender: genderController.text,
+      email: emailController.text,
+      phoneNumber: "+33${phoneController.text.substring(1)}".replaceAll(" ", ""),
+    ));
   }
 }
 
