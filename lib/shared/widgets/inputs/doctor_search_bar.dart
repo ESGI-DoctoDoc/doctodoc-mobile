@@ -4,10 +4,12 @@ import 'base/input_debounce.dart';
 
 class DoctorSearchBar extends StatefulWidget {
   final Function(String) onSearch;
+  final FocusNode? focusNode;
 
   const DoctorSearchBar({
     super.key,
     required this.onSearch,
+    this.focusNode,
   });
 
   @override
@@ -30,6 +32,7 @@ class _DoctorSearchBarState extends State<DoctorSearchBar> {
   @override
   Widget build(BuildContext context) {
     return InputDebounce(
+      focusNode: widget.focusNode,
       controller: _controller,
       debounceDuration: 300,
       label: 'Rechercher un médecin',

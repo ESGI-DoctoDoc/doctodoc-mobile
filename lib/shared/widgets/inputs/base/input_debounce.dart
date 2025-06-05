@@ -8,12 +8,14 @@ class InputDebounce extends StatefulWidget {
   final int debounceDuration;
   final String label;
   final String placeholder;
+  final FocusNode? focusNode;
 
   const InputDebounce({super.key,
     required this.controller,
     this.debounceDuration = 300,
     required this.label,
     required this.placeholder,
+    this.focusNode,
   });
 
   @override
@@ -57,6 +59,7 @@ class _InputDebounceState extends State<InputDebounce> {
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
       child: TextFormField(
         controller: _debounceController,
+        focusNode: widget.focusNode,
         decoration: buildInputDecoration(
           context: context,
           label: widget.label,

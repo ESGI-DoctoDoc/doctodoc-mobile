@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/screens/doctors/doctor_search_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +19,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FocusNode _searchFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     final userBloc = context.read<UserBloc>();
     userBloc.add(OnUserLoadedBasicInfos());
+    _searchFocusNode.addListener(() {
+      if (_searchFocusNode.hasFocus) {
+        _searchFocusNode.unfocus();
+        DoctorSearchScreen.navigateTo(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,10 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // search bar
                     const SizedBox(height: 20),
-                    DoctorSearchBar(onSearch: (search) {
-                      // Handle search action
-                      print("Searching for: $search");
-                    }),
+                    DoctorSearchBar(
+                      focusNode: _searchFocusNode,
+                      onSearch: (search) {
+                        // Handle search action
+                        print("Searching for: $search");
+                      },
+                    ),
 
                     // incoming appointments
                     const SizedBox(height: 10),
