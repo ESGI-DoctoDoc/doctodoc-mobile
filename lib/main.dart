@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
-import 'package:doctodoc_mobile/blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/appointment_data_source/remote_appointment_data_source.dart';
@@ -25,6 +24,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'blocs/auth_bloc/auth_bloc.dart';
+import 'blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import 'blocs/register_bloc/register_bloc.dart';
 import 'blocs/user_bloc/user_bloc.dart';
 import 'layout/main_layout.dart';

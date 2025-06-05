@@ -59,7 +59,6 @@ class _PatientsScreenState extends State<PatientsScreen> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      // todo mélissa ici pour créer un patient
                       showCreatePatientModal(context);
                     },
                     child: const Padding(

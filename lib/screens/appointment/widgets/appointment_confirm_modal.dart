@@ -41,7 +41,6 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
-              // todo : put value of appointment data
               child: Column(
                 children: [
                   ListTile(

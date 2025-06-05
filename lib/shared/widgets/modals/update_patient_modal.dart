@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/write_close_member_bloc/write_close_member_bloc.dart';
+import '../../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/firstname_input.dart';
 import '../inputs/lastname_input.dart';
@@ -99,12 +99,6 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
 
   void _updatePatient() {
     if (updatePatientKey.currentState!.validate()) {
-      // final updatedPatient = Patient(
-      //   id: widget.patient.id,
-      //   firstName: firstNameController.text,
-      //   lastName: lastNameController.text,
-      // );
-      Navigator.of(context).pop(/*updatedPatient*/);
 
       final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
       writeCloseMemberBloc.add(OnUpdateCloseMember(
@@ -117,6 +111,8 @@ class _UpdatePatientWidgetState extends State<_UpdatePatientWidget> {
         email: emailController.text,
         phoneNumber: "+33${phoneController.text.substring(1)}".replaceAll(" ", ""),
       ));
+
+      Navigator.of(context).pop();
     }
   }
 }

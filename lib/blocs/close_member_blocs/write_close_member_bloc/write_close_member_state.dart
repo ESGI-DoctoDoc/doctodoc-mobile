@@ -1,10 +1,5 @@
 part of 'write_close_member_bloc.dart';
 
-// @immutable
-// sealed class WriteCloseMemberState {}
-
-// final class WriteCloseMemberInitial extends WriteCloseMemberState {}
-
 enum WriteCloseMemberStatus {
   initial,
   loading,
@@ -31,19 +26,3 @@ final class WriteCloseMemberState {
     );
   }
 }
-
-// enum UpdateCloseMemberStatus {
-//   loading,
-//   success,
-//   error,
-// }
-//
-// final class UpdateCloseMemberState extends WriteCloseMemberState {
-//   final UpdateCloseMemberStatus status;
-//   final AppException? exception;
-//
-//   UpdateCloseMemberState({
-//     required this.status,
-//     this.exception,
-//   });
-// }

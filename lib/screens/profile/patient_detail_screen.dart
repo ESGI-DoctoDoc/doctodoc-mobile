@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../../blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
-import '../../blocs/write_close_member_bloc/write_close_member_bloc.dart';
+import '../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
 import '../../shared/widgets/modals/update_patient_modal.dart';
 

@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/email_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/firstname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../banners/info_banner.dart';
 import '../buttons/primary_button.dart';
 import '../inputs/birthdate_input.dart';
