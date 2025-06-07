@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/screens/profile/patient_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
+import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -39,14 +40,16 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
+              //todo ajouter le bloc ici
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Profil'),
                 subtitle: const Text('Corentin LECHENE'),
-                //Todo me
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () =>
-                    PatientDetailsScreen.navigateTo(context, patientId: "patientId"), //Todo me
+                onTap: () => ProfileDetailsScreen.navigateTo(
+                  context,
+                  patientId: "todo",
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.group),
