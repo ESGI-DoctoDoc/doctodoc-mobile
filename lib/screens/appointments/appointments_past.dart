@@ -7,26 +7,26 @@ import '../../models/appointment.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class AppointmentPast extends StatefulWidget {
-  const AppointmentPast({super.key});
+  final ScrollController scrollController;
+
+  const AppointmentPast({super.key, required this.scrollController});
 
   @override
   State<AppointmentPast> createState() => _AppointmentPastState();
 }
 
 class _AppointmentPastState extends State<AppointmentPast> {
-  final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = true;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    widget.scrollController.addListener(_onScroll);
     _fetchInitialAppointments();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -81,7 +81,7 @@ class _AppointmentPastState extends State<AppointmentPast> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
+    if (widget.scrollController.position.pixels >= widget.scrollController.position.maxScrollExtent &&
         _isLoadingMore) {
       _fetchNextAppointments();
     }

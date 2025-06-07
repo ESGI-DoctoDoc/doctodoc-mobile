@@ -84,12 +84,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
                   ? BlocProvider(
                       create: (context) => DisplayAppointmentBloc(
                           appointmentRepository: context.read<AppointmentRepository>()),
-                      child: const AppointmentInComing(),
+                      child: AppointmentInComing(scrollController: _scrollController),
                     )
                   : BlocProvider(
                       create: (context) => DisplayAppointmentBloc(
                           appointmentRepository: context.read<AppointmentRepository>()),
-                      child: const AppointmentPast(),
+                      child: AppointmentPast(scrollController: _scrollController),
                     );
             },
           ),

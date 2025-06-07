@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppointmentInComing extends StatefulWidget {
-  const AppointmentInComing({super.key});
+  final ScrollController scrollController;
+
+  const AppointmentInComing({super.key, required this.scrollController});
 
   @override
   State<AppointmentInComing> createState() => _AppointmentInComingState();
@@ -14,18 +16,16 @@ class AppointmentInComing extends StatefulWidget {
 
 class _AppointmentInComingState extends State<AppointmentInComing> {
   bool _isLoadingMore = true;
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    widget.scrollController.addListener(_onScroll);
     _fetchInitialAppointments();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -80,19 +80,23 @@ class _AppointmentInComingState extends State<AppointmentInComing> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
+    if (widget.scrollController.position.pixels >= widget.scrollController.position.maxScrollExtent &&
         _isLoadingMore) {
       _fetchNextAppointments();
     }
   }
 
   void _fetchInitialAppointments() {
-    final bloc = context.read<DisplayAppointmentBloc>();
-    bloc.add(OnGetInitialUpComing());
+    if(mounted) {
+      final bloc = context.read<DisplayAppointmentBloc>();
+      bloc.add(OnGetInitialUpComing());
+    }
   }
 
   void _fetchNextAppointments() {
-    final bloc = context.read<DisplayAppointmentBloc>();
-    bloc.add(OnGetNextUpComing());
+    if(mounted) {
+      final bloc = context.read<DisplayAppointmentBloc>();
+      bloc.add(OnGetNextUpComing());
+    }
   }
 }
