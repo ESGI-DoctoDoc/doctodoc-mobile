@@ -43,10 +43,20 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   }
 
   @override
-  Future<List<Appointment>> getAllUpcoming(int page) async {
+  Future<List<Appointment>> getUpComingAppointments(int page) async {
     int defaultSize = 10;
     final response =
         await dio.get("/patients/appointments/get-all-upcoming?page=$page&size=$defaultSize");
+
+    final jsonList = (response.data["data"] as List?) ?? [];
+    return jsonList.map((jsonElement) => Appointment.fromJson(jsonElement)).toList();
+  }
+
+  @override
+  Future<List<Appointment>> getPastAppointments(int page) async {
+    int defaultSize = 10;
+    final response =
+        await dio.get("/patients/appointments/get-all-past?page=$page&size=$defaultSize");
 
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Appointment.fromJson(jsonElement)).toList();

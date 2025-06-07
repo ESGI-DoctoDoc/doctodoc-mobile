@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
+import '../../services/repositories/appointment_repository/appointment_repository.dart';
 import 'appointments_in_coming.dart';
 import 'appointments_past.dart';
 
@@ -78,15 +81,22 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
             animation: _tabController,
             builder: (context, child) {
               return _tabController.index == 0
-                  ? const AppointmentInComing()
-                  : const AppointmentPast();
+                  ? BlocProvider(
+                      create: (context) => DisplayAppointmentBloc(
+                          appointmentRepository: context.read<AppointmentRepository>()),
+                      child: const AppointmentInComing(),
+                    )
+                  : BlocProvider(
+                      create: (context) => DisplayAppointmentBloc(
+                          appointmentRepository: context.read<AppointmentRepository>()),
+                      child: const AppointmentPast(),
+                    );
             },
           ),
         ],
       ),
     );
   }
-
 }
 
 class _FixedTextHeader extends SliverPersistentHeaderDelegate {

@@ -9,5 +9,7 @@ abstract class AppointmentDataSource {
 
   Future<void> confirm(String appointmentLockedId);
 
-  Future<List<Appointment>> getAllUpcoming(int page);
+  Future<List<Appointment>> getUpComingAppointments(int page);
+
+  Future<List<Appointment>> getPastAppointments(int page);
 }

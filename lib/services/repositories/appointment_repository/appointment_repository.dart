@@ -36,9 +36,17 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<Appointment>> getAllUpComing(int page) async {
+  Future<List<Appointment>> getUpComing(int page) async {
     try {
-      return await appointmentDataSource.getAllUpcoming(page);
+      return await appointmentDataSource.getUpComingAppointments(page);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<List<Appointment>> getPastAppointments(int page) async {
+    try {
+      return await appointmentDataSource.getPastAppointments(page);
     } catch (error) {
       throw UnknownException();
     }

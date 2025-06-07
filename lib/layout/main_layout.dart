@@ -1,10 +1,7 @@
-import 'package:doctodoc_mobile/blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointments/appointments_screen.dart';
 import 'package:doctodoc_mobile/screens/documents/documents_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/account_screen.dart';
-import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../screens/home_screen.dart';
 
@@ -28,11 +25,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    BlocProvider(
-      create: (context) =>
-          DisplayAppointmentBloc(appointmentRepository: context.read<AppointmentRepository>()),
-      child: const AppointmentsScreen(),
-    ),
+    AppointmentsScreen(),
     DocumentsScreen(),
     AccountScreen()
   ];

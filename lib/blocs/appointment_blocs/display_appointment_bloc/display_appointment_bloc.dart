@@ -13,11 +13,38 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
   DisplayAppointmentBloc({
     required this.appointmentRepository,
   }) : super(DisplayAppointmentState()) {
-    on<OnGetAllUpComing>(_onGetAllUpComing);
+    on<OnGetInitialUpComing>(_onGetInitial);
+    on<OnGetNextUpComing>(_onGetNextUpComing);
+    on<OnGetInitialPast>(_onGetInitialPast);
+    on<OnGetNextPart>(_onGetNextPart);
   }
 
-  Future<void> _onGetAllUpComing(
-      OnGetAllUpComing event, Emitter<DisplayAppointmentState> emit) async {
+  Future<void> _onGetInitial(
+      OnGetInitialUpComing event, Emitter<DisplayAppointmentState> emit) async {
+    try {
+      emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+
+      int page = 0;
+
+      List<Appointment> appointments = await appointmentRepository.getUpComing(page);
+
+      bool isLoadingMore = appointments.isEmpty ? false : true;
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.success,
+        page: page,
+        isLoadingMore: isLoadingMore,
+        appointments: appointments,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onGetNextUpComing(
+      OnGetNextUpComing event, Emitter<DisplayAppointmentState> emit) async {
     try {
       if (state.status == DisplayAppointmentStatus.success) {
         emit(state.copyWith(status: DisplayAppointmentStatus.loading));
@@ -32,7 +59,65 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
 
       List<Appointment> oldAppointments = List<Appointment>.from(state.appointments);
 
-      List<Appointment> appointments = await appointmentRepository.getAllUpComing(page);
+      List<Appointment> appointments = await appointmentRepository.getUpComing(page);
+
+      oldAppointments.addAll(appointments);
+      bool isLoadingMore = appointments.isEmpty ? false : true;
+
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.success,
+        page: page,
+        isLoadingMore: isLoadingMore,
+        appointments: oldAppointments,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onGetInitialPast(
+      OnGetInitialPast event, Emitter<DisplayAppointmentState> emit) async {
+    try {
+      emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+
+      int page = 0;
+
+      List<Appointment> appointments = await appointmentRepository.getPastAppointments(page);
+
+      bool isLoadingMore = appointments.isEmpty ? false : true;
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.success,
+        page: page,
+        isLoadingMore: isLoadingMore,
+        appointments: appointments,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: DisplayAppointmentStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onGetNextPart(OnGetNextPart event, Emitter<DisplayAppointmentState> emit) async {
+    try {
+      if (state.status == DisplayAppointmentStatus.success) {
+        emit(state.copyWith(status: DisplayAppointmentStatus.loading));
+      } else if ((state.status == DisplayAppointmentStatus.initial)) {
+        emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+      } else if ((state.status == DisplayAppointmentStatus.loading) ||
+          (state.status == DisplayAppointmentStatus.initialLoading)) {
+        return;
+      }
+
+      int page = state.page + 1;
+
+      List<Appointment> oldAppointments = List<Appointment>.from(state.appointments);
+
+      List<Appointment> appointments = await appointmentRepository.getPastAppointments(page);
 
       oldAppointments.addAll(appointments);
       bool isLoadingMore = appointments.isEmpty ? false : true;

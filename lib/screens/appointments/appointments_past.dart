@@ -83,12 +83,17 @@ class _AppointmentPastState extends State<AppointmentPast> {
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
         _isLoadingMore) {
-      _fetchInitialAppointments();
+      _fetchNextAppointments();
     }
   }
 
   void _fetchInitialAppointments() {
-    //todo mélissa
-    // context.read<DisplayAppointmentBloc>().add(OnGetAll());
+    final bloc = context.read<DisplayAppointmentBloc>();
+    bloc.add(OnGetInitialPast());
+  }
+
+  void _fetchNextAppointments() {
+    final bloc = context.read<DisplayAppointmentBloc>();
+    bloc.add(OnGetNextPart());
   }
 }

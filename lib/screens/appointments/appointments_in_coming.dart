@@ -82,11 +82,17 @@ class _AppointmentInComingState extends State<AppointmentInComing> {
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
         _isLoadingMore) {
-      _fetchInitialAppointments();
+      _fetchNextAppointments();
     }
   }
 
   void _fetchInitialAppointments() {
-    context.read<DisplayAppointmentBloc>().add(OnGetAllUpComing());
+    final bloc = context.read<DisplayAppointmentBloc>();
+    bloc.add(OnGetInitialUpComing());
+  }
+
+  void _fetchNextAppointments() {
+    final bloc = context.read<DisplayAppointmentBloc>();
+    bloc.add(OnGetNextUpComing());
   }
 }
