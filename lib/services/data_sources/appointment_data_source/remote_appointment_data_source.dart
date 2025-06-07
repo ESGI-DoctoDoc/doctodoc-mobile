@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/services/dtos/locked_appointment_request.dart';
 
+import '../../../models/appointment.dart';
 import 'appointment_data_source.dart';
 
 class RemoteAppointmentDataSource implements AppointmentDataSource {
@@ -39,5 +40,15 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   @override
   Future<void> unlockedAppointment(String appointmentLockedId) async {
     await dio.delete("/patients/appointments/$appointmentLockedId");
+  }
+
+  @override
+  Future<List<Appointment>> getAllUpcoming(int page) async {
+    int defaultSize = 10;
+    final response =
+        await dio.get("/patients/appointments/get-all-upcoming?page=$page&size=$defaultSize");
+
+    final jsonList = (response.data["data"] as List?) ?? [];
+    return jsonList.map((jsonElement) => Appointment.fromJson(jsonElement)).toList();
   }
 }

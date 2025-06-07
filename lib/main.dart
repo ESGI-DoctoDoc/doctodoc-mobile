@@ -163,7 +163,7 @@ class MyApp extends StatelessWidget {
             create: (context) => DisplayDetailCloseMemberBloc(
               closeMemberRepository: context.read<CloseMemberRepository>(),
             ),
-          ),
+          )
         ],
         child: MaterialApp(
           title: titleApp,

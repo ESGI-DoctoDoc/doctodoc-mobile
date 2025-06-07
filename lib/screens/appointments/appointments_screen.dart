@@ -1,5 +1,9 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
+import 'package:doctodoc_mobile/models/appointment.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/cards/appointment_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   const AppointmentsScreen({super.key});
@@ -10,9 +14,8 @@ class AppointmentsScreen extends StatefulWidget {
 
 class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  List<Widget> _incomingAppointments = [];
   List<Widget> _pastAppointments = [];
-  bool _isLoadingMore = false;
+  bool _isLoadingMore = true;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -90,19 +93,58 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
 
   List<Widget> _buildInComingAppointmentsTab() {
     return [
-      Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            ..._incomingAppointments,
-            if (_isLoadingMore) const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: CircularProgressIndicator(),
+      BlocBuilder<DisplayAppointmentBloc, DisplayAppointmentState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: BlocBuilder<DisplayAppointmentBloc, DisplayAppointmentState>(
+              builder: (context, state) {
+                return switch (state.status) {
+                  DisplayAppointmentStatus.initial ||
+                  DisplayAppointmentStatus.initialLoading =>
+                    const OnboardingLoading(), // todo : Corentin is ok ?
+                  DisplayAppointmentStatus.success ||
+                  DisplayAppointmentStatus.loading =>
+                    _buildSuccess(state.appointments, state.isLoadingMore),
+                  DisplayAppointmentStatus.error => _buildError(),
+                };
+              },
             ),
-          ],
-        ),
+          );
+        },
       )
     ];
+  }
+
+  Widget _buildSuccess(List<Appointment> appointments, bool isLoadingMore) {
+    List<Widget> appointmentsUpComings = [];
+
+    for (var appointment in appointments) {
+      appointmentsUpComings.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: AppointmentCard(
+            appointment: appointment,
+          ),
+        ),
+      );
+    }
+
+    _isLoadingMore = isLoadingMore;
+    Widget lastOne = isLoadingMore ? const CircularProgressIndicator() : const Text('nothing');
+
+    return Column(
+      children: [
+        ...appointmentsUpComings,
+        lastOne,
+      ],
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
   }
 
   List<Widget> _buildPastAppointmentsTab() {
@@ -112,7 +154,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
         child: Column(
           children: [
             ..._pastAppointments,
-            if (_isLoadingMore) const CircularProgressIndicator(),
+            // if (_isLoadingMore) const CircularProgressIndicator(),
           ],
         ),
       )
@@ -120,41 +162,15 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 && !_isLoadingMore) {
-      _loadMoreAppointments();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
+        _isLoadingMore) {
+      _fetchInitialAppointments();
     }
   }
 
   void _fetchInitialAppointments() {
-    setState(() {
-      _incomingAppointments = List.generate(5, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-      _pastAppointments = List.generate(5, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-    });
-  }
-
-  void _loadMoreAppointments() async {
-    setState(() {
-      _isLoadingMore = true;
-    });
-    await Future.delayed(Duration(seconds: 2));
-    setState(() {
-      final newItems = List.generate(3, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-      if (_tabController.index == 0) {
-        _incomingAppointments.addAll(newItems);
-      } else {
-        _pastAppointments.addAll(newItems);
-      }
-      _isLoadingMore = false;
-    });
+    final displayAppointmentBloc = context.read<DisplayAppointmentBloc>();
+    displayAppointmentBloc.add(OnGetAllUpComing());
   }
 }
 
