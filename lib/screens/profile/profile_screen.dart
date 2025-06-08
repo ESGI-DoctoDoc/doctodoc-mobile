@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
-import '../../shared/widgets/modals/confirm_modal.dart';
-import '../appointment/widgets/onboarding_loading.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -45,7 +43,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         return switch (state) {
-          UserLoading() || UserInitial() => const OnboardingLoading(),
+          UserLoading() || UserInitial() => const CircularProgressIndicator(),
           UserLoaded() => _buildSuccess(state.user.patientInfos),
           UserError() || UserState() => _buildError(),
         };
@@ -200,26 +198,6 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         //   trailing: const Icon(Icons.chevron_right),
         //   onTap: () => MedicalScreen.navigateTo(context, patientId: widget.patientId),
         // ),
-
-        // todo créer un autre fichier identique genre moi et les autres
-        ListTile(
-          leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-          title: Text(
-            'Supprimer le proche',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () async {
-            final shouldDelete = await showConfirmModal(
-              context,
-              'Êtes-vous sûr de vouloir supprimer ce proche ? Cette action est irréversible.',
-            );
-
-            if (shouldDelete == true) {
-              // _onDeleteCloseMember();
-            }
-          },
-        ),
       ]),
     );
   }

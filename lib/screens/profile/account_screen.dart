@@ -74,7 +74,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.group),
                 title: const Text('Ma famille'),
                 subtitle: const Text('Gérer les membres de ma famille'),
-                //Todo me
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => PatientsScreen.navigateTo(context),
               ),
@@ -82,7 +81,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.folder_shared),
                 title: const Text('Dossier médical'),
                 subtitle: const Text('Mes documents médicaux'),
-                //Todo me
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => MedicalScreen.navigateTo(context, patientId: "0"), //Todo me
               ),
@@ -117,7 +115,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.lock),
                 title: const Text('Mot de passe'),
                 subtitle: const Text('Modifier mon mot de passe'),
-                //Todo me
                 trailing: const Icon(Icons.edit, size: 18),
                 onTap: () => showChangePasswordModal(context),
               ),
@@ -134,13 +131,13 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.privacy_tip),
                 title: const Text('Politique de confidentialité'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo me
+                onTap: () {}, //Todo add page
               ),
               ListTile(
                 leading: const Icon(Icons.description),
                 title: const Text("Conditions d'utilisation"),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo me
+                onTap: () {}, //Todo add page
               ),
               ListTile(
                 leading: const Icon(Icons.logout),
