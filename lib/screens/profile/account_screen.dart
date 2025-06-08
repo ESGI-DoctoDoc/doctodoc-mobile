@@ -1,6 +1,8 @@
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/update_email_modal.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/update_phone_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -192,7 +194,7 @@ class _AccountScreenState extends State<AccountScreen> {
       subtitle: Text(phoneNumber),
       // todo Corentin reformat
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-      onTap: () {},
+      onTap: () => showUpdatePhoneModal(context, phoneNumber),
     );
   }
 
@@ -202,7 +204,7 @@ class _AccountScreenState extends State<AccountScreen> {
       title: Text('Email'),
       subtitle: Text(email),
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-      onTap: () {},
+      onTap: () => showUpdateEmailModal(context, email),
     );
   }
 
@@ -221,8 +223,10 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Widget _buildError() {
-    return const Center(
-      child: Text("Une erreur s'est produite."),
+    return const ListTile(
+      title: Text("Une erreur s'est produite."),
+      subtitle: Text("Veuillez réessayer plus tard."),
+      leading: Icon(Icons.error, color: Colors.red),
     );
   }
 }
