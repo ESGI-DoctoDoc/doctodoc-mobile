@@ -1,14 +1,33 @@
-import 'package:doctodoc_mobile/screens/profile/patient_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../blocs/user_bloc/user_bloc.dart';
+import '../../models/user.dart';
+import '../appointment/widgets/onboarding_loading.dart';
 import '../medicals/medical_screen.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUser();
+  }
+
+  void _loadCurrentUser() {
+    final userBloc = context.read<UserBloc>();
+    userBloc.add(OnUserLoadedBasicInfos());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +59,14 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              //todo ajouter le bloc ici
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profil'),
-                subtitle: const Text('Corentin LECHENE'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => ProfileDetailsScreen.navigateTo(
-                  context,
-                  patientId: "todo",
-                ),
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    UserLoading() || UserInitial() => const OnboardingLoading(),
+                    UserLoaded() => _buildProfileSection(state.user),
+                    UserError() || UserState() => _buildError(),
+                  };
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.group),
@@ -76,21 +93,23 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              ListTile(
-                leading: const Icon(Icons.email),
-                title: Text('Email'),
-                subtitle: const Text('c.lechene@myges.fr'),
-                //Todo me
-                trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-                onTap: () {},
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    UserLoading() || UserInitial() => const OnboardingLoading(),
+                    UserLoaded() => _buildEmailSection(state.user.patientInfos.email),
+                    UserError() || UserState() => _buildError(),
+                  };
+                },
               ),
-              ListTile(
-                leading: const Icon(Icons.phone),
-                title: Text('Email'),
-                subtitle: const Text('06 12 34 56 78'),
-                //Todo me
-                trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-                onTap: () {},
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    UserLoading() || UserInitial() => const OnboardingLoading(),
+                    UserLoaded() => _buildPhoneNumberSection(state.user.patientInfos.phoneNumber),
+                    UserError() || UserState() => _buildError(),
+                  };
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.lock),
@@ -163,6 +182,47 @@ class AccountScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  ListTile _buildPhoneNumberSection(String phoneNumber) {
+    return ListTile(
+      leading: const Icon(Icons.phone),
+      title: const Text('Numéro de téléphone'),
+      subtitle: Text(phoneNumber),
+      // todo Corentin reformat
+      trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
+      onTap: () {},
+    );
+  }
+
+  ListTile _buildEmailSection(String email) {
+    return ListTile(
+      leading: const Icon(Icons.email),
+      title: Text('Email'),
+      subtitle: Text(email),
+      trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
+      onTap: () {},
+    );
+  }
+
+  ListTile _buildProfileSection(User user) {
+    return ListTile(
+      leading: const Icon(Icons.person),
+      title: const Text('Profil'),
+      // subtitle: const Text('Corentin LECHENE'),
+      subtitle: Text("${user.patientInfos.firstName} ${user.patientInfos.lastName}"),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => ProfileDetailsScreen.navigateTo(
+        context,
+        patientId: user.patientInfos.id,
+      ),
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
     );
   }
 }

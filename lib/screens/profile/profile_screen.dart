@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
-import '../../blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
-import '../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
+import '../../blocs/user_bloc/user_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
 import '../../shared/widgets/modals/update_patient_modal.dart';
+import '../appointment/widgets/onboarding_loading.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -36,103 +36,85 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadCloseMember();
+    final userBloc = context.read<UserBloc>();
+    userBloc.add(OnUserLoadedBasicInfos());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DisplayDetailCloseMemberBloc, DisplayDetailCloseMemberState>(
+    return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
-        return switch (state.status) {
-          DisplayDetailCloseMemberStatus.initial ||
-          DisplayDetailCloseMemberStatus.loading =>
-              _buildLoading(),
-          DisplayDetailCloseMemberStatus.success => _buildSuccess(state.closeMember),
-          DisplayDetailCloseMemberStatus.error => _buildError(),
+        return switch (state) {
+          UserLoading() || UserInitial() => const OnboardingLoading(),
+          UserLoaded() => _buildSuccess(state.user.patientInfos),
+          UserError() || UserState() => _buildError(),
         };
       },
     );
   }
 
-  Widget _buildLoading() {
-    return const Scaffold(
+  Widget _buildSuccess(Patient userPatientInfos) {
+    print(userPatientInfos.birthdate);
+    return Scaffold(
       backgroundColor: Color(0xFFEFEFEF),
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  _loadCloseMember() {
-    final displayDetailCloseMemberBloc = context.read<DisplayDetailCloseMemberBloc>();
-    displayDetailCloseMemberBloc.add(OnLoadDetailCloseMember(id: widget.patientId));
-  }
-
-  Widget _buildSuccess(Patient? closeMember) {
-    if (closeMember == null) {
-      return _buildError();
-    } else {
-      return Scaffold(
-        backgroundColor: Color(0xFFEFEFEF),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              floating: true,
-              snap: true,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              expandedHeight: 100.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: InkWell(
-                        child: const Icon(Icons.chevron_left),
-                        onTap: () => Navigator.of(context).pop(),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            floating: true,
+            snap: true,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            expandedHeight: 100.0,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: InkWell(
+                      child: const Icon(Icons.chevron_left),
+                      onTap: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                  const Text(
+                    'Mes informations',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      final patient = Patient(
+                        id: userPatientInfos.id,
+                        lastName: userPatientInfos.lastName,
+                        firstName: userPatientInfos.firstName,
+                        gender: userPatientInfos.gender,
+                        email: userPatientInfos.email,
+                        phoneNumber: userPatientInfos.phoneNumber,
+                        birthdate: userPatientInfos.birthdate,
+                      );
+                      showUpdatePatientModal(context, patient);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(
+                        Icons.edit,
+                        size: 18,
                       ),
                     ),
-                    const Text(
-                      'Mes informations',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    const Spacer(),
-                    InkWell(
-                      onTap: () {
-                        final patient = Patient(
-                          id: closeMember.id,
-                          lastName: closeMember.lastName,
-                          firstName: closeMember.firstName,
-                          gender: closeMember.gender,
-                          email: closeMember.email,
-                          phoneNumber: closeMember.phoneNumber,
-                          birthdate: closeMember.birthdate,
-                        );
-                        showUpdatePatientModal(context, patient);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Icon(
-                          Icons.edit,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                background: Container(
-                  color: Color(0xFFEFEFEF),
-                ),
+                  ),
+                ],
+              ),
+              background: Container(
+                color: Color(0xFFEFEFEF),
               ),
             ),
-            buildBody(closeMember),
-          ],
-        ),
-      );
-    }
+          ),
+          buildBody(userPatientInfos),
+        ],
+      ),
+    );
   }
 
   Widget buildBody(Patient closeMember) {
@@ -162,7 +144,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
           leading: const Icon(Icons.badge),
           title: Text(
             "${closeMember.lastName[0].toUpperCase()}${closeMember.lastName.substring(1).toLowerCase()} "
-                "${closeMember.firstName[0].toUpperCase()}${closeMember.firstName.substring(1).toLowerCase()}",
+            "${closeMember.firstName[0].toUpperCase()}${closeMember.firstName.substring(1).toLowerCase()}",
           ),
         ),
 
@@ -235,7 +217,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
             );
 
             if (shouldDelete == true) {
-              _onDeleteCloseMember();
+              // _onDeleteCloseMember();
             }
           },
         ),
@@ -247,11 +229,5 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     return const Center(
       child: Text("Une erreur s'est produite."),
     );
-  }
-
-  _onDeleteCloseMember() {
-    final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
-    writeCloseMemberBloc.add(OnDeleteCloseMember(id: widget.patientId));
-    Navigator.pop(context);
   }
 }
