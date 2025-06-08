@@ -5,6 +5,14 @@ sealed class UserEvent {}
 
 class OnUserLoadedBasicInfos extends UserEvent {}
 
+class OnUserUpdatedProfileInfos extends UserEvent {
+  final Patient updatedProfile;
+
+  OnUserUpdatedProfileInfos({
+    required this.updatedProfile,
+  });
+}
+
 class OnUserLoadedCloseMembers extends UserEvent {}
 
 class OnUserAddCloseMembers extends UserEvent {

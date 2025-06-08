@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../blocs/user_bloc/user_bloc.dart';
+import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../models/user.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 import '../medicals/medical_screen.dart';

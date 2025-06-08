@@ -2,7 +2,7 @@ import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/user_bloc/user_bloc.dart';
+import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';

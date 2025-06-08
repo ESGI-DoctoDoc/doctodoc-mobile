@@ -1,11 +1,11 @@
 import 'package:doctodoc_mobile/models/patient.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/update_profile_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
-import '../../blocs/user_bloc/user_bloc.dart';
+import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
-import '../../shared/widgets/modals/update_patient_modal.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
@@ -54,7 +54,6 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   }
 
   Widget _buildSuccess(Patient userPatientInfos) {
-    print(userPatientInfos.birthdate);
     return Scaffold(
       backgroundColor: Color(0xFFEFEFEF),
       body: CustomScrollView(
@@ -94,7 +93,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                         phoneNumber: userPatientInfos.phoneNumber,
                         birthdate: userPatientInfos.birthdate,
                       );
-                      showUpdatePatientModal(context, patient);
+                      showUpdateProfileModal(context, patient);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -117,7 +116,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     );
   }
 
-  Widget buildBody(Patient closeMember) {
+  Widget buildBody(Patient currentUser) {
     return SliverList(
       delegate: SliverChildListDelegate([
         const SizedBox(height: 16),
@@ -129,8 +128,8 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
           ),
         ),
         ListTile(
-          leading: Icon(closeMember.gender == 'MALE' ? Icons.male : Icons.female),
-          title: Text(closeMember.gender == 'MALE' ? 'Homme' : 'Femme'),
+          leading: Icon(currentUser.gender == 'MALE' ? Icons.male : Icons.female),
+          title: Text(currentUser.gender == 'MALE' ? 'Homme' : 'Femme'),
         ),
 
         const Padding(
@@ -143,8 +142,8 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         ListTile(
           leading: const Icon(Icons.badge),
           title: Text(
-            "${closeMember.lastName[0].toUpperCase()}${closeMember.lastName.substring(1).toLowerCase()} "
-            "${closeMember.firstName[0].toUpperCase()}${closeMember.firstName.substring(1).toLowerCase()}",
+            "${currentUser.lastName[0].toUpperCase()}${currentUser.lastName.substring(1).toLowerCase()} "
+            "${currentUser.firstName[0].toUpperCase()}${currentUser.firstName.substring(1).toLowerCase()}",
           ),
         ),
 
@@ -158,7 +157,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         ListTile(
           leading: const Icon(Icons.cake),
           title: Text(
-            Jiffy.parse(closeMember.birthdate, pattern: 'yyyy-MM-dd').format(pattern: 'dd/MM/yyyy'),
+            Jiffy.parse(currentUser.birthdate, pattern: 'yyyy-MM-dd').format(pattern: 'dd/MM/yyyy'),
           ),
         ),
 
@@ -171,7 +170,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         ),
         ListTile(
           leading: const Icon(Icons.email),
-          title: Text(closeMember.email),
+          title: Text(currentUser.email),
         ),
 
         const Padding(
@@ -183,7 +182,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         ),
         ListTile(
           leading: const Icon(Icons.phone),
-          title: Text(closeMember.phoneNumber),
+          title: Text(currentUser.phoneNumber),
         ),
 
         const SizedBox(height: 24),
