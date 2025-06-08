@@ -1,3 +1,5 @@
+import 'package:doctodoc_mobile/blocs/auth_bloc/auth_bloc.dart';
+import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
@@ -143,7 +145,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.logout),
                 title: const Text('Déconnexion'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo mélissa se déconnecter
+                onTap: () {
+                  _onLogout(context);
+                },
               ),
 
               const SizedBox(height: 16),
@@ -182,6 +186,12 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
       ),
     );
+  }
+
+  void _onLogout(BuildContext context) {
+    final authBloc = context.read<AuthBloc>();
+    authBloc.add(OnLogout());
+    IntroductionScreen.navigateTo(context);
   }
 
   ListTile _buildPhoneNumberSection(String phoneNumber) {
