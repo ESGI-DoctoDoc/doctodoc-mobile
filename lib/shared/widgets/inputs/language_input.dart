@@ -17,9 +17,9 @@ class LanguageInput extends StatefulWidget {
 
 class _LanguageInputState extends State<LanguageInput> {
   final List<InputDropdownItem> languageItems = [
-    const InputDropdownItem(icon: Icons.add, label: "Français", value: "french"),
-    const InputDropdownItem(icon: Icons.add, label: "Anglais", value: "english"),
-    const InputDropdownItem(icon: Icons.add, label: "Espagnol", value: "spanish"),
+    const InputDropdownItem(label: "Français", value: "french"),
+    const InputDropdownItem(label: "Anglais", value: "english"),
+    const InputDropdownItem(label: "Espagnol", value: "spanish"),
   ];
 
   @override

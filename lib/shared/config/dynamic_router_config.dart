@@ -3,6 +3,7 @@ import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../screens/auth/otp_screen.dart';
+import '../../screens/doctors/doctor_search_screen.dart';
 import '../../screens/not_found_screen/not_found_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/profile/patient_detail_screen.dart';
@@ -16,6 +17,7 @@ class DynamicRouterConfig {
     PatientDetailsScreen.routeName: (args) => PatientDetailsScreen.routeBuilder(args),
     ProfileDetailsScreen.routeName: (args) => ProfileDetailsScreen.routeBuilder(args),
     MedicalScreen.routeName: (args) => MedicalScreen.routeBuilder(args),
+    DoctorSearchScreen.routeName: (args) => const DoctorSearchScreen(),
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {

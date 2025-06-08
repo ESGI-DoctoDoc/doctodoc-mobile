@@ -64,7 +64,7 @@ class ListTileBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22.0),
+        borderRadius: BorderRadius.circular(16.0),
         color: color ?? Theme.of(context).colorScheme.surfaceContainerLow,
         border: isFlat ? null : Border.all(
           color: Theme.of(context).colorScheme.outline.withAlpha(33),
@@ -77,7 +77,7 @@ class ListTileBase extends StatelessWidget {
         leading: leading,
         trailing: trailing,
         subtitle: _buildSubtitle(context),
-        contentPadding: const EdgeInsets.only(right: 4, left: 16),
+        contentPadding: const EdgeInsets.only(right: 4, left: 12),
         onTap: onTap,
       ),
     );
