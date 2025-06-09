@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import '../../shared/widgets/inputs/doctor_search_bar.dart';
-import '../appointment/widgets/onboarding_loading.dart';
 import 'doctor_detail_screen.dart';
 
 class DoctorSearchScreen extends StatefulWidget {
@@ -96,7 +95,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
                       return switch (state.status) {
                         DisplayDoctorStatus.initial ||
                         DisplayDoctorStatus.initialLoading =>
-                          const OnboardingLoading(),
+                          _buildInitial(),
                         DisplayDoctorStatus.loading ||
                         DisplayDoctorStatus.success =>
                           _buildSuccess(state.doctors, state.isLoadingMore),
@@ -125,10 +124,10 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
 
     return ListView.separated(
       controller: _scrollController,
-      itemCount: doctors.length,
+      itemCount: isLoadingMore ? doctors.length + 1 : doctors.length,
       separatorBuilder: (context, index) => const SizedBox(height: 8.0),
       itemBuilder: (context, index) {
-        if (index == doctors.length - 1 && isLoadingMore) {
+        if (index == doctors.length && isLoadingMore) {
           return const Center(child: CircularProgressIndicator());
         }
         return DoctorListTile(
@@ -136,6 +135,12 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
           onTap: () => DoctorDetailScreen.navigateTo(context, 'uuid1'),
         );
       },
+    );
+  }
+
+  Widget _buildInitial() {
+    return const Center(
+      child: Text("Aucune recherche"),
     );
   }
 
@@ -148,6 +153,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
   void applyFilters(BuildContext context) async {
     final Map<String, String>? filters = await showFilterSearchModal(context, _filters);
     _filters = filters;
+    _loadingInitialDoctorSearch();
   }
 
   void _loadingInitialDoctorSearch() {
@@ -163,9 +169,8 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
     final displayDoctor = context.read<DisplayDoctorBloc>();
     displayDoctor.add(OnGetNextSearchDoctor(
       name: _name,
-      speciality: _filters?['speciality'] ?? '', // todo Corentin get the value and not the label
-      languages: _filters?['languages'] ??
-          '', // todo Corentin il me semblait que c'était un tab, tu peux me renvoyer de la forme suivant => Anglais, Français
+      speciality: _filters?['speciality'] ?? '',
+      languages: _filters?['languages'] ?? '',
     ));
   }
 }

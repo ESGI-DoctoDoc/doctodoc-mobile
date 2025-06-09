@@ -31,7 +31,7 @@ class DisplayDoctorBloc extends Bloc<DisplayDoctorEvent, DisplayDoctorState> {
 
       List<Doctor> doctors = await searchRepository.searchDoctor(name, speciality, languages, page);
 
-      bool isLoadingMore = doctors.isEmpty ? false : true;
+      bool isLoadingMore = doctors.isEmpty || doctors.length < 10 ? false : true;
 
       emit(state.copyWith(
         status: DisplayDoctorStatus.success,

@@ -14,9 +14,6 @@ class RemoteSearchDataSource extends SearchDataSource {
     final response = await dio.get(
         "/patients/doctors/search?name=$name&speciality=$speciality&languages=$languages&page=$page&size=$defaultSize");
 
-    // final response =
-    // await dio.get("/patients/doctors/search?name=$name&speciality=infectiologue&page=$page&size=$defaultSize");
-
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Doctor.fromJson(jsonElement)).toList();
   }
