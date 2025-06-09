@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/models/doctor.dart';
-import 'package:doctodoc_mobile/services/repositories/searchRepository/search_repository.dart';
 import 'package:meta/meta.dart';
 
 import '../../../exceptions/app_exception.dart';
+import '../../../services/repositories/search_repository/search_repository.dart';
 
 part 'display_doctor_event.dart';
 part 'display_doctor_state.dart';

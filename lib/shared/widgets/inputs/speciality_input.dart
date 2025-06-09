@@ -1,5 +1,9 @@
+import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
+import 'package:doctodoc_mobile/models/speciality.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SpecialityInput extends StatefulWidget {
   final TextEditingController controller;
@@ -16,31 +20,50 @@ class SpecialityInput extends StatefulWidget {
 }
 
 class _SpecialityInputState extends State<SpecialityInput> {
-  final List<InputDropdownItem> specialityItems = [
-    const InputDropdownItem(label: "Médecin Généraliste", value: "generaliste"),
-    const InputDropdownItem(label: "Dentiste", value: "dentiste"),
-    const InputDropdownItem(label: "Cardiologue", value: "cardiologue"),
-    const InputDropdownItem(label: "Dermatologue", value: "dermatologue"),
-    const InputDropdownItem(label: "Gynécologue", value: "gynecologue"),
-    const InputDropdownItem(label: "Ophtalmologue", value: "ophtalmologue"),
-    const InputDropdownItem(label: "Pédiatre", value: "pediatre"),
-    const InputDropdownItem(label: "Psychiatre", value: "psychiatre"),
-    const InputDropdownItem(label: "Orthophoniste", value: "orthophoniste"),
-    const InputDropdownItem(label: "Kinésithérapeute", value: "kinesitherapeute"),
-    const InputDropdownItem(label: "ORL (Oto-Rhino-Laryngologiste)", value: "orl"),
-    const InputDropdownItem(label: "Chirurgien", value: "chirurgien"),
-    const InputDropdownItem(label: "Rhumatologue", value: "rhumatologue"),
-    const InputDropdownItem(label: "Urologue", value: "urologue"),
-    const InputDropdownItem(label: "Endocrinologue", value: "endocrinologue"),
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    final specialityBloc = context.read<DisplaySpecialitiesBloc>();
+    specialityBloc.add(OnGetSpecialities());
+  }
+
+  final List<InputDropdownItem> specialityItems = [];
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<DisplaySpecialitiesBloc, DisplaySpecialitiesState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          DisplaySpecialitiesStatus.initial ||
+          DisplaySpecialitiesStatus.loading =>
+            const OnboardingLoading(),
+          DisplaySpecialitiesStatus.success => _buildSuccess(state.specialities),
+          DisplaySpecialitiesStatus.error => _buildError(),
+        };
+      },
+    );
+  }
+
+  InputDropdown _buildSuccess(List<Speciality> specialities) {
+    for (var speciality in specialities) {
+      specialityItems.add(InputDropdownItem(
+        label: speciality.name,
+        value: speciality.name,
+      ));
+    }
+
     return InputDropdown(
       label: "Spécialité",
       placeholder: "Sélectionnez une spécialité",
       controller: widget.controller,
       items: specialityItems,
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
     );
   }
 }
