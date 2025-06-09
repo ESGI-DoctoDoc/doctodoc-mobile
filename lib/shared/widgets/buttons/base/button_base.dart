@@ -7,6 +7,7 @@ class ButtonBase extends StatefulWidget {
   final bool isLoading;
   final Color? textColor;
   final Color? bgColor;
+  final Border? borderColor;
 
   const ButtonBase({
     required this.label,
@@ -16,6 +17,7 @@ class ButtonBase extends StatefulWidget {
     this.isLoading = false,
     this.textColor = Colors.black,
     this.bgColor,
+    this.borderColor,
   });
 
   @override
@@ -39,6 +41,10 @@ class _ButtonBaseState extends State<ButtonBase> {
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: widget.borderColor?.top.color ?? Colors.transparent,
+                width: widget.borderColor?.top.width ?? 0,
+              ),
             ),
           ),
         ),

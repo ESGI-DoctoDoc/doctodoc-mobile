@@ -39,6 +39,14 @@ class DoctorListTile extends StatelessWidget {
         height: 60,
         width: 60,
         fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: 60,
+            width: 60,
+            color: Colors.grey.shade200,
+            child: const Icon(Icons.visibility_off, size: 30, color: Colors.grey),
+          );
+        },
       ),
     );
   }

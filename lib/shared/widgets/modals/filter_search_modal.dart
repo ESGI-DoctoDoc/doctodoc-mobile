@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/shared/widgets/buttons/secondary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -74,6 +75,18 @@ class _FilterSearchModalState extends State<_FilterSearchModal> {
                     'languages': _languageController.text,
                   });
                 }
+              },
+            ),
+            const SizedBox(height: 10),
+            SecondaryButton(
+              label: "Réinitialiser les filtres",
+              onTap: () {
+                _specialityController.clear();
+                _languageController.clear();
+                Navigator.of(context).pop({
+                  'speciality': '',
+                  'languages': '',
+                });
               },
             ),
           ],
