@@ -1,6 +1,9 @@
-import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_app_bar.dart';
+import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
+import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../appointment/types/appointment_flow_doctor_data.dart';
 
 class DoctorDetailScreen extends StatefulWidget {
   static const String routeName = '/doctors/:doctorId';
@@ -33,57 +36,92 @@ class DoctorDetailScreen extends StatefulWidget {
 class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(slivers: [
-            SliverAppBar(
-              floating: true,
-              snap: true,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              expandedHeight: 200.0,
-              collapsedHeight: 100,
-              flexibleSpace: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  final top = constraints.biggest.height;
-                  final isCollapsed = top <= 190;
-                  return FlexibleSpaceBar(
-                    title: isCollapsed ? _buildCollapsedTitle() : _buildExpandedTitle(),
-                  );
-                },
+    return Container(
+      color: Color(0xFFEFEFEF), // Light grey background
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          backgroundColor: Color(0xFFEFEFEF),
+          body: Stack(
+            children: [
+              CustomScrollView(slivers: [
+                SliverAppBar(
+                  floating: true,
+                  snap: true,
+                  pinned: true,
+                  automaticallyImplyLeading: false,
+                  expandedHeight: 200.0,
+                  collapsedHeight: 100,
+                  backgroundColor: Color(0xFFEFEFEF),
+                  flexibleSpace: LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      final top = constraints.biggest.height;
+                      final isCollapsed = top <= 190;
+                      return FlexibleSpaceBar(
+                        background: Container(
+                          color: Color(0xFFEFEFEF),
+                        ),
+                        title: isCollapsed ? _buildCollapsedTitle() : _buildExpandedTitle(),
+                      );
+                    },
+                  ),
+                ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  ..._buildBiography('TODO: bio'),
+                  ..._buildAddress('TODO: address'),
+                  ..._buildHours({
+                    'Lundi': '08:30 - 18:00',
+                    'Mardi': '08:30 - 18:00',
+                    'Mercredi': '08:30 - 12:00',
+                    'Jeudi': '08:30 - 18:00',
+                    'Vendredi': '08:30 - 17:00',
+                    'Samedi': '09:00 - 13:00',
+                    'Dimanche': 'Fermé',
+                  }), // TODO: horaires
+                  ..._buildLanguages(['Français', 'Anglais', 'Espagnol']), // TODO: langues
+                  ..._buildLegalInformation('TODO: RPPS'),
+                  const SizedBox(height: 20),
+                ]))
+              ]),
+              Positioned(
+                top: 20,
+                left: 5,
+                child: SafeArea(
+                  child: IconButton(
+                    icon: const Icon(Icons.chevron_left_outlined, size: 30, color: Colors.black),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
               ),
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              ..._buildBiography(),
-              ..._buildAddress(),
-              ..._buildHours(),
-              ..._buildLanguages(),
-              ..._buildLegalInformation(),
-            ]))
-          ]),
-          Positioned(
-            top: 20,
-            left: 5,
-            child: SafeArea(
-              child: IconButton(
-                icon: const Icon(Icons.chevron_left_outlined, size: 30, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+              Positioned(
+                top: 20,
+                right: 5,
+                child: SafeArea(
+                  child: IconButton(
+                    icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
+                    onPressed: () {
+                      //todo mélissa ajout les données ici
+                      final doctor = AppointmentFlowDoctorData(
+                        doctorId: widget.doctorId,
+                        firstName: 'John',
+                        lastName: 'Doe',
+                        pictureUrl:
+                            'https://www.shutterstock.com/image-photo/covid19-coronavirus-outbreak-healthcare-workers-260nw-1779353891.jpg',
+                        address: const AppointmentFlowAddressData(
+                          addressId: "addressId",
+                          latitude: 23,
+                          longitude: 23,
+                        ),
+                      );
+                      AppointmentScreen.navigateTo(context, doctor);
+                    },
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          Positioned(
-            top: 20,
-            right: 5,
-            child: SafeArea(
-              child: IconButton(
-                icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -111,21 +149,22 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     );
   }
 
-  List<Widget> _buildBiography() {
+  List<Widget> _buildBiography(String bio) {
     return [
       _buildTitleSection(title: 'Biographie'),
-      const Padding(
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Text(
-          'Dr. John Doe est un cardiologue renommé avec plus de 10 ans d\'expérience dans le domaine. Il est spécialisé dans le traitement des maladies cardiaques et offre des soins personnalisés à ses patients.',
-          style: TextStyle(fontSize: 14, color: Colors.black87),
+          bio,
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
         ),
       ),
     ];
   }
 
-  List<Widget> _buildAddress() {
+  List<Widget> _buildAddress(String address) {
     return [
+      const SizedBox(height: 8),
       _buildTitleSection(
         title: 'Adresse',
         trailing: TextButton(
@@ -142,11 +181,11 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
           ),
         ),
       ),
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Text(
-          '123 Rue de la Santé, Paris, France',
-          style: TextStyle(fontSize: 14, color: Colors.black87),
+          address,
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
         ),
       ),
     ];
@@ -165,41 +204,120 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     }
   }
 
-  List<Widget> _buildHours() {
-    return [];
-  }
+  List<Widget> _buildHours(Map<String, String> hours) {
+    final weekdays = [
+      'Lundi',
+      'Mardi',
+      'Mercredi',
+      'Jeudi',
+      'Vendredi',
+      'Samedi',
+      'Dimanche',
+    ];
 
-  List<Widget> _buildLanguages() {
-    final languages = ['Français', 'Anglais', 'Espagnol', 'Allemand'];
+    final todayIndex = DateTime.now().weekday - 1; // 1 (Mon) -> 0, 7 (Sun) -> 6
+    final reorderedKeys = [...weekdays.sublist(todayIndex), ...weekdays.sublist(0, todayIndex)];
+
+    Widget buildRow(String day, String time) {
+      return Row(
+        children: [
+          Expanded(
+            child: Text(
+              day,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+          Spacer(),
+          Expanded(
+            child: Text(
+              time,
+              style: const TextStyle(fontSize: 14, color: Colors.black87),
+            ),
+          ),
+        ],
+      );
+    }
 
     return [
-      _buildTitleSection(title: "Langues parlées"),
+      const SizedBox(height: 8),
+      _buildTitleSection(title: "Horaires"),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 4,
-          children: languages.map((lang) {
-            return Row(
-              children: [
-                const Icon(Icons.language, size: 16, color: Colors.black54),
-                const SizedBox(width: 6),
-                Text(
-                  lang,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
-                ),
-              ],
-            );
-          }).toList(),
+        child: Column(
+          children: [
+            for (final day in reorderedKeys) ...[
+              buildRow(day, hours[day] ?? ''),
+              const SizedBox(height: 12),
+            ],
+          ],
         ),
       ),
     ];
   }
 
-  List<Widget> _buildLegalInformation() {
-    return [];
+  List<Widget> _buildLanguages(List<String> languages) {
+    Widget buildRow((String, String) languages) {
+      return Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                const Icon(Icons.language, size: 16, color: Colors.black54),
+                const SizedBox(width: 8),
+                Text(
+                  languages.$1,
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+              ],
+            ),
+          ),
+          Spacer(),
+          if (languages.$2.isNotEmpty)
+            Expanded(
+              child: Row(
+                children: [
+                  const Icon(Icons.language, size: 16, color: Colors.black54),
+                  const SizedBox(width: 8),
+                  Text(
+                    languages.$2,
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
+    }
+
+    return [
+      const SizedBox(height: 8),
+      _buildTitleSection(title: "Langues parlées"),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            for (int i = 0; i < languages.length; i += 2) ...[
+              buildRow((languages[i], i + 1 < languages.length ? languages[i + 1] : '')),
+              const SizedBox(height: 12),
+            ],
+          ],
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildLegalInformation(String rpps) {
+    return [
+      const SizedBox(height: 8),
+      _buildTitleSection(title: "Informations légales"),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text(
+          'Numéro RPPS : $rpps',
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
+        ),
+      ),
+    ];
   }
 
   Widget _buildCollapsedTitle() {
