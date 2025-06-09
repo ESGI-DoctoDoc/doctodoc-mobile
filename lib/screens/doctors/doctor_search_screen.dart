@@ -119,8 +119,18 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
     }
   }
 
-  ListView _buildSuccess(List<Doctor> doctors, bool isLoadingMore) {
+  Widget _buildSuccess(List<Doctor> doctors, bool isLoadingMore) {
     _isLoadingMore = isLoadingMore;
+
+    if (doctors.isEmpty && (_name.isEmpty || _name == '')) {
+      return const Center(
+        child: Text("Tapez pour rechercher un médecin"),
+      );
+    } else if( doctors.isEmpty) {
+      return const Center(
+        child: Text("Aucun médecin trouvé pour cette recherche."),
+      );
+    }
 
     return ListView.separated(
       controller: _scrollController,
@@ -140,7 +150,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
 
   Widget _buildInitial() {
     return const Center(
-      child: Text("Aucune recherche"),
+      child: Text("Tapez pour rechercher un médecin"),
     );
   }
 
