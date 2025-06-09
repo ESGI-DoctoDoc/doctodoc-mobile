@@ -1,8 +1,11 @@
+import 'package:doctodoc_mobile/models/speciality.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/doctors/doctor_search_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
@@ -30,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         DoctorSearchScreen.navigateTo(context);
       }
     });
+    _onLoadSpecialities();
   }
 
   @override
@@ -95,35 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     const ListTitle(title: "Par spécialité"),
                     SizedBox(
                       height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10, // Replace with your specialties count
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.lightBlue.shade100,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.medical_services, // You can change this icon
-                                    color: Colors.blue.shade800,
-                                    size: 30,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                const Text(
-                                  'Spécialité',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          );
+                      child: BlocBuilder<DisplaySpecialitiesBloc, DisplaySpecialitiesState>(
+                        builder: (context, state) {
+                          return switch (state.status) {
+                            DisplaySpecialitiesStatus.initial ||
+                            DisplaySpecialitiesStatus.loading =>
+                              const OnboardingLoading(),
+                            DisplaySpecialitiesStatus.success =>
+                              _buildSuccessForSpecialities(state.specialities),
+                            DisplaySpecialitiesStatus.error => _buildErrorForSpecialities(),
+                          };
                         },
                       ),
                     ),
@@ -147,6 +132,40 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  ListView _buildSuccessForSpecialities(List<Speciality> specialities) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: specialities.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Colors.lightBlue.shade100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.medical_services, // You can change this icon
+                  color: Colors.blue.shade800,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                specialities[index].name,
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -188,5 +207,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildErrorForSpecialities() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  _onLoadSpecialities() {
+    final specialityBloc = context.read<DisplaySpecialitiesBloc>();
+    specialityBloc.add(OnGetSpecialities());
   }
 }

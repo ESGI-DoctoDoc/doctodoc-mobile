@@ -137,7 +137,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
       itemCount: isLoadingMore ? doctors.length + 1 : doctors.length,
       separatorBuilder: (context, index) => const SizedBox(height: 8.0),
       itemBuilder: (context, index) {
-        if (index == doctors.length && isLoadingMore) {
+        if (index >= doctors.length) {
           return const Center(child: CircularProgressIndicator());
         }
         return DoctorListTile(
