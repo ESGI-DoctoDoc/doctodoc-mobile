@@ -24,7 +24,7 @@ class _LanguageInputState extends State<LanguageInput> {
 
   @override
   Widget build(BuildContext context) {
-    return InputDropdown(
+    return InputMultiDropdown(
       label: "Langues",
       placeholder: "Sélectionnez une langue",
       controller: widget.controller,

@@ -6,9 +6,8 @@ import '../inputs/language_input.dart';
 import '../inputs/speciality_input.dart';
 import 'base/modal_base.dart';
 
-
-
-Future<Map<String, String>?> showFilterSearchModal(BuildContext context) {
+Future<Map<String, String>?> showFilterSearchModal(
+    BuildContext context, Map<String, String>? filters) {
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -16,7 +15,7 @@ Future<Map<String, String>?> showFilterSearchModal(BuildContext context) {
         buildModalPage(
           context: context,
           title: "Filtrer la recherche",
-          child: _FilterSearchModal(),
+          child: _FilterSearchModal(filters: filters),
         ),
       ];
     },
@@ -24,7 +23,9 @@ Future<Map<String, String>?> showFilterSearchModal(BuildContext context) {
 }
 
 class _FilterSearchModal extends StatefulWidget {
-  const _FilterSearchModal();
+  final Map<String, String>? filters;
+
+  const _FilterSearchModal({this.filters});
 
   @override
   State<_FilterSearchModal> createState() => _FilterSearchModalState();
@@ -40,6 +41,15 @@ class _FilterSearchModalState extends State<_FilterSearchModal> {
     super.dispose();
     _specialityController.dispose();
     _languageController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.filters != null) {
+      _specialityController.text = widget.filters?['speciality'] ?? '';
+      _languageController.text = widget.filters?['languages'] ?? '';
+    }
   }
 
   @override

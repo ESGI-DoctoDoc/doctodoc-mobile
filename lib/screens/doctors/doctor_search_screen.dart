@@ -145,7 +145,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
   }
 
   void applyFilters(BuildContext context) async {
-    final Map<String, String>? filters = await showFilterSearchModal(context);
+    final Map<String, String>? filters = await showFilterSearchModal(context, _filters);
     _filters = filters;
   }
 
@@ -153,9 +153,8 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
     final displayDoctor = context.read<DisplayDoctorBloc>();
     displayDoctor.add(OnGetInitialSearchDoctor(
       name: _name,
-      speciality: _filters?['speciality'] ?? '', // todo Corentin get the value and not the label
-      languages: _filters?['languages'] ??
-          '', // todo Corentin il me semblait que c'était un tab, tu peux me renvoyer de la forme suivant => Anglais, Français
+      speciality: _filters?['speciality'] ?? '',
+      languages: _filters?['languages'] ?? '',
     ));
   }
 
