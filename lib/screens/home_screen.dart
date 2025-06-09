@@ -3,9 +3,8 @@ import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/user_bloc/user_bloc.dart';
+import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
-import '../shared/widgets/cards/appointment_card.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
 import '../shared/widgets/list_tile/doctor_list_tile.dart';
@@ -93,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // incoming appointments
                     const SizedBox(height: 10),
                     const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
-                    const AppointmentCard(),
+                    // const AppointmentCard(), // todo
 
                     const SizedBox(height: 20),
                     const ListTitle(title: "Par spécialité"),

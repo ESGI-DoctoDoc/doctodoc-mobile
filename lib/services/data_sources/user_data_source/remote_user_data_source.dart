@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/models/user.dart';
 import 'package:doctodoc_mobile/services/data_sources/user_data_source/user_data_source.dart';
+import 'package:doctodoc_mobile/services/dtos/update_profile_request.dart';
 
 class RemoteUserDataSource implements UserDataSource {
   final Dio dio;
@@ -20,5 +23,20 @@ class RemoteUserDataSource implements UserDataSource {
 
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Patient.fromJson(jsonElement)).toList();
+  }
+
+  @override
+  Future<Patient> updateProfile(UpdateProfileRequest request) async {
+    final response = await dio.put(
+      "/patients/profile",
+      data: jsonEncode({
+        "gender": request.gender,
+        "firstName": request.firstName,
+        "lastName": request.lastName,
+        "birthdate": request.birthdate,
+      }),
+    );
+
+    return Patient.fromJson(response.data["data"]);
   }
 }

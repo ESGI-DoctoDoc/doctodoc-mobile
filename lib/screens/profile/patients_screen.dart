@@ -4,7 +4,7 @@ import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/user_bloc/user_bloc.dart';
+import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class PatientsScreen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                     ),
                   ),
                   const Text(
-                    'Mes patients',
+                    'Mes proches',
                     style: TextStyle(fontSize: 20),
                   ),
                   const Spacer(),
@@ -75,32 +75,6 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Moi',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text(
-                  'Corentin Lechene',
-                  style: TextStyle(fontSize: 18, letterSpacing: 0.5),
-                ),
-                //Todo me
-                trailing: const Icon(Icons.chevron_right),
-                subtitle: const Text('c.lechene@myges.fr'),
-                //Todo me
-                onTap: () => PatientDetailsScreen.navigateTo(context, patientId: "0"), //Todo me
-              ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Membres de ma famille',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
               BlocBuilder<UserBloc, UserState>(
                 builder: (context, state) {
                   return switch (state) {

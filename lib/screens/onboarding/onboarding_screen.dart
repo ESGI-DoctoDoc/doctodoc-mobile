@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:doctodoc_mobile/blocs/register_bloc/register_bloc.dart';
 import 'package:doctodoc_mobile/layout/main_layout.dart';
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboading_general_practitioner_step.dart';
@@ -9,6 +6,12 @@ import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_gender_step.
 import 'package:doctodoc_mobile/screens/onboarding/steps/onboarding_name_step.dart';
 import 'package:doctodoc_mobile/screens/onboarding/widgets/onboarding_app_bar.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
+
+import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../introduction_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   static const String routeName = '/on-boarding';
@@ -87,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     canGoNext = false;
                   });
                 } else {
-                  //todo mélissa ici il faut déco le gars
+                  _onLogout(context);
                 }
               },
             ),
@@ -191,6 +194,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       birthdate: birthDate,
       referentDoctorId: _userData.generalPractitioner ?? "",
     ));
+  }
+
+  void _onLogout(BuildContext context) {
+    final authBloc = context.read<AuthBloc>();
+    authBloc.add(OnLogout());
+    IntroductionScreen.navigateTo(context);
   }
 }
 

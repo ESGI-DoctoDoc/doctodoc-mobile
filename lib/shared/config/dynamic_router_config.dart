@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/medicals/medical_screen.dart';
+import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../screens/auth/otp_screen.dart';
@@ -14,6 +15,7 @@ class DynamicRouterConfig {
     OnboardingScreen.routeName: (args) => const OnboardingScreen(),
     PatientsScreen.routeName: (args) => const PatientsScreen(),
     PatientDetailsScreen.routeName: (args) => PatientDetailsScreen.routeBuilder(args),
+    ProfileDetailsScreen.routeName: (args) => ProfileDetailsScreen.routeBuilder(args),
     MedicalScreen.routeName: (args) => MedicalScreen.routeBuilder(args),
     DoctorSearchScreen.routeName: (args) => const DoctorSearchScreen(),
   };

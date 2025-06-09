@@ -1,8 +1,14 @@
+import 'package:doctodoc_mobile/models/appointment.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentCard extends StatelessWidget {
-  const AppointmentCard({super.key});
+  final Appointment appointment;
+
+  const AppointmentCard({
+    super.key,
+    required this.appointment,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +26,8 @@ class AppointmentCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: AppointmentListTile(
-              title: "Dr. Charlie Brown",
-              subtitle: "Dentiste",
+              title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
+              subtitle: appointment.doctor.speciality,
               color: Colors.white,
               trailing: IconButton(
                 onPressed: () {},
@@ -44,7 +50,8 @@ class AppointmentCard extends StatelessWidget {
                     Icon(Icons.calendar_month_outlined, color: Colors.green.shade900, size: 22),
                     const SizedBox(width: 8),
                     Text(
-                      "Dimanche 12 Sept.",
+                      appointment.date, // todo Corentin
+                      // "Dimanche 12 Sept.",
                       style: TextStyle(color: Colors.green.shade900, fontSize: 12),
                     ),
                   ],
@@ -59,7 +66,7 @@ class AppointmentCard extends StatelessWidget {
                     Icon(Icons.access_time_outlined, color: Colors.green.shade900, size: 22),
                     const SizedBox(width: 8),
                     Text(
-                      "09:00 - 10:00",
+                      "${appointment.start} - ${appointment.end}",
                       style: TextStyle(color: Colors.green.shade900, fontSize: 12),
                     ),
                   ],

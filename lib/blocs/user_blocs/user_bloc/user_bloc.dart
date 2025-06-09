@@ -6,9 +6,10 @@ import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository_event.dart';
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository_event.dart';
 import 'package:meta/meta.dart';
 
-import '../../models/user.dart';
+import '../../../models/user.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -18,14 +19,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final CloseMemberRepository closeMemberRepository;
 
   late StreamSubscription _closeMemberRepositoryEventSubscription;
+  late StreamSubscription _userRepositoryEventSubscription;
 
   UserBloc({
     required this.userRepository,
     required this.closeMemberRepository,
   }) : super(UserInitial()) {
     on<OnUserLoadedBasicInfos>(_onUserLoadedBasicInfos);
-    on<OnUserLoadedCloseMembers>(_onUserLoadedCloseMembers);
+    on<OnUserUpdatedProfileInfos>(_onUserUpdatedProfileInfos);
 
+    on<OnUserLoadedCloseMembers>(_onUserLoadedCloseMembers);
     on<OnUserAddCloseMembers>(_onUserAddCloseMembers);
     on<OnUserUpdateCloseMember>(_onUserUpdateCloseMember);
     on<OnUserDeleteCloseMember>(_onUserDeleteCloseMember);
@@ -50,6 +53,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         ));
       }
     });
+
+    _userRepositoryEventSubscription = userRepository.userRepositoryEventStream.listen((event) {
+      if (event is UpdatedProfileEvent) {
+        add(OnUserUpdatedProfileInfos(
+          updatedProfile: event.updatedProfile,
+        ));
+      }
+    });
   }
 
   Future<void> _onUserLoadedBasicInfos(
@@ -61,6 +72,27 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } catch (error) {
       emit(UserError(exception: AppException.from(error)));
     }
+  }
+
+  Future<void> _onUserUpdatedProfileInfos(
+      OnUserUpdatedProfileInfos event, Emitter<UserState> emit) async {
+    if (state is! UserLoaded) return;
+    final currentState = state as UserLoaded;
+    emit(UserLoading());
+
+    final updatedProfile = event.updatedProfile;
+    final currentUser = currentState.user;
+
+    currentUser.patientInfos = Patient(
+      id: updatedProfile.id,
+      lastName: updatedProfile.lastName,
+      firstName: updatedProfile.firstName,
+      gender: updatedProfile.gender,
+      email: updatedProfile.email,
+      phoneNumber: updatedProfile.phoneNumber,
+      birthdate: updatedProfile.birthdate,
+    );
+    emit(UserLoaded(currentUser));
   }
 
   Future<void> _onUserLoadedCloseMembers(
@@ -141,6 +173,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   Future<void> close() {
     _closeMemberRepositoryEventSubscription.cancel();
+    _userRepositoryEventSubscription.cancel();
     return super.close();
   }
 }

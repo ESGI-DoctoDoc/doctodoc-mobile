@@ -13,6 +13,7 @@ class MainLayout extends StatefulWidget {
       ),
     );
   }
+
   const MainLayout({super.key});
 
   @override
@@ -60,7 +61,6 @@ class _MainLayoutState extends State<MainLayout> {
           selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
-
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),

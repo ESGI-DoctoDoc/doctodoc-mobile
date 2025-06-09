@@ -2,7 +2,7 @@ import 'package:doctodoc_mobile/models/patient.dart';
 
 class User {
   final String token;
-  final Patient patientInfos;
+  Patient patientInfos;
   final bool hasOnBoardingDone;
   List<Patient> closeMembers;
 

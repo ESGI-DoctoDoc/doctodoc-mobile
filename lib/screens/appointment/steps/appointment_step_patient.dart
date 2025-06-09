@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/blocs/user_bloc/user_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_patient_data.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/create_patient_modal.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../../models/user.dart';
 import '../../../shared/widgets/inputs/patient_selection.dart';
 import '../widgets/onboarding_loading.dart';

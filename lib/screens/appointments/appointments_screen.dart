@@ -1,5 +1,10 @@
-import 'package:doctodoc_mobile/shared/widgets/cards/appointment_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
+import '../../services/repositories/appointment_repository/appointment_repository.dart';
+import 'appointments_in_coming.dart';
+import 'appointments_past.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   const AppointmentsScreen({super.key});
@@ -10,17 +15,18 @@ class AppointmentsScreen extends StatefulWidget {
 
 class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  List<Widget> _incomingAppointments = [];
-  List<Widget> _pastAppointments = [];
-  bool _isLoadingMore = false;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _scrollController.addListener(_onScroll);
-    _fetchInitialAppointments();
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollController.jumpTo(0);
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -74,87 +80,22 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
           AnimatedBuilder(
             animation: _tabController,
             builder: (context, child) {
-              return SliverList(
-                delegate: SliverChildListDelegate(
-                  _tabController.index == 0
-                      ? _buildInComingAppointmentsTab()
-                      : _buildPastAppointmentsTab(),
-                ),
-              );
+              return _tabController.index == 0
+                  ? BlocProvider(
+                      create: (context) => DisplayAppointmentBloc(
+                          appointmentRepository: context.read<AppointmentRepository>()),
+                      child: AppointmentInComing(scrollController: _scrollController),
+                    )
+                  : BlocProvider(
+                      create: (context) => DisplayAppointmentBloc(
+                          appointmentRepository: context.read<AppointmentRepository>()),
+                      child: AppointmentPast(scrollController: _scrollController),
+                    );
             },
           ),
         ],
       ),
     );
-  }
-
-  List<Widget> _buildInComingAppointmentsTab() {
-    return [
-      Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            ..._incomingAppointments,
-            if (_isLoadingMore) const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: CircularProgressIndicator(),
-            ),
-          ],
-        ),
-      )
-    ];
-  }
-
-  List<Widget> _buildPastAppointmentsTab() {
-    return [
-      Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            ..._pastAppointments,
-            if (_isLoadingMore) const CircularProgressIndicator(),
-          ],
-        ),
-      )
-    ];
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 && !_isLoadingMore) {
-      _loadMoreAppointments();
-    }
-  }
-
-  void _fetchInitialAppointments() {
-    setState(() {
-      _incomingAppointments = List.generate(5, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-      _pastAppointments = List.generate(5, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-    });
-  }
-
-  void _loadMoreAppointments() async {
-    setState(() {
-      _isLoadingMore = true;
-    });
-    await Future.delayed(Duration(seconds: 2));
-    setState(() {
-      final newItems = List.generate(3, (_) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: AppointmentCard(),
-      ));
-      if (_tabController.index == 0) {
-        _incomingAppointments.addAll(newItems);
-      } else {
-        _pastAppointments.addAll(newItems);
-      }
-      _isLoadingMore = false;
-    });
   }
 }
 
