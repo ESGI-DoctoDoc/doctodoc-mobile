@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import '../../shared/widgets/inputs/doctor_search_bar.dart';
 import '../appointment/widgets/onboarding_loading.dart';
+import 'doctor_detail_screen.dart';
 
 class DoctorSearchScreen extends StatefulWidget {
   static const String routeName = '/doctors/search';
@@ -132,7 +133,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
         }
         return DoctorListTile(
           doctor: doctors[index],
-          onTap: () {},
+          onTap: () => DoctorDetailScreen.navigateTo(context, 'uuid1'),
         );
       },
     );
