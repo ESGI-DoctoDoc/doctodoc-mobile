@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class DynamicRouterConfig {
     MedicalScreen.routeName: (args) => MedicalScreen.routeBuilder(args),
     DoctorSearchScreen.routeName: (args) => const DoctorSearchScreen(),
     DoctorDetailScreen.routeName: (args) => DoctorDetailScreen.routeBuilder(args),
+    AppointmentDetailScreen.routeName: (args) => AppointmentDetailScreen.routeBuilder(args),
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
