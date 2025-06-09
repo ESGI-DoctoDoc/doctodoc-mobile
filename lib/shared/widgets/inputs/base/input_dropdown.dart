@@ -149,6 +149,17 @@ class _InputMultiDropdownState extends State<InputMultiDropdown> {
     _displayController.dispose();
     super.dispose();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _displayController.text = widget.controller.text;
+    if (widget.controller.text.isNotEmpty) {
+      final values = widget.controller.text.split(',');
+      _selectedItems.addAll(widget.items.where((item) => values.contains(item.value)));
+      _displayController.text = _selectedItems.map((e) => e.label).join(",");
+    }
+  }
 }
 
 class InputDropdown extends StatefulWidget {
@@ -245,5 +256,18 @@ class _InputDropdownState extends State<InputDropdown> {
   void dispose() {
     _displayController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _displayController.text = widget.controller.text;
+    if (widget.controller.text.isNotEmpty) {
+      final selectedItem = widget.items.firstWhere(
+        (item) => item.value == widget.controller.text,
+        orElse: () => InputDropdownItem(label: '', value: ''),
+      );
+      _displayController.text = selectedItem.label;
+    }
   }
 }

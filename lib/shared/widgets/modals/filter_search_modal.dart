@@ -8,8 +8,10 @@ import '../inputs/speciality_input.dart';
 import 'base/modal_base.dart';
 
 Future<Map<String, String>?> showFilterSearchModal(
-    BuildContext context, Map<String, String>? filters) {
-  return WoltModalSheet.show(
+  BuildContext context,
+  Map<String, String>? filters,
+) async {
+  final result = await WoltModalSheet.show<Map<String, String>>(
     context: context,
     pageListBuilder: (context) {
       return [
@@ -21,6 +23,7 @@ Future<Map<String, String>?> showFilterSearchModal(
       ];
     },
   );
+  return result ?? filters;
 }
 
 class _FilterSearchModal extends StatefulWidget {
@@ -47,6 +50,7 @@ class _FilterSearchModalState extends State<_FilterSearchModal> {
   @override
   void initState() {
     super.initState();
+    print(widget.filters);
     if (widget.filters != null) {
       _specialityController.text = widget.filters?['speciality'] ?? '';
       _languageController.text = widget.filters?['languages'] ?? '';
