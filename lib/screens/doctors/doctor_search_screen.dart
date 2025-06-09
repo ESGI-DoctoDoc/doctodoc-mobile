@@ -1,10 +1,12 @@
-import 'package:doctodoc_mobile/shared/widgets/inputs/language_input.dart';
-import 'package:doctodoc_mobile/shared/widgets/inputs/speciality_input.dart';
+import 'package:doctodoc_mobile/models/doctor.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/doctor_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/filter_search_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import '../../shared/widgets/inputs/doctor_search_bar.dart';
+import '../appointment/widgets/onboarding_loading.dart';
 
 class DoctorSearchScreen extends StatefulWidget {
   static const String routeName = '/doctors/search';
@@ -23,6 +25,8 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
   final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
+  String _name = '';
+  Map<String, String>? _filters = {};
 
   @override
   void initState() {
@@ -30,19 +34,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
     Future.delayed(Duration.zero, () {
       _focusNode.requestFocus();
     });
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 && !_isLoadingMore) {
-        setState(() {
-          _isLoadingMore = true;
-        });
-        // TODO mélissa: charger plus de résultats ici
-        Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _isLoadingMore = false;
-          });
-        });
-      }
-    });
+    _scrollController.addListener(_onScroll);
   }
 
   @override
@@ -69,8 +61,8 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
               DoctorSearchBar(
                 focusNode: _focusNode,
                 onSearch: (value) {
-                  //todo mélissa tu as la valeur qui possède déjà un debounce
-                  print("Recherche: $value");
+                  _name = value;
+                  _loadingInitialDoctorSearch();
                 },
               ),
               const SizedBox(height: 16.0),
@@ -98,17 +90,17 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
                   onNotification: (ScrollNotification scrollInfo) {
                     return false;
                   },
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    itemCount: 10 + (_isLoadingMore ? 1 : 0),
-                    separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-                    itemBuilder: (context, index) {
-                      if (index == 10) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return DoctorListTile(
-                        onTap: () {},
-                      );
+                  child: BlocBuilder<DisplayDoctorBloc, DisplayDoctorState>(
+                    builder: (context, state) {
+                      return switch (state.status) {
+                        DisplayDoctorStatus.initial ||
+                        DisplayDoctorStatus.initialLoading =>
+                          const OnboardingLoading(),
+                        DisplayDoctorStatus.loading ||
+                        DisplayDoctorStatus.success =>
+                          _buildSuccess(state.doctors, state.isLoadingMore),
+                        DisplayDoctorStatus.error => _buildError(),
+                      };
                     },
                   ),
                 ),
@@ -120,9 +112,60 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
     );
   }
 
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 &&
+        _isLoadingMore) {
+      _loadNextDoctorSearch();
+    }
+  }
+
+  ListView _buildSuccess(List<Doctor> doctors, bool isLoadingMore) {
+    _isLoadingMore = isLoadingMore;
+
+    return ListView.separated(
+      controller: _scrollController,
+      itemCount: doctors.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+      itemBuilder: (context, index) {
+        if (index == doctors.length - 1 && isLoadingMore) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return DoctorListTile(
+          doctor: doctors[index],
+          onTap: () {},
+        );
+      },
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
   void applyFilters(BuildContext context) async {
     final Map<String, String>? filters = await showFilterSearchModal(context);
-    //todo mélissa tu as les filtres ici
-    print(filters);
+    _filters = filters;
+  }
+
+  void _loadingInitialDoctorSearch() {
+    final displayDoctor = context.read<DisplayDoctorBloc>();
+    displayDoctor.add(OnGetInitialSearchDoctor(
+      name: _name,
+      speciality: _filters?['speciality'] ?? '', // todo Corentin get the value and not the label
+      languages: _filters?['languages'] ??
+          '', // todo Corentin il me semblait que c'était un tab, tu peux me renvoyer de la forme suivant => Anglais, Français
+    ));
+  }
+
+  void _loadNextDoctorSearch() {
+    final displayDoctor = context.read<DisplayDoctorBloc>();
+    displayDoctor.add(OnGetNextSearchDoctor(
+      name: _name,
+      speciality: _filters?['speciality'] ?? '', // todo Corentin get the value and not the label
+      languages: _filters?['languages'] ??
+          '', // todo Corentin il me semblait que c'était un tab, tu peux me renvoyer de la forme suivant => Anglais, Français
+    ));
   }
 }

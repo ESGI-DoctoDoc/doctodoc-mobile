@@ -1,19 +1,22 @@
+import 'package:doctodoc_mobile/models/doctor.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/list_tile_base.dart';
 import 'package:flutter/material.dart';
 
 class DoctorListTile extends StatelessWidget {
+  final Doctor doctor;
   final Function? onTap;
 
   const DoctorListTile({
     super.key,
+    required this.doctor,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTileBase(
-      title: "Dr. John Doe",
-      subtitle: "Cardiologist",
+      title: "Dr. ${doctor.firstName} ${doctor.lastName}",
+      subtitle: doctor.speciality,
       leading: _buildLeadingIcon(context),
       trailing: const Padding(
         padding: EdgeInsets.only(right: 10.0),
@@ -32,7 +35,7 @@ class DoctorListTile extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Image.network(
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
+        doctor.pictureUrl,
         height: 60,
         width: 60,
         fit: BoxFit.cover,

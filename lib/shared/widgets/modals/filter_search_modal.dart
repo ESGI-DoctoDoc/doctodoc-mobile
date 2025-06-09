@@ -61,7 +61,7 @@ class _FilterSearchModalState extends State<_FilterSearchModal> {
                 if (_formKey.currentState?.validate() ?? false) {
                   Navigator.of(context).pop({
                     'speciality': _specialityController.text,
-                    'language': _languageController.text,
+                    'languages': _languageController.text,
                   });
                 }
               },

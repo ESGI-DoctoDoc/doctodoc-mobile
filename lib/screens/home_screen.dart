@@ -7,7 +7,6 @@ import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
-import '../shared/widgets/list_tile/doctor_list_tile.dart';
 import '../shared/widgets/texts/list_title.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,8 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
         };
       },
     );
-
-
   }
 
   Widget _buildSuccess(BuildContext context, User user) {
@@ -132,9 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const ListTitle(title: "Historique"),
-                    const DoctorListTile(),
+                    // const DoctorListTile(),
                     const SizedBox(height: 8),
-                    const DoctorListTile(),
+                    // const DoctorListTile(),
 
                     const SizedBox(height: 10),
                     const ListTitle(title: "Vaccins à prévoir"),
@@ -174,14 +171,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              PrimaryButton(label: "Réessayer", onTap: () {
-                // Retry logic can be added here
-                context.read<UserBloc>().add(OnUserLoadedBasicInfos());
-              }),
+              PrimaryButton(
+                  label: "Réessayer",
+                  onTap: () {
+                    // Retry logic can be added here
+                    context.read<UserBloc>().add(OnUserLoadedBasicInfos());
+                  }),
               const SizedBox(height: 10),
               TextButton.icon(
-                onPressed: () {
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.logout),
                 label: const Text('Se déconnecter'),
               ),
