@@ -1,4 +1,6 @@
+import 'package:doctodoc_mobile/screens/documents/document_detail_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/show_document_information_modal.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/update_document_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -30,7 +32,20 @@ class _DocumentMenuWidget extends StatelessWidget {
           ListTile(
             title: const Text("Ouvrir le document"),
             leading: const Icon(Icons.open_in_new),
-            onTap: () {},
+            onTap: () {
+              DocumentDetailScreen.navigateTo(context, "documentId");
+            },
+          ),
+          ListTile(
+            title: const Text('Modifier le document'),
+            leading: const Icon(Icons.edit),
+            onTap: () {
+              showUpdateDocumentModal(
+                context,
+                "documentId",
+                "Nom du document", //todo remplace par le nom du document
+              );
+            },
           ),
           ListTile(
             title: const Text("Afficher les détails"),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -37,8 +38,23 @@ class _DocumentUploadWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
+            title: const Text("Prendre une photo"),
+            leading: const Icon(Icons.camera_alt),
+            onTap: () async {
+              final ImagePicker picker = ImagePicker();
+              final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
+              if (photo != null) {
+                File file = File(photo.path);
+                AddDocumentScreen.navigateTo(context, file);
+              } else {
+                print("Photo non prise ou annulée.");
+              }
+            },
+          ),
+          ListTile(
             title: const Text("Charger une photo"),
-            leading: const Icon(Icons.photo_camera),
+            leading: const Icon(Icons.image),
             onTap: () async {
               FilePickerResult? result = await FilePicker.platform.pickFiles(
                 type: FileType.image,
