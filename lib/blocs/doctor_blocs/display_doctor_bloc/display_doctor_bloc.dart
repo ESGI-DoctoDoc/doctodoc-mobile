@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:doctodoc_mobile/models/doctor.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:meta/meta.dart';
 
 import '../../../exceptions/app_exception.dart';

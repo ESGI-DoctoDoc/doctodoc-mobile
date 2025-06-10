@@ -1,6 +1,10 @@
+import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor_detailed.dart';
 import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../appointment/types/appointment_flow_doctor_data.dart';
@@ -8,7 +12,6 @@ import '../appointment/types/appointment_flow_doctor_data.dart';
 class DoctorDetailScreen extends StatefulWidget {
   static const String routeName = '/doctors/:doctorId';
 
-  //todo mélissa convertir pour avoir le doctorId
   static void navigateTo(BuildContext context, String doctorId) {
     Navigator.pushNamed(context, routeName, arguments: {
       'doctorId': doctorId,
@@ -35,7 +38,31 @@ class DoctorDetailScreen extends StatefulWidget {
 
 class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   @override
+  void initState() {
+    super.initState();
+    _onLoadDoctorDetail();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return BlocBuilder<DoctorDetailBloc, DoctorDetailState>(
+      builder: (context, state) {
+        return switch (state) {
+          DoctorDetailInitial() || DoctorDetailLoading() => const OnboardingLoading(),
+          DoctorDetailError() => _buildError(),
+          DoctorDetailLoaded() => _buildSuccess(state.doctor),
+        };
+      },
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  Container _buildSuccess(DoctorDetailed doctorDetailed) {
     return Container(
       color: Color(0xFFEFEFEF), // Light grey background
       child: SafeArea(
@@ -61,15 +88,17 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                         background: Container(
                           color: Color(0xFFEFEFEF),
                         ),
-                        title: isCollapsed ? _buildCollapsedTitle() : _buildExpandedTitle(),
+                        title: isCollapsed
+                            ? _buildCollapsedTitle(doctorDetailed)
+                            : _buildExpandedTitle(doctorDetailed),
                       );
                     },
                   ),
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  ..._buildBiography('TODO: bio'),
-                  ..._buildAddress('TODO: address'),
+                  ..._buildBiography(doctorDetailed.biography),
+                  ..._buildAddress(doctorDetailed.address.address),
                   ..._buildHours({
                     'Lundi': '08:30 - 18:00',
                     'Mardi': '08:30 - 18:00',
@@ -79,8 +108,8 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                     'Samedi': '09:00 - 13:00',
                     'Dimanche': 'Fermé',
                   }), // TODO: horaires
-                  ..._buildLanguages(['Français', 'Anglais', 'Espagnol']), // TODO: langues
-                  ..._buildLegalInformation('TODO: RPPS'),
+                  ..._buildLanguages(doctorDetailed.languages),
+                  ..._buildLegalInformation(doctorDetailed.rpps),
                   const SizedBox(height: 20),
                 ]))
               ]),
@@ -101,17 +130,14 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   child: IconButton(
                     icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
                     onPressed: () {
-                      //todo mélissa ajout les données ici
                       final doctor = AppointmentFlowDoctorData(
                         doctorId: widget.doctorId,
-                        firstName: 'John',
-                        lastName: 'Doe',
-                        pictureUrl:
-                            'https://www.shutterstock.com/image-photo/covid19-coronavirus-outbreak-healthcare-workers-260nw-1779353891.jpg',
-                        address: const AppointmentFlowAddressData(
-                          addressId: "addressId",
-                          latitude: 23,
-                          longitude: 23,
+                        firstName: doctorDetailed.basicInformation.firstName,
+                        lastName: doctorDetailed.basicInformation.lastName,
+                        pictureUrl: doctorDetailed.basicInformation.pictureUrl,
+                        address: AppointmentFlowAddressData(
+                          latitude: doctorDetailed.address.latitude,
+                          longitude: doctorDetailed.address.longitude,
                         ),
                       );
                       AppointmentScreen.navigateTo(context, doctor);
@@ -320,7 +346,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     ];
   }
 
-  Widget _buildCollapsedTitle() {
+  Widget _buildCollapsedTitle(DoctorDetailed doctor) {
     return Container(
       color: Theme.of(context).primaryColor,
       child: SafeArea(
@@ -348,11 +374,11 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Dr. "firstname" ""',
+                    'Dr. ${doctor.basicInformation.firstName}',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
-                  const Text(
-                    'Dentiste',
+                  Text(
+                    doctor.basicInformation.speciality,
                     style: TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
@@ -365,7 +391,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     );
   }
 
-  Widget _buildExpandedTitle() {
+  Widget _buildExpandedTitle(DoctorDetailed doctorDetailed) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -373,20 +399,25 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
         CircleAvatar(
           radius: 30,
           backgroundImage: NetworkImage(
-            "https://www.shutterstock.com/image-photo/covid19-coronavirus-outbreak-healthcare-workers-260nw-1779353891.jpg",
+            doctorDetailed.basicInformation.pictureUrl,
           ),
         ),
         SizedBox(height: 10),
         Text(
-          'Dr. John Doe',
+          'Dr. ${doctorDetailed.basicInformation.firstName} ${doctorDetailed.basicInformation.lastName}',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5),
         Text(
-          'Cardiologist',
+          doctorDetailed.basicInformation.speciality,
           style: TextStyle(fontSize: 12, color: Colors.black),
         ),
       ],
     );
+  }
+
+  _onLoadDoctorDetail() {
+    final doctorDetailedBloc = context.read<DoctorDetailBloc>();
+    doctorDetailedBloc.add(OnGetDoctorDetail(id: widget.doctorId));
   }
 }

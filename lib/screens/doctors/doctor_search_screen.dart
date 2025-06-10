@@ -1,4 +1,4 @@
-import 'package:doctodoc_mobile/models/doctor.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/doctor_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/filter_search_modal.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +142,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
         }
         return DoctorListTile(
           doctor: doctors[index],
-          onTap: () => DoctorDetailScreen.navigateTo(context, 'uuid1'),
+          onTap: () => DoctorDetailScreen.navigateTo(context, doctors[index].id),
         );
       },
     );

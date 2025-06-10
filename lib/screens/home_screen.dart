@@ -8,10 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
+import '../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
 import '../shared/widgets/texts/list_title.dart';
 import 'appointments/appointment_detail_screen.dart';
+import 'introduction_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -205,7 +207,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
               const SizedBox(height: 10),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _logoutUser(context);
+                },
                 icon: const Icon(Icons.logout),
                 label: const Text('Se déconnecter'),
               ),
@@ -225,5 +229,11 @@ class _HomeScreenState extends State<HomeScreen> {
   _onLoadSpecialities() {
     final specialityBloc = context.read<DisplaySpecialitiesBloc>();
     specialityBloc.add(OnGetSpecialities());
+  }
+
+  void _logoutUser(BuildContext context) {
+    final sharedPreferences = SharedPreferencesAuthDataSource();
+    sharedPreferences.reset();
+    IntroductionScreen.navigateTo(context);
   }
 }

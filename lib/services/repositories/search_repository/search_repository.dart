@@ -1,4 +1,4 @@
-import 'package:doctodoc_mobile/models/doctor.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:doctodoc_mobile/services/data_sources/search_data_source/search_data_source.dart';
 
 import '../../../exceptions/auth_exception.dart';
