@@ -11,6 +11,7 @@ import '../models/user.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
 import '../shared/widgets/texts/list_title.dart';
+import 'appointments/appointment_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -94,6 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 10),
                     const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
                     // const AppointmentCard(), // todo
+                    TextButton(
+                      onPressed: () {
+                        AppointmentDetailScreen.navigateTo(context, "appointmentId123");
+                      },
+                      child: const Text("Voir les détails du rendez-vous"),
+                    ),
 
                     const SizedBox(height: 20),
                     const ListTitle(title: "Par spécialité"),
