@@ -1,4 +1,4 @@
-import 'package:doctodoc_mobile/models/doctor/address.dart';
+import 'package:doctodoc_mobile/models/address.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 
 class DoctorDetailed {

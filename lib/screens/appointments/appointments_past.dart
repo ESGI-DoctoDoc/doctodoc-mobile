@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
-import '../../models/appointment.dart';
+import '../../models/appointment/appointment.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class AppointmentPast extends StatefulWidget {

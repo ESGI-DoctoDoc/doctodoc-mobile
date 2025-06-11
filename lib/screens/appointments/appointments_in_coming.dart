@@ -1,5 +1,5 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
-import 'package:doctodoc_mobile/models/appointment.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/cards/appointment_card.dart';
 import 'package:flutter/material.dart';

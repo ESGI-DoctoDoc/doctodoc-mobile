@@ -66,7 +66,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
                   controller: _tabController,
                   tabs: const [
                     Tab(text: 'À venir'),
-                    Tab(text: 'Passées'),
+                    Tab(text: 'Passés'),
                   ],
                   labelColor: Theme.of(context).primaryColor,
                   indicatorColor: Theme.of(context).primaryColor,

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
-import 'package:doctodoc_mobile/models/appointment.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
 import 'package:meta/meta.dart';
 

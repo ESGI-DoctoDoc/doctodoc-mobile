@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
 import 'package:doctodoc_mobile/services/dtos/locked_appointment_request.dart';
 
-import '../../../models/appointment.dart';
+import '../../../models/appointment/appointment.dart';
 import 'appointment_data_source.dart';
 
 class RemoteAppointmentDataSource implements AppointmentDataSource {
@@ -60,5 +61,11 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
 
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Appointment.fromJson(jsonElement)).toList();
+  }
+
+  @override
+  Future<AppointmentDetailed> getById(String id) async {
+    final response = await dio.get("/patients/appointments/$id");
+    return AppointmentDetailed.fromJson(response.data["data"]);
   }
 }

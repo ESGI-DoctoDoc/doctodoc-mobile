@@ -1,4 +1,4 @@
-import 'doctor/doctor.dart';
+import '../doctor/doctor.dart';
 
 class Appointment {
   final String id;

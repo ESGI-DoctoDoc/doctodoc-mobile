@@ -1,7 +1,8 @@
-import 'package:doctodoc_mobile/models/appointment.dart';
-import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:flutter/material.dart';
+
+import '../../../screens/appointments/appointment_detail_screen.dart';
 
 class AppointmentCard extends StatelessWidget {
   final Appointment appointment;

@@ -1,6 +1,12 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
+import 'package:doctodoc_mobile/models/address.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/error_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/maps/maps_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
@@ -30,59 +36,106 @@ class AppointmentDetailScreen extends StatefulWidget {
 
 class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   @override
+  void initState() {
+    super.initState();
+    _fetchAppointmentDetail();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFEFEFEF),
-      child: SafeArea(
-        top: false,
-        child: Scaffold(
-          backgroundColor: const Color(0xFFEFEFEF),
-          appBar: AppBar(
-            title: const Text('Détails du rendez-vous'),
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12.0),
-                color: Theme.of(context).primaryColor.withAlpha(50),
-                child: Center(
-                  child: Text(
-                    'Lundi 9 juin 2025 - 14h30',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                ),
+    return BlocBuilder<AppointmentDetailBloc, AppointmentDetailState>(
+      builder: (context, state) {
+        return Container(
+          color: const Color(0xFFEFEFEF),
+          child: SafeArea(
+            top: false,
+            child: Scaffold(
+              backgroundColor: const Color(0xFFEFEFEF),
+              appBar: AppBar(
+                title: const Text('Détails du rendez-vous'),
+                backgroundColor: Theme.of(context).primaryColor,
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildDoctor('Dr. John Doe', 'Cardiologist', 'https://exemple.jpg'), // TODO
-                        _buildPatient('Jane Doe', 'c.lechene@myges.fr', 'Consultation Cardiaque'), // TODO
-                        _buildCareTracking(),
-                        _buildAddress('9 impasse des Fleurs, 75000 Paris', LatLng(23, 23), 'https://exemple.jpg'), // TODO
-                        const SizedBox(height: 16),
-                        ErrorButton(
-                          label: "Annuler le rendez-vous",
-                          onTap: () {},
-                        ),
-                      ],
+              body: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12.0),
+                    color: Theme.of(context).primaryColor.withAlpha(50),
+                    child: BlocBuilder<AppointmentDetailBloc, AppointmentDetailState>(
+                      builder: (context, state) {
+                        return switch (state) {
+                          AppointmentDetailInitial() ||
+                          AppointmentDetailLoading() =>
+                            const OnboardingLoading(),
+                          AppointmentDetailError() => _buildError(),
+                          AppointmentDetailLoaded() =>
+                            buildDateSection(state.appointment.date, state.appointment.start),
+                        };
+                        // return buildDateSection();
+                      },
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: BlocBuilder<AppointmentDetailBloc, AppointmentDetailState>(
+                          builder: (context, state) {
+                            return switch (state) {
+                              AppointmentDetailInitial() ||
+                              AppointmentDetailLoading() =>
+                                const OnboardingLoading(),
+                              AppointmentDetailError() => _buildError(),
+                              AppointmentDetailLoaded() => _buildBody(state.appointment),
+                            };
+                            // return buildBody();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
+        );
+      },
+    );
+  }
+
+  Column _buildBody(AppointmentDetailed appointment) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildDoctor(appointment.doctor),
+        _buildPatient(appointment.patient, appointment.medicalConcern),
+        _buildCareTracking(),
+        _buildAddress(appointment.address, 'https://exemple.jpg'), // todo Corentin image de quoi ?
+        const SizedBox(height: 16),
+        ErrorButton(
+          label: "Annuler le rendez-vous", // todo Corentin pas pour les rdv passés
+          onTap: () {},
         ),
+      ],
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  Center buildDateSection(String date, String start) {
+    return Center(
+      child: Text(
+        '$date - $start', // todo Corentin reformat like // 'Lundi 9 juin 2025 - 14h30',
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
 
-  Widget _buildDoctor(String fullName, String specialty, String pictureUrl) {
+  Widget _buildDoctor(Doctor doctor) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -102,7 +155,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  pictureUrl,
+                  doctor.pictureUrl,
                   height: 60,
                   width: 60,
                   fit: BoxFit.cover,
@@ -122,11 +175,11 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      fullName,
+                      '${doctor.firstName} ${doctor.lastName}',
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
-                    Text(specialty, style: TextStyle(color: Colors.grey.shade600)),
+                    Text(doctor.speciality, style: TextStyle(color: Colors.grey.shade600)),
                   ],
                 ),
               ),
@@ -137,7 +190,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
-  Widget _buildPatient(String fullName, String email, String motif) {
+  Widget _buildPatient(Patient patient, String motif) {
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
       decoration: BoxDecoration(
@@ -160,14 +213,14 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              fullName,
+              '${patient.firstName} ${patient.lastName}',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              email,
+              patient.email,
               style: const TextStyle(fontSize: 16),
             ),
           ),
@@ -192,7 +245,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
-  Widget _buildAddress(String address, LatLng center, String pictureUrl) {
+  Widget _buildAddress(Address address, String pictureUrl) {
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
       decoration: BoxDecoration(
@@ -223,7 +276,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              address,
+              address.address,
               style: const TextStyle(fontSize: 16),
             ),
           ),
@@ -236,7 +289,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             padding: const EdgeInsets.all(16.0),
             child: MapsViewer(
               zoom: 15,
-              center: center,
+              center: LatLng(address.latitude, address.longitude),
               marker: CircleAvatar(
                 radius: 22,
                 backgroundImage: NetworkImage(
@@ -272,5 +325,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
           )
       ],
     );
+  }
+
+  void _fetchAppointmentDetail() {
+    context.read<AppointmentDetailBloc>().add(OnGetAppointmentDetail(id: widget.appointmentId));
   }
 }

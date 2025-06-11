@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
-import 'package:doctodoc_mobile/models/appointment.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
 import 'package:doctodoc_mobile/services/data_sources/appointment_data_source/appointment_data_source.dart';
 import 'package:doctodoc_mobile/services/dtos/locked_appointment_request.dart';
 
@@ -47,6 +48,14 @@ class AppointmentRepository {
   Future<List<Appointment>> getPastAppointments(int page) async {
     try {
       return await appointmentDataSource.getPastAppointments(page);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<AppointmentDetailed> getById(String id) async {
+    try {
+      return await appointmentDataSource.getById(id);
     } catch (error) {
       throw UnknownException();
     }
