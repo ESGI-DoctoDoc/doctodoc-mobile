@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/models/appointment.dart';
+import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -12,69 +13,74 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withAlpha(50),
-          width: 1,
+    return InkWell(
+      onTap: () {
+        AppointmentDetailScreen.navigateTo(context, appointment.id);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline.withAlpha(50),
+            width: 1,
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: AppointmentListTile(
-              title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
-              subtitle: appointment.doctor.speciality,
-              color: Colors.white,
-              trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.directions_outlined),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: AppointmentListTile(
+                title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
+                subtitle: appointment.doctor.speciality,
+                color: Colors.white,
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.directions_outlined),
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.calendar_month_outlined, color: Colors.green.shade900, size: 22),
-                    const SizedBox(width: 8),
-                    Text(
-                      appointment.date, // todo Corentin
-                      // "Dimanche 12 Sept.",
-                      style: TextStyle(color: Colors.green.shade900, fontSize: 12),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 24,
-                  width: 1,
-                  color: Colors.green.shade900,
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.access_time_outlined, color: Colors.green.shade900, size: 22),
-                    const SizedBox(width: 8),
-                    Text(
-                      "${appointment.start} - ${appointment.end}",
-                      style: TextStyle(color: Colors.green.shade900, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-        ],
+            Container(
+              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_month_outlined, color: Colors.green.shade900, size: 22),
+                      const SizedBox(width: 8),
+                      Text(
+                        appointment.date, // todo Corentin
+                        // "Dimanche 12 Sept.",
+                        style: TextStyle(color: Colors.green.shade900, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 24,
+                    width: 1,
+                    color: Colors.green.shade900,
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.access_time_outlined, color: Colors.green.shade900, size: 22),
+                      const SizedBox(width: 8),
+                      Text(
+                        "${appointment.start} - ${appointment.end}",
+                        style: TextStyle(color: Colors.green.shade900, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
