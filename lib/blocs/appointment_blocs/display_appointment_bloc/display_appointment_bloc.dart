@@ -28,7 +28,7 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
 
       List<Appointment> appointments = await appointmentRepository.getUpComing(page);
 
-      bool isLoadingMore = appointments.isEmpty ? false : true;
+      bool isLoadingMore = appointments.isEmpty || appointments.length < 10 ? false : true;
       emit(state.copyWith(
         status: DisplayAppointmentStatus.success,
         page: page,
@@ -87,7 +87,7 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
 
       List<Appointment> appointments = await appointmentRepository.getPastAppointments(page);
 
-      bool isLoadingMore = appointments.isEmpty ? false : true;
+      bool isLoadingMore = appointments.isEmpty || appointments.length < 10 ? false : true;
       emit(state.copyWith(
         status: DisplayAppointmentStatus.success,
         page: page,
