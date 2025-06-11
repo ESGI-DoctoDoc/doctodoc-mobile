@@ -48,7 +48,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     return BlocBuilder<DoctorDetailBloc, DoctorDetailState>(
       builder: (context, state) {
         return switch (state) {
-          DoctorDetailInitial() || DoctorDetailLoading() => const OnboardingLoading(),
+          DoctorDetailInitial() || DoctorDetailLoading() => const SizedBox.shrink(),
           DoctorDetailError() => _buildError(),
           DoctorDetailLoaded() => _buildSuccess(state.doctor),
         };
@@ -194,7 +194,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
       _buildTitleSection(
         title: 'Adresse',
         trailing: TextButton(
-          onPressed: () => _openMap(),
+          onPressed: () => _openMap(address),
           child: Row(
             children: [
               Text(
@@ -217,11 +217,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     ];
   }
 
-  void _openMap() async {
-    final Uri uri = Uri.parse(
-      Uri.encodeFull(
-          'https://www.google.com/maps/search/?api=1&query=123 Rue de la Santé, Paris, France'),
-    );
+  void _openMap(String address) async {
+    final Uri uri =
+        Uri.parse(Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$address'));
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
