@@ -198,8 +198,12 @@ class _AccountScreenState extends State<AccountScreen> {
     return ListTile(
       leading: const Icon(Icons.phone),
       title: const Text('Numéro de téléphone'),
-      subtitle: Text(phoneNumber),
-      // todo Corentin reformat
+      subtitle: Text(
+        phoneNumber
+            .replaceFirst('+33', '0')
+            .replaceAllMapped(RegExp(r".{2}"), (match) => "${match.group(0)} ")
+            .trim(),
+      ),
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
       onTap: () => showUpdatePhoneModal(context, phoneNumber),
     );
