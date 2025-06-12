@@ -7,6 +7,7 @@ import 'package:doctodoc_mobile/shared/widgets/buttons/error_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/maps/maps_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
@@ -39,6 +40,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   void initState() {
     super.initState();
     _fetchAppointmentDetail();
+    Jiffy.setLocale('fr-FR');
   }
 
   @override
@@ -110,12 +112,13 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         _buildDoctor(appointment.doctor),
         _buildPatient(appointment.patient, appointment.medicalConcern),
         _buildCareTracking(),
-        _buildAddress(appointment.address, 'https://exemple.jpg'), // todo Corentin image de quoi ?
+        _buildAddress(appointment.address, appointment.doctor.pictureUrl),
         const SizedBox(height: 16),
-        ErrorButton(
-          label: "Annuler le rendez-vous", // todo Corentin pas pour les rdv passés
-          onTap: () {},
-        ),
+        if (DateTime.now().isBefore(DateTime.parse('${appointment.date} ${appointment.start}')))
+          ErrorButton(
+            label: "Annuler le rendez-vous",
+            onTap: () {},
+          ),
       ],
     );
   }
@@ -129,7 +132,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   Center buildDateSection(String date, String start) {
     return Center(
       child: Text(
-        '$date - $start', // todo Corentin reformat like // 'Lundi 9 juin 2025 - 14h30',
+        Jiffy.parse(date).format(pattern: "EEEE d MMMM yyyy") +
+        ' - ' +
+        Jiffy.parse(start, pattern: 'HH:mm').format(pattern: "HH:mm"),
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );

@@ -1,10 +1,11 @@
 import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
 import '../../../screens/appointments/appointment_detail_screen.dart';
 
-class AppointmentCard extends StatelessWidget {
+class AppointmentCard extends StatefulWidget {
   final Appointment appointment;
 
   const AppointmentCard({
@@ -13,10 +14,21 @@ class AppointmentCard extends StatelessWidget {
   });
 
   @override
+  State<AppointmentCard> createState() => _AppointmentCardState();
+}
+
+class _AppointmentCardState extends State<AppointmentCard> {
+  @override
+  void initState() {
+    super.initState();
+    Jiffy.setLocale('fr-FR');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppointmentDetailScreen.navigateTo(context, appointment.id);
+        AppointmentDetailScreen.navigateTo(context, widget.appointment.id);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -32,12 +44,16 @@ class AppointmentCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: AppointmentListTile(
-                title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
-                subtitle: appointment.doctor.speciality,
+                title: "Dr. ${widget.appointment.doctor.firstName} ${widget.appointment.doctor.lastName}",
+                subtitle: widget.appointment.doctor.speciality,
                 color: Colors.white,
                 trailing: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.directions_outlined),
+                  icon: Icon(
+                    DateTime.now().isAfter(DateTime.parse('${widget.appointment.date} ${widget.appointment.end}'))
+                      ? Icons.check_circle_outline
+                      : Icons.directions_outlined,
+                  ),
                 ),
               ),
             ),
@@ -56,8 +72,7 @@ class AppointmentCard extends StatelessWidget {
                       Icon(Icons.calendar_month_outlined, color: Colors.green.shade900, size: 22),
                       const SizedBox(width: 8),
                       Text(
-                        appointment.date, // todo Corentin
-                        // "Dimanche 12 Sept.",
+                        Jiffy.parse(widget.appointment.date).format(pattern: "dd MMMM yyyy"),
                         style: TextStyle(color: Colors.green.shade900, fontSize: 12),
                       ),
                     ],
@@ -72,7 +87,7 @@ class AppointmentCard extends StatelessWidget {
                       Icon(Icons.access_time_outlined, color: Colors.green.shade900, size: 22),
                       const SizedBox(width: 8),
                       Text(
-                        "${appointment.start} - ${appointment.end}",
+                        "${widget.appointment.start} - ${widget.appointment.end}",
                         style: TextStyle(color: Colors.green.shade900, fontSize: 12),
                       ),
                     ],
