@@ -9,10 +9,10 @@ import '../blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
 import '../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
+import '../shared/widgets/cards/appointment_card.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
 import '../shared/widgets/texts/list_title.dart';
-import 'appointments/appointment_detail_screen.dart';
 import 'introduction_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -96,13 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // incoming appointments
                     const SizedBox(height: 10),
                     const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
-                    // const AppointmentCard(), // todo
-                    TextButton(
-                      onPressed: () {
-                        AppointmentDetailScreen.navigateTo(context, "appointmentId123");
-                      },
-                      child: const Text("Voir les détails du rendez-vous"),
-                    ),
+                    const AppointmentCard(appointment: ), // todo mélissa
 
                     const SizedBox(height: 20),
                     const ListTitle(title: "Par spécialité"),
