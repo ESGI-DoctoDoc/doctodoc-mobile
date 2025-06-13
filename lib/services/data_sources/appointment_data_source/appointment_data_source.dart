@@ -15,4 +15,6 @@ abstract class AppointmentDataSource {
   Future<List<Appointment>> getPastAppointments(int page);
 
   Future<AppointmentDetailed> getById(String id);
+
+  Future<void> cancel(String id);
 }

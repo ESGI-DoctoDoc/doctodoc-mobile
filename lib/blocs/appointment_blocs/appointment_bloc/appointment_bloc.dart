@@ -16,6 +16,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     on<OnLockedAppointment>(_onLockedAppointment);
     on<OnConfirmAppointment>(_onConfirmAppointment);
     on<OnUnlockedAppointment>(_onUnlockedAppointment);
+    on<OnCancelAppointment>(_onCancelAppointment);
   }
 
   Future<void> _onLockedAppointment(
@@ -80,6 +81,20 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
     } catch (error) {
       emit(AppointmentLocked(
         status: AppointmentLockedStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onCancelAppointment(
+      OnCancelAppointment event, Emitter<AppointmentState> emit) async {
+    try {
+      emit(AppointmentCancel(status: AppointmentCancelStatus.loading));
+      appointmentRepository.cancel(event.id);
+      emit(AppointmentCancel(status: AppointmentCancelStatus.success));
+    } catch (error) {
+      emit(AppointmentCancel(
+        status: AppointmentCancelStatus.error,
         exception: AppException.from(error),
       ));
     }

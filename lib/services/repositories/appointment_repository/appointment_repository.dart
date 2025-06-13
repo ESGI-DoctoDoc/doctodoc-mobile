@@ -5,6 +5,7 @@ import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
 import 'package:doctodoc_mobile/services/data_sources/appointment_data_source/appointment_data_source.dart';
 import 'package:doctodoc_mobile/services/dtos/locked_appointment_request.dart';
+import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository_event.dart';
 
 class AppointmentRepository {
   final AppointmentDataSource appointmentDataSource;
@@ -12,6 +13,12 @@ class AppointmentRepository {
   AppointmentRepository({
     required this.appointmentDataSource,
   });
+
+  final _appointmentRepositoryEventController =
+      StreamController<AppointmentRepositoryEvent>.broadcast();
+
+  Stream<AppointmentRepositoryEvent> get appointmentRepositoryEventStream =>
+      _appointmentRepositoryEventController.stream;
 
   Future<String> lockedAppointment(LockedAppointmentRequest request) async {
     try {
@@ -59,5 +66,18 @@ class AppointmentRepository {
     } catch (error) {
       throw UnknownException();
     }
+  }
+
+  Future<void> cancel(String id) async {
+    try {
+      await appointmentDataSource.cancel(id);
+      _appointmentRepositoryEventController.add(CancelAppointmentEvent(id: id));
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  dispose() {
+    _appointmentRepositoryEventController.close();
   }
 }

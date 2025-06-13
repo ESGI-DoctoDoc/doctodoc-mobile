@@ -26,3 +26,11 @@ class OnLockedAppointment extends AppointmentEvent {
 class OnUnlockedAppointment extends AppointmentEvent {}
 
 class OnConfirmAppointment extends AppointmentEvent {}
+
+class OnCancelAppointment extends AppointmentEvent {
+  final String id;
+
+  OnCancelAppointment({
+    required this.id,
+  });
+}

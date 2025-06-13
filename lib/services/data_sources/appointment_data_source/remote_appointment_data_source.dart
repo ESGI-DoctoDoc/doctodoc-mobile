@@ -23,10 +23,12 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
         "slotId": request.slotId,
         "date": request.date,
         "time": request.time,
-        "responses": request.answers.map((answer) => {
-          "questionId": answer.questionId,
-          "answer": answer.answer,
-        }).toList(),
+        "responses": request.answers
+            .map((answer) => {
+                  "questionId": answer.questionId,
+                  "answer": answer.answer,
+                })
+            .toList(),
       }),
     );
 
@@ -40,7 +42,7 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
 
   @override
   Future<void> unlockedAppointment(String appointmentLockedId) async {
-    await dio.delete("/patients/appointments/$appointmentLockedId");
+    await dio.delete("/patients/appointments/unlock/$appointmentLockedId");
   }
 
   @override
@@ -67,5 +69,10 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   Future<AppointmentDetailed> getById(String id) async {
     final response = await dio.get("/patients/appointments/$id");
     return AppointmentDetailed.fromJson(response.data["data"]);
+  }
+
+  @override
+  Future<void> cancel(String id) async {
+    await dio.delete("/patients/appointments/cancel/$id");
   }
 }

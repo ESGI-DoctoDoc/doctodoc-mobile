@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository_event.dart';
 import 'package:meta/meta.dart';
 
 part 'display_appointment_event.dart';
@@ -10,6 +13,8 @@ part 'display_appointment_state.dart';
 class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppointmentState> {
   final AppointmentRepository appointmentRepository;
 
+  late StreamSubscription _appointmentRepositoryEventSubscription;
+
   DisplayAppointmentBloc({
     required this.appointmentRepository,
   }) : super(DisplayAppointmentState()) {
@@ -17,6 +22,14 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
     on<OnGetNextUpComing>(_onGetNextUpComing);
     on<OnGetInitialPast>(_onGetInitialPast);
     on<OnGetNextPart>(_onGetNextPart);
+    on<OnDeleteAppointmentUpComings>(_onDeleteAppointmentUpComings);
+
+    _appointmentRepositoryEventSubscription =
+        appointmentRepository.appointmentRepositoryEventStream.listen((event) {
+      if (event is CancelAppointmentEvent) {
+        add(OnDeleteAppointmentUpComings(id: event.id));
+      }
+    });
   }
 
   Future<void> _onGetInitial(
@@ -134,5 +147,21 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
         exception: AppException.from(error),
       ));
     }
+  }
+
+  Future<void> _onDeleteAppointmentUpComings(
+      OnDeleteAppointmentUpComings event, Emitter<DisplayAppointmentState> emit) async {
+    emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+
+    final appointments = state.appointments;
+    appointments.removeWhere((appointment) => appointment.id == event.id);
+
+    emit(state.copyWith(status: DisplayAppointmentStatus.success));
+  }
+
+  @override
+  Future<void> close() {
+    _appointmentRepositoryEventSubscription.cancel();
+    return super.close();
   }
 }

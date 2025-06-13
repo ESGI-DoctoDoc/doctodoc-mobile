@@ -51,3 +51,25 @@ final class AppointmentConfirm extends AppointmentState {
     );
   }
 }
+
+enum AppointmentCancelStatus { success, loading, error }
+
+final class AppointmentCancel extends AppointmentState {
+  final AppointmentCancelStatus status;
+  final AppException? exception;
+
+  AppointmentCancel({
+    required this.status,
+    this.exception,
+  });
+
+  AppointmentCancel copyWith({
+    AppointmentCancelStatus? status,
+    AppException? exception,
+  }) {
+    return AppointmentCancel(
+      status: status ?? this.status,
+      exception: exception ?? this.exception,
+    );
+  }
+}

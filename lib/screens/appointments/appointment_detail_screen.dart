@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
 import 'package:doctodoc_mobile/models/address.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
@@ -117,10 +118,17 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         if (DateTime.now().isBefore(DateTime.parse('${appointment.date} ${appointment.start}')))
           ErrorButton(
             label: "Annuler le rendez-vous",
-            onTap: () {},
+            onTap: () {
+              _onCancelAppointment(); // todo : faire une pop up pour confirmer l'annulation
+            },
           ),
       ],
     );
+  }
+
+  void _onCancelAppointment() {
+    context.read<AppointmentBloc>().add(OnCancelAppointment(id: widget.appointmentId));
+    Navigator.of(context).pop();
   }
 
   Widget _buildError() {

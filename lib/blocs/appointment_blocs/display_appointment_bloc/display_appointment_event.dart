@@ -10,3 +10,11 @@ class OnGetNextUpComing extends DisplayAppointmentEvent {}
 class OnGetInitialPast extends DisplayAppointmentEvent {}
 
 class OnGetNextPart extends DisplayAppointmentEvent {}
+
+class OnDeleteAppointmentUpComings extends DisplayAppointmentEvent {
+  final String id;
+
+  OnDeleteAppointmentUpComings({
+    required this.id,
+  });
+}
