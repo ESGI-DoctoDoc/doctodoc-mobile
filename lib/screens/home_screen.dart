@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // incoming appointments
                     const SizedBox(height: 10),
-                    const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
+                    const ListTitle(title: "Rendez-vous à venir"),
 
                     BlocBuilder<MostRecentUpcomingAppointmentBloc,
                         MostRecentUpcomingAppointmentState>(builder: (context, state) {
@@ -132,17 +132,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const ListTitle(title: "Historique"),
+                    ListTileBase(
+                      title: "Aucun rendez-vous récent.",
+                      leading: const Icon(Icons.history_outlined),
+                      onTap: () {},
+                    ),
                     // const DoctorListTile(),
                     const SizedBox(height: 8),
                     // const DoctorListTile(),
-
-                    const SizedBox(height: 10),
-                    const ListTitle(title: "Vaccins à prévoir"),
-                    ListTileBase.dense(
-                      title: "AJouter un vaccin",
-                      onTap: () {},
-                      leading: const Icon(Icons.add_circle_outline),
-                    ),
                   ],
                 ),
               )
@@ -155,8 +152,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMostRecentUpComingAppointment(Appointment? appointment) {
     if (appointment == null) {
-      return const Center(
-        child: Text("Pas de rendez vous."),
+      return ListTileBase(
+        title: "Aucun rendez-vous à venir.",
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: Icon(Icons.calendar_today_outlined),
+        ),
+        onTap: () {},
       );
     } else {
       return AppointmentCard(appointment: appointment);
