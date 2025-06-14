@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
+import '../../blocs/appointment_blocs/display_appointments_bloc/display_appointments_bloc.dart';
 import '../../services/repositories/appointment_repository/appointment_repository.dart';
 import 'appointments_in_coming.dart';
 import 'appointments_past.dart';
@@ -82,12 +82,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
             builder: (context, child) {
               return _tabController.index == 0
                   ? BlocProvider(
-                      create: (context) => DisplayAppointmentBloc(
+                      create: (context) => DisplayAppointmentsBloc(
                           appointmentRepository: context.read<AppointmentRepository>()),
                       child: AppointmentInComing(scrollController: _scrollController),
                     )
                   : BlocProvider(
-                      create: (context) => DisplayAppointmentBloc(
+                      create: (context) => DisplayAppointmentsBloc(
                           appointmentRepository: context.read<AppointmentRepository>()),
                       child: AppointmentPast(scrollController: _scrollController),
                     );

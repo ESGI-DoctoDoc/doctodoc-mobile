@@ -1,3 +1,5 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
+import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/models/speciality.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/doctors/doctor_search_screen.dart';
@@ -9,6 +11,7 @@ import '../blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import '../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../models/user.dart';
 import '../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
+import '../shared/widgets/cards/appointment_card.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
 import '../shared/widgets/texts/list_title.dart';
@@ -36,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
     _onLoadSpecialities();
+    _onGetMostRecentUpComingAppointmentBloc();
   }
 
   @override
@@ -95,7 +99,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     // incoming appointments
                     const SizedBox(height: 10),
                     const ListTitle(title: "Rendez-vous à venir", trailing: "Voir tous"),
-                    // const AppointmentCard(appointment: ), // todo mélissa
+
+                    BlocBuilder<MostRecentUpcomingAppointmentBloc,
+                        MostRecentUpcomingAppointmentState>(builder: (context, state) {
+                      return switch (state.status) {
+                        MostRecentUpcomingAppointmentStatus.initial ||
+                        MostRecentUpcomingAppointmentStatus.loading =>
+                          const SizedBox.shrink(),
+                        MostRecentUpcomingAppointmentStatus.success =>
+                          _buildMostRecentUpComingAppointment(state.appointment),
+                        MostRecentUpcomingAppointmentStatus.error =>
+                          _buildErrorForMostRecentUpComing(),
+                      };
+                    }),
 
                     const SizedBox(height: 20),
                     const ListTitle(title: "Par spécialité"),
@@ -135,6 +151,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildMostRecentUpComingAppointment(Appointment? appointment) {
+    if (appointment == null) {
+      return const Center(
+        child: Text("Pas de rendez vous."),
+      );
+    } else {
+      return AppointmentCard(appointment: appointment);
+    }
   }
 
   ListView _buildSuccessForSpecialities(List<Speciality> specialities) {
@@ -219,9 +245,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildErrorForMostRecentUpComing() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
   _onLoadSpecialities() {
     final specialityBloc = context.read<DisplaySpecialitiesBloc>();
     specialityBloc.add(OnGetSpecialities());
+  }
+
+  void _onGetMostRecentUpComingAppointmentBloc() {
+    context.read<MostRecentUpcomingAppointmentBloc>().add(OnGet());
   }
 
   void _logoutUser(BuildContext context) {

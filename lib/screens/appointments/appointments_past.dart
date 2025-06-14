@@ -2,7 +2,7 @@ import 'package:doctodoc_mobile/shared/widgets/cards/appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/appointment_blocs/display_appointment_bloc/display_appointment_bloc.dart';
+import '../../blocs/appointment_blocs/display_appointments_bloc/display_appointments_bloc.dart';
 import '../../models/appointment/appointment.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
@@ -37,16 +37,16 @@ class _AppointmentPastState extends State<AppointmentPast> {
         [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: BlocBuilder<DisplayAppointmentBloc, DisplayAppointmentState>(
+            child: BlocBuilder<DisplayAppointmentsBloc, DisplayAppointmentsState>(
               builder: (context, state) {
                 return switch (state.status) {
-                  DisplayAppointmentStatus.initial ||
-                  DisplayAppointmentStatus.initialLoading =>
-                  const OnboardingLoading(),
-                  DisplayAppointmentStatus.success ||
-                  DisplayAppointmentStatus.loading =>
-                      _buildSuccess(state.appointments, state.isLoadingMore),
-                  DisplayAppointmentStatus.error => _buildError(),
+                  DisplayAppointmentsStatus.initial ||
+                  DisplayAppointmentsStatus.initialLoading =>
+                    const OnboardingLoading(),
+                  DisplayAppointmentsStatus.success ||
+                  DisplayAppointmentsStatus.loading =>
+                    _buildSuccess(state.appointments, state.isLoadingMore),
+                  DisplayAppointmentsStatus.error => _buildError(),
                 };
               },
             ),
@@ -88,12 +88,12 @@ class _AppointmentPastState extends State<AppointmentPast> {
   }
 
   void _fetchInitialAppointments() {
-    final bloc = context.read<DisplayAppointmentBloc>();
+    final bloc = context.read<DisplayAppointmentsBloc>();
     bloc.add(OnGetInitialPast());
   }
 
   void _fetchNextAppointments() {
-    final bloc = context.read<DisplayAppointmentBloc>();
+    final bloc = context.read<DisplayAppointmentsBloc>();
     bloc.add(OnGetNextPart());
   }
 }

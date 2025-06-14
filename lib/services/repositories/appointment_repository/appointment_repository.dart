@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
@@ -44,9 +45,25 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<Appointment>> getUpComing(int page) async {
+  Future<List<Appointment>> getUpComingAppointments(int page) async {
     try {
       return await appointmentDataSource.getUpComingAppointments(page);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<Appointment?> getMostRecentUpComingAppointment() async {
+    try {
+      return await appointmentDataSource.getMostRecentUpComingAppointment();
+    } on DioException catch (error) {
+      final code = error.response?.data["code"];
+      var noneUpComingAppointmentKey = "appointment.empty";
+
+      if (code == noneUpComingAppointmentKey) {
+        return null;
+      }
+      throw UnknownException();
     } catch (error) {
       throw UnknownException();
     }

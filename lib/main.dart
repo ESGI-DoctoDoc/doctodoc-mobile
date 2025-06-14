@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
+import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
 import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
 import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
@@ -199,6 +200,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => AppointmentDetailBloc(
+              appointmentRepository: context.read<AppointmentRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => MostRecentUpcomingAppointmentBloc(
               appointmentRepository: context.read<AppointmentRepository>(),
             ),
           ),

@@ -7,17 +7,17 @@ import 'package:doctodoc_mobile/services/repositories/appointment_repository/app
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository_event.dart';
 import 'package:meta/meta.dart';
 
-part 'display_appointment_event.dart';
-part 'display_appointment_state.dart';
+part 'display_appointments_event.dart';
+part 'display_appointments_state.dart';
 
-class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppointmentState> {
+class DisplayAppointmentsBloc extends Bloc<DisplayAppointmentsEvent, DisplayAppointmentsState> {
   final AppointmentRepository appointmentRepository;
 
   late StreamSubscription _appointmentRepositoryEventSubscription;
 
-  DisplayAppointmentBloc({
+  DisplayAppointmentsBloc({
     required this.appointmentRepository,
-  }) : super(DisplayAppointmentState()) {
+  }) : super(DisplayAppointmentsState()) {
     on<OnGetInitialUpComing>(_onGetInitial);
     on<OnGetNextUpComing>(_onGetNextUpComing);
     on<OnGetInitialPast>(_onGetInitialPast);
@@ -32,39 +32,39 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
     });
   }
 
-  Future<void> _onGetInitial(
-      OnGetInitialUpComing event, Emitter<DisplayAppointmentState> emit) async {
+  Future<void> _onGetInitial(OnGetInitialUpComing event,
+      Emitter<DisplayAppointmentsState> emit) async {
     try {
-      emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+      emit(state.copyWith(status: DisplayAppointmentsStatus.initialLoading));
 
       int page = 0;
 
-      List<Appointment> appointments = await appointmentRepository.getUpComing(page);
+      List<Appointment> appointments = await appointmentRepository.getUpComingAppointments(page);
 
       bool isLoadingMore = appointments.isEmpty || appointments.length < 10 ? false : true;
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.success,
+        status: DisplayAppointmentsStatus.success,
         page: page,
         isLoadingMore: isLoadingMore,
         appointments: appointments,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.error,
+        status: DisplayAppointmentsStatus.error,
         exception: AppException.from(error),
       ));
     }
   }
 
-  Future<void> _onGetNextUpComing(
-      OnGetNextUpComing event, Emitter<DisplayAppointmentState> emit) async {
+  Future<void> _onGetNextUpComing(OnGetNextUpComing event,
+      Emitter<DisplayAppointmentsState> emit) async {
     try {
-      if (state.status == DisplayAppointmentStatus.success) {
-        emit(state.copyWith(status: DisplayAppointmentStatus.loading));
-      } else if ((state.status == DisplayAppointmentStatus.initial)) {
-        emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
-      } else if ((state.status == DisplayAppointmentStatus.loading) ||
-          (state.status == DisplayAppointmentStatus.initialLoading)) {
+      if (state.status == DisplayAppointmentsStatus.success) {
+        emit(state.copyWith(status: DisplayAppointmentsStatus.loading));
+      } else if ((state.status == DisplayAppointmentsStatus.initial)) {
+        emit(state.copyWith(status: DisplayAppointmentsStatus.initialLoading));
+      } else if ((state.status == DisplayAppointmentsStatus.loading) ||
+          (state.status == DisplayAppointmentsStatus.initialLoading)) {
         return;
       }
 
@@ -72,29 +72,29 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
 
       List<Appointment> oldAppointments = List<Appointment>.from(state.appointments);
 
-      List<Appointment> appointments = await appointmentRepository.getUpComing(page);
+      List<Appointment> appointments = await appointmentRepository.getUpComingAppointments(page);
 
       oldAppointments.addAll(appointments);
       bool isLoadingMore = appointments.isEmpty ? false : true;
 
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.success,
+        status: DisplayAppointmentsStatus.success,
         page: page,
         isLoadingMore: isLoadingMore,
         appointments: oldAppointments,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.error,
+        status: DisplayAppointmentsStatus.error,
         exception: AppException.from(error),
       ));
     }
   }
 
-  Future<void> _onGetInitialPast(
-      OnGetInitialPast event, Emitter<DisplayAppointmentState> emit) async {
+  Future<void> _onGetInitialPast(OnGetInitialPast event,
+      Emitter<DisplayAppointmentsState> emit) async {
     try {
-      emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+      emit(state.copyWith(status: DisplayAppointmentsStatus.initialLoading));
 
       int page = 0;
 
@@ -102,27 +102,27 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
 
       bool isLoadingMore = appointments.isEmpty || appointments.length < 10 ? false : true;
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.success,
+        status: DisplayAppointmentsStatus.success,
         page: page,
         isLoadingMore: isLoadingMore,
         appointments: appointments,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.error,
+        status: DisplayAppointmentsStatus.error,
         exception: AppException.from(error),
       ));
     }
   }
 
-  Future<void> _onGetNextPart(OnGetNextPart event, Emitter<DisplayAppointmentState> emit) async {
+  Future<void> _onGetNextPart(OnGetNextPart event, Emitter<DisplayAppointmentsState> emit) async {
     try {
-      if (state.status == DisplayAppointmentStatus.success) {
-        emit(state.copyWith(status: DisplayAppointmentStatus.loading));
-      } else if ((state.status == DisplayAppointmentStatus.initial)) {
-        emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
-      } else if ((state.status == DisplayAppointmentStatus.loading) ||
-          (state.status == DisplayAppointmentStatus.initialLoading)) {
+      if (state.status == DisplayAppointmentsStatus.success) {
+        emit(state.copyWith(status: DisplayAppointmentsStatus.loading));
+      } else if ((state.status == DisplayAppointmentsStatus.initial)) {
+        emit(state.copyWith(status: DisplayAppointmentsStatus.initialLoading));
+      } else if ((state.status == DisplayAppointmentsStatus.loading) ||
+          (state.status == DisplayAppointmentsStatus.initialLoading)) {
         return;
       }
 
@@ -136,27 +136,27 @@ class DisplayAppointmentBloc extends Bloc<DisplayAppointmentEvent, DisplayAppoin
       bool isLoadingMore = appointments.isEmpty ? false : true;
 
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.success,
+        status: DisplayAppointmentsStatus.success,
         page: page,
         isLoadingMore: isLoadingMore,
         appointments: oldAppointments,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: DisplayAppointmentStatus.error,
+        status: DisplayAppointmentsStatus.error,
         exception: AppException.from(error),
       ));
     }
   }
 
-  Future<void> _onDeleteAppointmentUpComings(
-      OnDeleteAppointmentUpComings event, Emitter<DisplayAppointmentState> emit) async {
-    emit(state.copyWith(status: DisplayAppointmentStatus.initialLoading));
+  Future<void> _onDeleteAppointmentUpComings(OnDeleteAppointmentUpComings event,
+      Emitter<DisplayAppointmentsState> emit) async {
+    emit(state.copyWith(status: DisplayAppointmentsStatus.initialLoading));
 
     final appointments = state.appointments;
     appointments.removeWhere((appointment) => appointment.id == event.id);
 
-    emit(state.copyWith(status: DisplayAppointmentStatus.success));
+    emit(state.copyWith(status: DisplayAppointmentsStatus.success));
   }
 
   @override

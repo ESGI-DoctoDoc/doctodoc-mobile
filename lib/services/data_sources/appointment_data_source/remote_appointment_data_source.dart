@@ -56,6 +56,13 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   }
 
   @override
+  Future<Appointment> getMostRecentUpComingAppointment() async {
+    final response = await dio.get("/patients/appointments/most-recent-upcoming");
+
+    return Appointment.fromJson(response.data["data"]);
+  }
+
+  @override
   Future<List<Appointment>> getPastAppointments(int page) async {
     int defaultSize = 10;
     final response =

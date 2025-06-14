@@ -1,30 +1,30 @@
-part of 'display_appointment_bloc.dart';
+part of 'display_appointments_bloc.dart';
 
-enum DisplayAppointmentStatus { initial, initialLoading, loading, success, error }
+enum DisplayAppointmentsStatus { initial, initialLoading, loading, success, error }
 
-class DisplayAppointmentState {
-  final DisplayAppointmentStatus status;
+class DisplayAppointmentsState {
+  final DisplayAppointmentsStatus status;
   final int page;
   final bool isLoadingMore;
   final List<Appointment> appointments;
   final AppException? exception;
 
-  DisplayAppointmentState({
-    this.status = DisplayAppointmentStatus.initial,
+  DisplayAppointmentsState({
+    this.status = DisplayAppointmentsStatus.initial,
     this.page = -1,
     this.isLoadingMore = true,
     this.appointments = const [],
     this.exception,
   });
 
-  DisplayAppointmentState copyWith({
-    DisplayAppointmentStatus? status,
+  DisplayAppointmentsState copyWith({
+    DisplayAppointmentsStatus? status,
     int? page,
     List<Appointment>? appointments,
     bool? isLoadingMore,
     AppException? exception,
   }) {
-    return DisplayAppointmentState(
+    return DisplayAppointmentsState(
       status: status ?? this.status,
       page: page ?? this.page,
       appointments: appointments ?? this.appointments,
