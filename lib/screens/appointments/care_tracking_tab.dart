@@ -1,5 +1,3 @@
-
-
 import 'package:doctodoc_mobile/shared/widgets/list_tile/care_tracking_list_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -60,10 +58,14 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
   }
 
   Widget _buildSuccess(List<String> careTrackingItems) {
-   List<Widget> careTrackingWidgets = careTrackingItems.map((item) {
+    List<Widget> careTrackingWidgets = careTrackingItems.map((item) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: CareTrackingListTile(title: "$item"),
+        child: CareTrackingListTile(
+          title: "$item",
+          subtitle: "Détails de $item",
+          pictureUrl: "https://via.placeholder.com/150",
+        ),
       );
     }).toList();
 

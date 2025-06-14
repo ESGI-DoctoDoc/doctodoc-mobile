@@ -1,8 +1,5 @@
 import 'package:doctodoc_mobile/screens/appointments/care_tracking_tab.dart';
 import 'package:doctodoc_mobile/screens/documents/documents_tab.dart';
-import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
-import 'package:doctodoc_mobile/shared/widgets/list_tile/care_tracking_list_tile.dart';
-import 'package:doctodoc_mobile/shared/widgets/list_tile/document_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/show_document_upload_modal.dart';
 import 'package:flutter/material.dart';
 
@@ -34,109 +31,6 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
-  }
-
-  List<Widget> _buildDocumentsTab() {
-    return [
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InfoBanner(title: "Vous seul avez accès à vos documents."),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              //todo group by year
-              child: Text(
-                '2025',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            DocumentListTile(title: "Vaccin contre la grippe"),
-            const SizedBox(height: 10),
-            DocumentListTile(title: "Vaccin contre la grippe"),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              //todo group by year
-              child: Text(
-                '2023',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            DocumentListTile(title: "Vaccin contre la grippe"),
-            const SizedBox(height: 10),
-            DocumentListTile(title: "Vaccin contre la grippe"),
-            const SizedBox(height: 10),
-            DocumentListTile(title: "Vaccin contre la grippe"),
-          ],
-        ),
-      ),
-
-      // End
-      const SizedBox(height: 16),
-    ];
-  }
-
-  List<Widget> _buildDossiersTab() {
-    return [
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InfoBanner(title: "Vous seul pouvez autoriser l'accès à vos dossiers."),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              //todo group by year
-              child: Text(
-                '2025',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-            const SizedBox(height: 10),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              //todo group by year
-              child: Text(
-                '2024',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              //todo group by year
-              child: Text(
-                '2023',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-            const SizedBox(height: 10),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-            const SizedBox(height: 10),
-            CareTrackingListTile(
-              title: "Médecin généraliste",
-            ),
-          ],
-        ),
-      ),
-
-      // End
-      const SizedBox(height: 16),
-    ];
   }
 
   @override

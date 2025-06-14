@@ -194,6 +194,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                     AppointmentListTile(
                       title: "title",
                       subtitle: "subtitle",
+                      pictureUrl: "https://example.com/picture.jpg",
                       trailing: IconButton(
                         icon: const Icon(Icons.arrow_forward_ios, size: 16),
                         onPressed: () {

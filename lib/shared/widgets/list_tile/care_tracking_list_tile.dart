@@ -6,10 +6,14 @@ import 'package:timelines_plus/timelines_plus.dart';
 
 class CareTrackingListTile extends StatefulWidget {
   final String title;
+  final String subtitle;
+  final String pictureUrl;
 
   const CareTrackingListTile({
     super.key,
     required this.title,
+    required this.subtitle,
+    required this.pictureUrl,
   });
 
   @override
@@ -80,7 +84,8 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
               children: [
                 AppointmentListTile(
                   title: widget.title,
-                  subtitle: "Le 12/12/2023 à 14h30",
+                  subtitle: widget.subtitle,
+                  pictureUrl: widget.pictureUrl,
                 ),
                 if (index < appointments.length - 1)
                   Container(

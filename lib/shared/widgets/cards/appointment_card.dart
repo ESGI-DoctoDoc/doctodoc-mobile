@@ -46,6 +46,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
               child: AppointmentListTile(
                 title: "Dr. ${widget.appointment.doctor.firstName} ${widget.appointment.doctor.lastName}",
                 subtitle: widget.appointment.doctor.speciality,
+                pictureUrl: widget.appointment.doctor.pictureUrl,
                 color: Colors.white,
                 trailing: IconButton(
                   onPressed: () {},

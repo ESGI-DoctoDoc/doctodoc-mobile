@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AppointmentListTile extends StatelessWidget {
   final String title; //todo use Appointment model ?
   final String subtitle;
+  final String pictureUrl;
   final Widget? trailing;
   final Color? color;
 
@@ -11,6 +12,7 @@ class AppointmentListTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    required this.pictureUrl,
     this.trailing,
     this.color = Colors.white,
   });
@@ -30,7 +32,7 @@ class AppointmentListTile extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d",
+        pictureUrl,
         height: 50,
         width: 50,
         fit: BoxFit.cover,
