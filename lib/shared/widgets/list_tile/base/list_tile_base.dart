@@ -87,6 +87,7 @@ class ListTileBase extends StatelessWidget {
     return Text(
       title,
       style: Theme.of(context).textTheme.titleMedium,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
