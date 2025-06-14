@@ -8,14 +8,19 @@ import 'package:file_picker/file_picker.dart';
 import '../../../screens/documents/add_document_screen.dart';
 import 'base/modal_base.dart';
 
-void showDocumentUploadModal(BuildContext context) {
+void showDocumentCareTrackingUploadModal(
+  BuildContext context, {
+  required String careTrackingId,
+}) {
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
       return [
         buildModalPage(
           context: context,
-          child: const _DocumentUploadWidget(),
+          child: _DocumentUploadWidget(
+            careTrackingId: careTrackingId,
+          ),
         ),
       ];
     },
@@ -23,7 +28,11 @@ void showDocumentUploadModal(BuildContext context) {
 }
 
 class _DocumentUploadWidget extends StatelessWidget {
-  const _DocumentUploadWidget();
+  final String careTrackingId;
+
+  const _DocumentUploadWidget({
+    required this.careTrackingId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +88,7 @@ class _DocumentUploadWidget extends StatelessWidget {
   void handleFileSelection(FilePickerResult? result, BuildContext context) {
     if (result != null && result.files.isNotEmpty) {
       File file = File(result.files.single.path!);
-      AddDocumentScreen.navigateTo(context, file, null);
+      AddDocumentScreen.navigateTo(context, file, careTrackingId);
     } else {
       print("No file selected or file selection was cancelled.");
     }

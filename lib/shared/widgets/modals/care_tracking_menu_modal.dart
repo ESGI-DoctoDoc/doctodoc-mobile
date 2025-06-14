@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../screens/care_tracking/care_tracking_detail_screen.dart';
 import 'base/modal_base.dart';
 
 void showCareTrackingMenuModal(BuildContext context) {
@@ -29,7 +30,7 @@ class _CareTrackingMenuWidget extends StatelessWidget {
           ListTile(
             title: const Text("Voir le détail du suivi"),
             leading: const Icon(Icons.visibility),
-            onTap: () {}
+            onTap: () => CareTrackingDetailScreen.navigateTo(context, "appointmentId")
           ),
           ListTile(
             title: const Text("Ajouter un rendez-vous"),

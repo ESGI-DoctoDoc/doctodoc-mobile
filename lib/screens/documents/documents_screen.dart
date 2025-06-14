@@ -1,3 +1,5 @@
+import 'package:doctodoc_mobile/screens/appointments/care_tracking_tab.dart';
+import 'package:doctodoc_mobile/screens/documents/documents_tab.dart';
 import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/care_tracking_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/document_list_tile.dart';
@@ -13,16 +15,24 @@ class DocumentsScreen extends StatefulWidget {
 
 class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollController.jumpTo(0);
+        setState(() {});
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -136,9 +146,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
       floatingActionButton: _tabController.index == 1
           ? null
           : FloatingActionButton(
-              onPressed: () => showDocumentUploadModal(context, onDocumentUploaded: () {
-                //todo refresh documents list
-              }),
+              onPressed: () => showDocumentUploadModal(context),
               child: const Icon(Icons.add),
             ),
       body: CustomScrollView(
@@ -180,11 +188,9 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
           AnimatedBuilder(
             animation: _tabController,
             builder: (context, child) {
-              return SliverList(
-                delegate: SliverChildListDelegate(
-                  _tabController.index == 0 ? _buildDocumentsTab() : _buildDossiersTab(),
-                ),
-              );
+              return _tabController.index == 0
+                  ? DocumentsTab(scrollController: _scrollController)
+                  : CareTrackingTab(scrollController: _scrollController);
             },
           ),
         ],
