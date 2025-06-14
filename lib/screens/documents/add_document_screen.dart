@@ -8,19 +8,24 @@ import '../../shared/widgets/inputs/document_type_input.dart';
 
 class AddDocumentScreen extends StatefulWidget {
   final File file;
+  final String? careTrackingId;
 
   static const String routeName = '/documents/add';
 
-  static void navigateTo(BuildContext context, File file) {
+  static void navigateTo(BuildContext context, File file, String? careTrackingId) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => AddDocumentScreen(file: file),
+        builder: (context) => AddDocumentScreen(file: file, careTrackingId: careTrackingId),
       ),
     );
   }
 
-  const AddDocumentScreen({super.key, required this.file});
+  const AddDocumentScreen({
+    super.key,
+    required this.file,
+    this.careTrackingId,
+  });
 
   @override
   State<AddDocumentScreen> createState() => _AddDocumentScreenState();
@@ -120,10 +125,10 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     print('Building file preview for: ${widget.file.path}');
     final String fileName = widget.file.path.split('/').last;
     final bool isPdf = widget.file.path.toLowerCase().endsWith('.pdf');
-    final bool isImage =
-        ['jpg', 'jpeg', 'png', 'heic'].any((ext) => widget.file.path.toLowerCase().endsWith('.$ext'));
+    final bool isImage = ['jpg', 'jpeg', 'png', 'heic']
+        .any((ext) => widget.file.path.toLowerCase().endsWith('.$ext'));
 
-    if(isImage) {
+    if (isImage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12.0),
         child: Image.file(
