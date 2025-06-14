@@ -101,6 +101,7 @@ class ListTileBase extends StatelessWidget {
           color: Colors.black87,
           fontSize: 14,
         ),
+        overflow: TextOverflow.ellipsis,
       );
     }
   }
