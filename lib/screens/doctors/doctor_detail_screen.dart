@@ -2,7 +2,6 @@ import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_det
 import 'package:doctodoc_mobile/models/doctor/doctor_detailed.dart';
 import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
-import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -99,15 +98,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                     delegate: SliverChildListDelegate([
                   ..._buildBiography(doctorDetailed.biography),
                   ..._buildAddress(doctorDetailed.address.address),
-                  ..._buildHours({
-                    'Lundi': '08:30 - 18:00',
-                    'Mardi': '08:30 - 18:00',
-                    'Mercredi': '08:30 - 12:00',
-                    'Jeudi': '08:30 - 18:00',
-                    'Vendredi': '08:30 - 17:00',
-                    'Samedi': '09:00 - 13:00',
-                    'Dimanche': 'Fermé',
-                  }), // TODO: horaires
+                  ..._buildHours(OpeningHours.openingHoursListToMap(doctorDetailed.openingHours)),
                   ..._buildLanguages(doctorDetailed.languages),
                   ..._buildLegalInformation(doctorDetailed.rpps),
                   const SizedBox(height: 20),
