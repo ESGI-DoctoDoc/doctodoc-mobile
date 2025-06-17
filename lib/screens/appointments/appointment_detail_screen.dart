@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/models/address.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment_detailed.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
+import 'package:doctodoc_mobile/screens/doctors/doctor_detail_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/error_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/maps/maps_viewer.dart';
 import 'package:flutter/material.dart';
@@ -163,40 +164,45 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         children: [
           _buildTitleSection(title: "Docteur"),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  doctor.pictureUrl,
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 55,
-                      width: 55,
-                      color: Colors.grey.shade200,
-                      child: const Icon(Icons.visibility_off, size: 30, color: Colors.grey),
-                    );
-                  },
+          InkWell(
+            onTap: () {
+              DoctorDetailScreen.navigateTo(context, doctor.id);
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    doctor.pictureUrl,
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 55,
+                        width: 55,
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.visibility_off, size: 30, color: Colors.grey),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${doctor.firstName} ${doctor.lastName}',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(doctor.speciality, style: TextStyle(color: Colors.grey.shade600)),
-                  ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${doctor.firstName} ${doctor.lastName}',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(doctor.speciality, style: TextStyle(color: Colors.grey.shade600)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       ),
