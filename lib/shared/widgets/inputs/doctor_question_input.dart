@@ -48,7 +48,11 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
       case MedicalConcernQuestionType.list:
         return Column(
           children: [
-            AppointmentLabel(label: widget.question.question),
+            AppointmentLabel(
+              label: widget.question.required
+                  ? '${widget.question.question} *'
+                  : widget.question.question,
+            ),
             InputSelection(
               controller: widget.controller,
               items: widget.question.options,
@@ -62,14 +66,22 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
       case MedicalConcernQuestionType.yesNo:
         return Column(
           children: [
-            AppointmentLabel(label: widget.question.question),
+            AppointmentLabel(
+              label: widget.question.required
+                  ? '${widget.question.question} *'
+                  : widget.question.question,
+            ),
             YesNoInput(controller: widget.controller, required: widget.question.required),
           ],
         );
       case MedicalConcernQuestionType.text:
         return Column(
           children: [
-            AppointmentLabel(label: widget.question.question),
+            AppointmentLabel(
+              label: widget.question.required
+                  ? '${widget.question.question} *'
+                  : widget.question.question,
+            ),
             InputText(
               controller: widget.controller,
               label: "",
