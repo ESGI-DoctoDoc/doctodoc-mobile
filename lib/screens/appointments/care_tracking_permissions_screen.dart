@@ -113,7 +113,7 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
     return documents.map((doc) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
-        // child: buildFileTile(doc),
+        // child: buildFileTile(doc), // todo j'ai commenté
       );
     }).toList();
   }

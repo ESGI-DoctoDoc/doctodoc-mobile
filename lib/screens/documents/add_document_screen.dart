@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:doctodoc_mobile/blocs/medical_record/upload_document_bloc/upload_document_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/document_type_input.dart';
 
@@ -33,87 +36,99 @@ class AddDocumentScreen extends StatefulWidget {
 
 class _AddDocumentScreenState extends State<AddDocumentScreen> {
   final addDocumentFormKey = GlobalKey<FormState>();
+
+  // todo Corentin bloquer le bouton si les deux champs + fichier ne sont pas renseignés
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFFEFEFEF),
-      child: SafeArea(
-        top: false,
-        child: Scaffold(
-          backgroundColor: Color(0xFFEFEFEF),
-          body: CustomScrollView(slivers: [
-            SliverAppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              floating: true,
-              snap: true,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              expandedHeight: 100.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: InkWell(
-                        child: const Icon(Icons.chevron_left),
-                        onTap: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                    const Text(
-                      'Ajouter un document',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                background: Container(
-                  color: Color(0xFFEFEFEF),
-                ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Form(
-                  key: addDocumentFormKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DocumentNameInput(controller: _nameController),
-                        const SizedBox(height: 10),
-                        DocumentTypeInput(controller: _typeController),
-                        const SizedBox(height: 10),
-
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text(
-                            'Fichier',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
+    return BlocListener<UploadDocumentBloc, UploadDocumentState>(
+      listenWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      listener: _uploadDocumentBlocListener,
+      child: Container(
+        color: Color(0xFFEFEFEF),
+        child: SafeArea(
+          top: false,
+          child: Scaffold(
+            backgroundColor: Color(0xFFEFEFEF),
+            body: CustomScrollView(slivers: [
+              SliverAppBar(
+                backgroundColor: Theme.of(context).primaryColor,
+                floating: true,
+                snap: true,
+                pinned: true,
+                automaticallyImplyLeading: false,
+                expandedHeight: 100.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: InkWell(
+                          child: const Icon(Icons.chevron_left),
+                          onTap: () => Navigator.of(context).pop(),
                         ),
-
-                        // Display the selected file if image or document
-                        _buildFilePreview(),
-                      ],
-                    ),
+                      ),
+                      const Text(
+                        'Ajouter un document',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  background: Container(
+                    color: Color(0xFFEFEFEF),
                   ),
                 ),
-              ]),
-            )
-          ]),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: PrimaryButton(
-              label: "Uploader le document",
-              onTap: () {
-                //todo handle file upload
-                Navigator.pop(context);
-              },
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Form(
+                    key: addDocumentFormKey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DocumentNameInput(controller: _nameController),
+                          const SizedBox(height: 10),
+                          DocumentTypeInput(controller: _typeController),
+                          const SizedBox(height: 10),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              'Fichier',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+
+                          // Display the selected file if image or document
+                          _buildFilePreview(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              )
+            ]),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: PrimaryButton(
+                label: "Uploader le document",
+                onTap: () {
+                  _onUploadDocument(
+                    widget.file,
+                    _nameController.text,
+                    _typeController.text,
+                  );
+                  // Navigator.pop(context);
+                },
+              ),
             ),
           ),
         ),
@@ -171,5 +186,23 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
         ],
       ),
     );
+  }
+
+  void _uploadDocumentBlocListener(BuildContext context, UploadDocumentState state) {
+    if (state.status == UploadDocumentStatus.success) {
+      Navigator.pop(context);
+    } else if (state.status == UploadDocumentStatus.error) {
+      showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
+    }
+  }
+
+  void _onUploadDocument(File file, String filename, String type) {
+    context.read<UploadDocumentBloc>().add(
+          OnUploadUrl(
+            file: file,
+            type: type,
+            filename: filename,
+          ),
+        );
   }
 }

@@ -138,7 +138,7 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
 
                   final doc = _documents[index];
                   //todo mélissa nom du document
-                  // return DocumentListTile(title: "name: ${doc.title}");
+                  // return DocumentListTile(title: "name: ${doc.title}"); // todo j'ai commenté
                   return Placeholder();
                 },
               ),

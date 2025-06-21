@@ -6,6 +6,7 @@ import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_d
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
+import 'package:doctodoc_mobile/blocs/medical_record/upload_document_bloc/upload_document_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
@@ -253,6 +254,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => DisplayDocumentContentBloc(
+              medicalRecordRepository: context.read<MedicalRecordRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => UploadDocumentBloc(
               medicalRecordRepository: context.read<MedicalRecordRepository>(),
             ),
           ),

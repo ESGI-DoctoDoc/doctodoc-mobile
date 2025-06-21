@@ -1,6 +1,17 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_dropdown.dart';
-import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_selection.dart';
 import 'package:flutter/material.dart';
+
+enum DocumentType {
+  medicalReport("Rapport médical"),
+  prescription("Ordonnance"),
+  medicalCertificate("Certificat médical"),
+  analysesResult("Résultats d\'analyses"),
+  other("Autre");
+
+  final String label;
+
+  const DocumentType(this.label);
+}
 
 class DocumentTypeItem extends InputDropdownItem {
   final String typeId;
@@ -25,18 +36,16 @@ class DocumentTypeInput extends StatefulWidget {
 }
 
 class _DocumentTypeInputState extends State<DocumentTypeInput> {
-  late final List<DocumentTypeItem> _documentTypes;
+  final List<DocumentTypeItem> _documentTypes = DocumentType.values
+      .map((value) => DocumentTypeItem(
+            typeId: value.label,
+            name: value.label,
+          ))
+      .toList();
 
   @override
   void initState() {
     super.initState();
-    _documentTypes = [
-      DocumentTypeItem(typeId: '1', name: 'Rapport médical'),
-      DocumentTypeItem(typeId: '2', name: 'Ordonnance'),
-      DocumentTypeItem(typeId: '3', name: 'Certificat médical'),
-      DocumentTypeItem(typeId: '4', name: 'Résultats d\'analyses'),
-      DocumentTypeItem(typeId: '5', name: 'Autre'),
-    ];
   }
 
   @override
