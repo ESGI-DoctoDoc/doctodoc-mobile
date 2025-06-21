@@ -14,4 +14,10 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Document.fromJson(jsonElement)).toList();
   }
+
+  @override
+  Future<Document> getDocumentById(String id) async {
+    final response = await dio.get("/patients/medical-record/documents/$id");
+    return Document.fromJson(response.data["data"]);
+  }
 }

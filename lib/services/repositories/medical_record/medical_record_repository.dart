@@ -17,4 +17,12 @@ class MedicalRecordRepository {
       throw UnknownException();
     }
   }
+
+  Future<Document> getDocumentById(String id) async {
+    try {
+      return await medicalRecordDataSource.getDocumentById(id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
 }

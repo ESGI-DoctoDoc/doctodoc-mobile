@@ -1,13 +1,18 @@
+import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
+import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class DocumentDetailScreen extends StatefulWidget {
   static const String routeName = "/documents/:documentId";
 
   static void navigateTo(BuildContext context, String documentId) {
-    Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (context) => DocumentDetailScreen(documentId: documentId),
-    ));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DocumentDetailScreen(documentId: documentId),
+        ));
   }
 
   static Widget routeBuilder(Map<String, dynamic> arguments) {
@@ -32,26 +37,56 @@ class DocumentDetailScreen extends StatefulWidget {
 
 class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   @override
-  Widget build(BuildContext context) {
-    print(widget.documentId);
-    final String url = "https://www.oecd.org/content/dam/oecd/en/topics/policy-sub-issues/health-system-performance/health-brochure.pdf"; // à remplacer dynamiquement
-    return Container(
-      color: const Color(0xFFEFEFEF),
-      child: SafeArea(
-        top: false,
-        child: Scaffold(
-          backgroundColor: const Color(0xFFEFEFEF),
-          appBar: AppBar(
-            title: const Text('Nom_du_document'),
-            backgroundColor: Theme.of(context).primaryColor,
-            actions: [
+  void initState() {
+    super.initState();
+    _getUrl();
+  }
 
-            ],
-          ),
-          body: buildDocumentViewer(url),
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DisplayDocumentContentBloc, DisplayDocumentContentState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          DisplayDocumentContentStatus.initial ||
+          DisplayDocumentContentStatus.loading =>
+            const SizedBox.shrink(),
+          DisplayDocumentContentStatus.success => _buildSuccess(state.document),
+          DisplayDocumentContentStatus.error => _buildError(),
+        };
+      },
     );
+  }
+
+  Widget _buildSuccess(Document? document) {
+    if (document == null) {
+      return _buildError();
+    } else {
+      return Container(
+        color: const Color(0xFFEFEFEF),
+        child: SafeArea(
+          top: false,
+          child: Scaffold(
+            backgroundColor: const Color(0xFFEFEFEF),
+            appBar: AppBar(
+              title: Text(document.name),
+              backgroundColor: Theme.of(context).primaryColor,
+              actions: [],
+            ),
+            body: buildDocumentViewer(document.url),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  void _getUrl() {
+    context.read<DisplayDocumentContentBloc>().add(OnGetContent(id: widget.documentId));
   }
 }
 
