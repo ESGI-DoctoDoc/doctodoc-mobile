@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/screens/documents/document_detail_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/show_document_information_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_document_modal.dart';
@@ -6,14 +7,16 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import 'base/modal_base.dart';
 
-void showDocumentMenuModal(BuildContext context) {
+void showDocumentMenuModal(BuildContext context, Document document) {
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
       return [
         buildModalPage(
           context: context,
-          child: _DocumentMenuWidget(),
+          child: _DocumentMenuWidget(
+            document: document,
+          ),
         ),
       ];
     },
@@ -21,7 +24,11 @@ void showDocumentMenuModal(BuildContext context) {
 }
 
 class _DocumentMenuWidget extends StatelessWidget {
-  const _DocumentMenuWidget();
+  final Document document;
+
+  const _DocumentMenuWidget({
+    required this.document,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class _DocumentMenuWidget extends StatelessWidget {
             title: const Text("Ouvrir le document"),
             leading: const Icon(Icons.open_in_new),
             onTap: () {
-              DocumentDetailScreen.navigateTo(context, "documentId");
+              DocumentDetailScreen.navigateTo(context, document.id);
             },
           ),
           ListTile(
@@ -42,17 +49,17 @@ class _DocumentMenuWidget extends StatelessWidget {
             onTap: () {
               showUpdateDocumentModal(
                 context,
-                "documentId",
-                "Nom du document", //todo remplace par le nom du document
+                document.id,
+                document.name,
               );
             },
           ),
           ListTile(
             title: const Text("Afficher les détails"),
-            leading: const Icon(Icons.info),
+            leading: Icon(Icons.info),
             onTap: () => showDocumentInformationModal(
               context,
-              "documentId", //todo remplace par l'ID du document
+              document.id,
             ),
           ),
           ListTile(

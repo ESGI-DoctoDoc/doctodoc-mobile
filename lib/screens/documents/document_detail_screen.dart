@@ -33,6 +33,7 @@ class DocumentDetailScreen extends StatefulWidget {
 class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.documentId);
     final String url = "https://www.oecd.org/content/dam/oecd/en/topics/policy-sub-issues/health-system-performance/health-brochure.pdf"; // à remplacer dynamiquement
     return Container(
       color: const Color(0xFFEFEFEF),

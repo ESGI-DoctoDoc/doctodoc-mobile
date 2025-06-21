@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
-import 'package:doctodoc_mobile/shared/widgets/list_tile/document_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class Document {
@@ -92,29 +91,29 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
   }
 
   List<Widget> _buildFiles(List<Document> documents) {
-    Widget buildFileTile(Document doc) {
-      return DocumentListTile(
-        title: doc.name,
-        trailing: Transform.scale(
-          scale: 0.75,
-          child: Switch(
-            value: doc.isShared,
-            onChanged: (bool newValue) {
-              setState(() {
-                // todo mélissa appel
-                final isShared = !doc.isShared;
-                print("new isShared state: $isShared");
-              });
-            },
-          ),
-        ),
-      );
-    }
+    // Widget buildFileTile(Document doc) {
+    //   return DocumentListTile(
+    //     title: doc.name,
+    //     trailing: Transform.scale(
+    //       scale: 0.75,
+    //       child: Switch(
+    //         value: doc.isShared,
+    //         onChanged: (bool newValue) {
+    //           setState(() {
+    //             // todo mélissa appel
+    //             final isShared = !doc.isShared;
+    //             print("new isShared state: $isShared");
+    //           });
+    //         },
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return documents.map((doc) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: buildFileTile(doc),
+        // child: buildFileTile(doc),
       );
     }).toList();
   }

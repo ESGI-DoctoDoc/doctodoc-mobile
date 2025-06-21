@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_me
 import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
+import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
@@ -13,6 +14,7 @@ import 'package:doctodoc_mobile/services/data_sources/auth_data_source/remote_au
 import 'package:doctodoc_mobile/services/data_sources/close_member_data_source/remote_close_member_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/doctor_data_source/remote_doctor_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
+import 'package:doctodoc_mobile/services/data_sources/medical_record_data_source/remote_medical_record_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/register_data_source/remote_register_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/search_data_source/remote_search_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/speciality_data_source/remote_speciality_data_source.dart';
@@ -23,6 +25,7 @@ import 'package:doctodoc_mobile/services/repositories/appointment_repository/app
 import 'package:doctodoc_mobile/services/repositories/auth_repository/auth_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/doctor_repository/doctor_repository.dart';
+import 'package:doctodoc_mobile/services/repositories/medical_record/medical_record_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/register_repository/register_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/search_repository/search_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/speciality_repository/speciality_repository.dart';
@@ -163,6 +166,15 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => MedicalRecordRepository(
+            medicalRecordDataSource: RemoteMedicalRecordDataSource(
+              dio: DioClient(
+                localAuthDataSource: SharedPreferencesAuthDataSource(),
+              ).dio,
+            ),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -232,7 +244,12 @@ class MyApp extends StatelessWidget {
             create: (context) => DoctorDetailBloc(
               doctorRepository: context.read<DoctorRepository>(),
             ),
-          )
+          ),
+          BlocProvider(
+            create: (context) => DisplayMedicalRecordDocumentsBloc(
+              medicalRecordRepository: context.read<MedicalRecordRepository>(),
+            ),
+          ),
         ],
         child: MaterialApp(
           title: titleApp,

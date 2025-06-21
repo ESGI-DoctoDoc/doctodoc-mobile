@@ -16,8 +16,6 @@ class OpeningHours {
 
     final hours = (start != null && end != null) ? "$start - $end" : "Fermé";
 
-    print(hours);
-
     return OpeningHours(
       day: json['day'],
       hours: hours,

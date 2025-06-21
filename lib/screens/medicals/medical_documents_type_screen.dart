@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/shared/widgets/list_tile/document_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class Document {
@@ -139,7 +138,8 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
 
                   final doc = _documents[index];
                   //todo mélissa nom du document
-                  return DocumentListTile(title: "name: ${doc.title}");
+                  // return DocumentListTile(title: "name: ${doc.title}");
+                  return Placeholder();
                 },
               ),
       ),
