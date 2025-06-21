@@ -45,6 +45,15 @@ class MedicalRecordRepository {
     }
   }
 
+  Future<void> deleteDocument(String id) async {
+    try {
+      await medicalRecordDataSource.deleteDocument(id);
+      _medicalRecordRepositoryEventController.add(DeleteMedicalRecordDocumentEvent(id: id));
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
   dispose() {
     _medicalRecordRepositoryEventController.close();
   }

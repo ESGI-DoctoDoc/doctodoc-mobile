@@ -6,7 +6,6 @@ import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_d
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
-import 'package:doctodoc_mobile/blocs/medical_record/upload_document_bloc/upload_document_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
@@ -42,6 +41,7 @@ import 'blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
+import 'blocs/medical_record/write_document_bloc/write_document_bloc.dart';
 import 'blocs/register_bloc/register_bloc.dart';
 import 'blocs/user_blocs/user_bloc/user_bloc.dart';
 import 'layout/main_layout.dart';
@@ -258,7 +258,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => UploadDocumentBloc(
+            create: (context) => WriteDocumentBloc(
               medicalRecordRepository: context.read<MedicalRecordRepository>(),
             ),
           ),

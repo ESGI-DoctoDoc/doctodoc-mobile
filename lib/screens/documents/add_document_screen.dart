@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:doctodoc_mobile/blocs/medical_record/upload_document_bloc/upload_document_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/medical_record/write_document_bloc/write_document_bloc.dart';
 import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/document_type_input.dart';
@@ -43,9 +43,9 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UploadDocumentBloc, UploadDocumentState>(
+    return BlocListener<WriteDocumentBloc, WriteDocumentState>(
       listenWhen: (previous, current) {
-        return previous.status != current.status;
+        return previous.uploadStatus != current.uploadStatus;
       },
       listener: _uploadDocumentBlocListener,
       child: Container(
@@ -188,17 +188,17 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     );
   }
 
-  void _uploadDocumentBlocListener(BuildContext context, UploadDocumentState state) {
-    if (state.status == UploadDocumentStatus.success) {
+  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentState state) {
+    if (state.uploadStatus == UploadDocumentStatus.success) {
       Navigator.pop(context);
-    } else if (state.status == UploadDocumentStatus.error) {
+    } else if (state.uploadStatus == UploadDocumentStatus.error) {
       showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
     }
   }
 
   void _onUploadDocument(File file, String filename, String type) {
-    context.read<UploadDocumentBloc>().add(
-          OnUploadUrl(
+    context.read<WriteDocumentBloc>().add(
+          OnUploadDocument(
             file: file,
             type: type,
             filename: filename,

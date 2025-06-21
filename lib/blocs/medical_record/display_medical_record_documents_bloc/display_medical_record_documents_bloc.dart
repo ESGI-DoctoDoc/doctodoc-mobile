@@ -21,11 +21,16 @@ class DisplayMedicalRecordDocumentsBloc
     required this.medicalRecordRepository,
   }) : super(DisplayMedicalRecordDocumentsState()) {
     on<OnGetMedicalRecordDocuments>(_onGetMedicalRecordDocuments);
+    on<OnDeleteMedicalRecordDocument>(_onDeleteMedicalRecordDocument);
 
     _medicalRecordRepositoryEventSubscription =
         medicalRecordRepository.medicalRecordRepositoryEventStream.listen((event) {
       if (event is UploadMedicalRecordDocumentEvent) {
         add(OnGetMedicalRecordDocuments());
+      }
+
+      if (event is DeleteMedicalRecordDocumentEvent) {
+        add(OnDeleteMedicalRecordDocument(id: event.id));
       }
     });
   }
@@ -48,6 +53,16 @@ class DisplayMedicalRecordDocumentsBloc
         exception: AppException.from(error),
       ));
     }
+  }
+
+  Future<void> _onDeleteMedicalRecordDocument(
+      OnDeleteMedicalRecordDocument event, Emitter<DisplayMedicalRecordDocumentsState> emit) async {
+    emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.loading));
+
+    final documents = state.documents;
+    documents.removeWhere((document) => document.id == event.id);
+
+    emit(state.copyWith(documents: documents, status: DisplayMedicalRecordDocumentsStatus.success));
   }
 
   @override

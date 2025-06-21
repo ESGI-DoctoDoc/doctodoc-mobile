@@ -63,4 +63,9 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
       }),
     );
   }
+
+  @override
+  Future<void> deleteDocument(String id) async {
+    await dio.delete("/patients/medical-record/documents/$id");
+  }
 }

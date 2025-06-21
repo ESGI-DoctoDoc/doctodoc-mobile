@@ -5,10 +5,10 @@ sealed class DisplayMedicalRecordDocumentsEvent {}
 
 class OnGetMedicalRecordDocuments extends DisplayMedicalRecordDocumentsEvent {}
 
-class OnGetMedicalRecordDocument extends DisplayMedicalRecordDocumentsEvent {
+class OnDeleteMedicalRecordDocument extends DisplayMedicalRecordDocumentsEvent {
   final String id;
 
-  OnGetMedicalRecordDocument({
+  OnDeleteMedicalRecordDocument({
     required this.id,
   });
 }
