@@ -7,6 +7,7 @@ import '../../blocs/close_member_blocs/display_detail_close_member_bloc/display_
 import '../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
 import '../../shared/widgets/modals/update_patient_modal.dart';
+import '../medicals/medical_patient_details_screen.dart';
 
 class PatientDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -206,21 +207,25 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
 
         const SizedBox(height: 24),
 
-        // // Medical
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-        //   child: Text(
-        //     'Dossier médical',
-        //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        //   ),
-        // ),
-        // ListTile(
-        //   title: const Text('Mes documents médicaux'),
-        //   trailing: const Icon(Icons.chevron_right),
-        //   onTap: () => MedicalScreen.navigateTo(context, patientId: widget.patientId),
-        // ),
+        // Medical
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Dossier médical',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.folder_shared),
+          title: Text('Mes documents médicaux'),
+          trailing: Icon(Icons.chevron_right),
+          onTap: () => MedicalPatientDetailsScreen.navigateTo(
+            context,
+            patientId: closeMember.id,
+          ),
+        ),
 
-        // todo créer un autre fichier identique genre moi et les autres
+        const SizedBox(height: 24),
         ListTile(
           leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
           title: Text(

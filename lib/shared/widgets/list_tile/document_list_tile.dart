@@ -5,19 +5,27 @@ import '../modals/document_menu_modal.dart';
 
 class DocumentListTile extends StatelessWidget {
   final String title;
+  final String? subtitle;
   final Widget? trailing;
 
-  const DocumentListTile({super.key, required this.title, this.trailing});
+  const DocumentListTile({
+    super.key,
+    required this.title,
+    this.trailing,
+    this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTileBase(
       title: title,
+      subtitle: subtitle,
       leading: _buildLeadingIcon(context),
-      trailing: trailing ?? IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () => showDocumentMenuModal(context),
-            ),
+      trailing: trailing ??
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showDocumentMenuModal(context),
+          ),
     );
   }
 

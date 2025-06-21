@@ -12,7 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../models/user.dart';
 import '../appointment/widgets/onboarding_loading.dart';
-import '../medicals/medical_screen.dart';
+import '../medicals/medical_details_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -84,7 +84,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 title: const Text('Dossier médical'),
                 subtitle: const Text('Mes documents médicaux'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => MedicalScreen.navigateTo(context, patientId: "0"), //Todo me
+                onTap: () => MedicalDetailsScreen.navigateTo(context, patientId: "0"), //Todo me
               ),
 
               // Moyens de connexion
