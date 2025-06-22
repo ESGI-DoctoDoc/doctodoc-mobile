@@ -28,6 +28,12 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
   }
 
   @override
+  Future<DocumentDetailed> getDetailDocumentById(String id) async {
+    final response = await dio.get("/patients/medical-record/documents/detail/$id");
+    return DocumentDetailed.fromJson(response.data["data"]);
+  }
+
+  @override
   Future<void> uploadDocument(UploadDocumentRequest uploadDocumentRequest) async {
     final mimeType = lookupMimeType(uploadDocumentRequest.file.path) ?? 'application/octet-stream';
 

@@ -1,7 +1,7 @@
 class Document {
-  String id;
-  String name;
-  String url;
+  final String id;
+  final String name;
+  final String url;
 
   Document({
     required this.id,
@@ -14,6 +14,29 @@ class Document {
       id: json['id'],
       name: json['name'],
       url: json['url'],
+    );
+  }
+}
+
+class DocumentDetailed {
+  final Document document;
+  final String type;
+  final String uploadedAt;
+
+// final String uploadedBy;
+
+  DocumentDetailed({
+    required this.document,
+    required this.type,
+    required this.uploadedAt,
+  });
+
+  factory DocumentDetailed.fromJson(Map<String, dynamic> json) {
+    Document document = Document.fromJson(json);
+    return DocumentDetailed(
+      document: document,
+      type: json['type'],
+      uploadedAt: json['uploadedAt'],
     );
   }
 }

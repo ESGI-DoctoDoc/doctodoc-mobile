@@ -7,6 +7,8 @@ abstract class MedicalRecordDataSource {
 
   Future<Document> getDocumentById(String id);
 
+  Future<DocumentDetailed> getDetailDocumentById(String id);
+
   Future<void> uploadDocument(UploadDocumentRequest uploadDocumentRequest);
 
   Future<void> deleteDocument(String id);

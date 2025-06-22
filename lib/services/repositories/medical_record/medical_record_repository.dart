@@ -36,6 +36,15 @@ class MedicalRecordRepository {
     }
   }
 
+  Future<DocumentDetailed> getDetailDocumentById(String id) async {
+    try {
+      return await medicalRecordDataSource.getDetailDocumentById(id);
+    } catch (error) {
+      print(error);
+      throw UnknownException();
+    }
+  }
+
   Future<void> uploadDocument(UploadDocumentRequest uploadDocumentRequest) async {
     try {
       await medicalRecordDataSource.uploadDocument(uploadDocumentRequest);
