@@ -1,17 +1,7 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_dropdown.dart';
 import 'package:flutter/material.dart';
 
-enum DocumentType {
-  medicalReport("Rapport médical"),
-  prescription("Ordonnance"),
-  medicalCertificate("Certificat médical"),
-  analysesResult("Résultats d\'analyses"),
-  other("Autre");
-
-  final String label;
-
-  const DocumentType(this.label);
-}
+import '../../../models/document.dart';
 
 class DocumentTypeItem extends InputDropdownItem {
   final String typeId;

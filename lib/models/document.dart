@@ -1,3 +1,15 @@
+enum DocumentType {
+  medicalReport("Rapport médical"),
+  prescription("Ordonnance"),
+  medicalCertificate("Certificat médical"),
+  analysesResult("Résultats d\'analyses"),
+  other("Autre");
+
+  final String label;
+
+  const DocumentType(this.label);
+}
+
 class Document {
   final String id;
   final String name;

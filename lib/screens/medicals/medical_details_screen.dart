@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/document.dart';
 import 'medical_documents_type_screen.dart';
 
 class MedicalDetailsScreen extends StatefulWidget {
@@ -69,69 +70,51 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Mes analyses',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.science),
-                title: Text('Analyse'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
-                },
-              ),
+              ...DocumentType.values.map((docType) {
+                IconData icon;
+                switch (docType) {
+                  case DocumentType.medicalReport:
+                    icon = Icons.description;
+                    break;
+                  case DocumentType.prescription:
+                    icon = Icons.receipt;
+                    break;
+                  case DocumentType.medicalCertificate:
+                    icon = Icons.assignment_turned_in;
+                    break;
+                  case DocumentType.analysesResult:
+                    icon = Icons.science;
+                    break;
+                  case DocumentType.other:
+                    icon = Icons.image;
+                    break;
+                }
 
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Mes vaccinations',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.vaccines),
-                title: Text('Vaccin'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
-                },
-              ),
-
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Mes ordonnances',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.description),
-                title: Text('Ordonnance'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
-                },
-              ),
-
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Mes documents médicaux',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.image),
-                title: Text('Imagerie'),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
-                },
-              ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        docType.label,
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(icon),
+                      title: Text(docType.label),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        MedicalDocumentsTypeScreen.navigateTo(
+                          context,
+                          patientId: widget.patientId,
+                          type: docType.name,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }).toList(),
             ]),
           ),
         ],
