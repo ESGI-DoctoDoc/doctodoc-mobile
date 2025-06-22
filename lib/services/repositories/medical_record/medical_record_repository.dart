@@ -21,9 +21,9 @@ class MedicalRecordRepository {
     required this.medicalRecordDataSource,
   });
 
-  Future<List<Document>> getAll() async {
+  Future<List<Document>> getDocuments(int page) async {
     try {
-      return await medicalRecordDataSource.getAll();
+      return await medicalRecordDataSource.getDocuments(page);
     } catch (error) {
       throw UnknownException();
     }

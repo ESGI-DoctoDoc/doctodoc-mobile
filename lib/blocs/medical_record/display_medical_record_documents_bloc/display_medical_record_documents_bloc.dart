@@ -20,14 +20,15 @@ class DisplayMedicalRecordDocumentsBloc
   DisplayMedicalRecordDocumentsBloc({
     required this.medicalRecordRepository,
   }) : super(DisplayMedicalRecordDocumentsState()) {
-    on<OnGetMedicalRecordDocuments>(_onGetMedicalRecordDocuments);
+    on<OnGetInitialMedicalRecordDocuments>(_onGetInitialMedicalRecordDocuments);
+    on<OnGetNextMedicalRecordDocuments>(_onGetNextMedicalRecordDocuments);
     on<OnDeleteMedicalRecordDocument>(_onDeleteMedicalRecordDocument);
     on<OnUpdateMedicalRecordDocument>(_onUpdateMedicalRecordDocument);
 
     _medicalRecordRepositoryEventSubscription =
         medicalRecordRepository.medicalRecordRepositoryEventStream.listen((event) {
       if (event is UploadMedicalRecordDocumentEvent) {
-        add(OnGetMedicalRecordDocuments());
+        add(OnGetInitialMedicalRecordDocuments());
       }
 
       if (event is DeleteMedicalRecordDocumentEvent) {
@@ -45,15 +46,54 @@ class DisplayMedicalRecordDocumentsBloc
   }
 
   // todo pagination
-  Future<void> _onGetMedicalRecordDocuments(
-      OnGetMedicalRecordDocuments event, Emitter<DisplayMedicalRecordDocumentsState> emit) async {
+  Future<void> _onGetInitialMedicalRecordDocuments(OnGetInitialMedicalRecordDocuments event,
+      Emitter<DisplayMedicalRecordDocumentsState> emit) async {
     try {
-      emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.loading));
+      emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.initialLoading));
 
-      List<Document> documents = await medicalRecordRepository.getAll();
+      int page = 0;
+
+      List<Document> documents = await medicalRecordRepository.getDocuments(page);
+      bool isLoadingMore = documents.isEmpty || documents.length < 10 ? false : true;
 
       emit(state.copyWith(
         status: DisplayMedicalRecordDocumentsStatus.success,
+        page: page,
+        isLoadingMore: isLoadingMore,
+        documents: documents,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: DisplayMedicalRecordDocumentsStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onGetNextMedicalRecordDocuments(OnGetNextMedicalRecordDocuments event,
+      Emitter<DisplayMedicalRecordDocumentsState> emit) async {
+    try {
+      if (state.status == DisplayMedicalRecordDocumentsStatus.success) {
+        emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.loading));
+      } else if ((state.status == DisplayMedicalRecordDocumentsStatus.initial)) {
+        emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.initialLoading));
+      } else if ((state.status == DisplayMedicalRecordDocumentsStatus.loading) ||
+          (state.status == DisplayMedicalRecordDocumentsStatus.initialLoading)) {
+        return;
+      }
+
+      int page = state.page + 1;
+
+      List<Document> oldDocuments = List<Document>.from(state.documents);
+      List<Document> documents = await medicalRecordRepository.getDocuments(page);
+
+      oldDocuments.addAll(documents);
+      bool isLoadingMore = documents.isEmpty ? false : true;
+
+      emit(state.copyWith(
+        status: DisplayMedicalRecordDocumentsStatus.success,
+        page: page,
+        isLoadingMore: isLoadingMore,
         documents: documents,
       ));
     } catch (error) {

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DocumentsTab extends StatefulWidget {
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
-  const DocumentsTab({super.key, this.scrollController});
+  const DocumentsTab({super.key, required this.scrollController});
 
   @override
   State<DocumentsTab> createState() => _DocumentsTabState();
@@ -20,21 +20,23 @@ class _DocumentsTabState extends State<DocumentsTab> {
   @override
   void initState() {
     super.initState();
-    widget.scrollController?.addListener(_onScroll);
-    _fetchDocuments();
+    widget.scrollController.addListener(_onScroll);
+    _fetchInitialDocuments();
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.scrollController?.removeListener(_onScroll);
+    widget.scrollController.removeListener(_onScroll);
   }
 
   void _onScroll() {
-    // if (widget.scrollController.position.pixels >= widget.scrollController.position.maxScrollExtent &&
-    //     _isLoadingMore) {
-    // _fetchMoreDocuments();
-    // }
+    if (widget.scrollController.position.pixels >=
+            widget.scrollController.position.maxScrollExtent &&
+        _isLoadingMore) {
+      print("je fetch");
+      _fetchNextDocuments();
+    }
   }
 
   @override
@@ -47,9 +49,11 @@ class _DocumentsTabState extends State<DocumentsTab> {
             builder: (context, state) {
               return switch (state.status) {
                 DisplayMedicalRecordDocumentsStatus.initial ||
-                DisplayMedicalRecordDocumentsStatus.loading =>
+                DisplayMedicalRecordDocumentsStatus.initialLoading =>
                   const OnboardingLoading(),
-                DisplayMedicalRecordDocumentsStatus.success => _buildSuccess(state.documents),
+                DisplayMedicalRecordDocumentsStatus.success ||
+                DisplayMedicalRecordDocumentsStatus.loading =>
+                  _buildSuccess(state.documents, state.isLoadingMore),
                 DisplayMedicalRecordDocumentsStatus.error => _buildError(),
               };
             },
@@ -59,9 +63,7 @@ class _DocumentsTabState extends State<DocumentsTab> {
     );
   }
 
-  Widget _buildSuccess(List<Document> documents) {
-    // List<String> names = documents.map((document) => document.name).toList();
-
+  Widget _buildSuccess(List<Document> documents, bool isLoadingMore) {
     List<Widget> documentWidgets = documents.map((document) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -69,7 +71,14 @@ class _DocumentsTabState extends State<DocumentsTab> {
       );
     }).toList();
 
-    return Column(children: documentWidgets);
+    _isLoadingMore = isLoadingMore;
+
+    return Column(
+      children: [
+        ...documentWidgets,
+        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+      ],
+    );
   }
 
   Widget _buildError() {
@@ -78,7 +87,17 @@ class _DocumentsTabState extends State<DocumentsTab> {
     );
   }
 
-  void _fetchDocuments() {
-    context.read<DisplayMedicalRecordDocumentsBloc>().add(OnGetMedicalRecordDocuments());
+  void _fetchInitialDocuments() {
+    if (mounted) {
+      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
+      bloc.add(OnGetInitialMedicalRecordDocuments());
+    }
+  }
+
+  void _fetchNextDocuments() {
+    if (mounted) {
+      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
+      bloc.add(OnGetNextMedicalRecordDocuments());
+    }
   }
 }
