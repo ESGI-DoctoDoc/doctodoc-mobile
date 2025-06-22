@@ -22,6 +22,7 @@ class DisplayMedicalRecordDocumentsBloc
   }) : super(DisplayMedicalRecordDocumentsState()) {
     on<OnGetMedicalRecordDocuments>(_onGetMedicalRecordDocuments);
     on<OnDeleteMedicalRecordDocument>(_onDeleteMedicalRecordDocument);
+    on<OnUpdateMedicalRecordDocument>(_onUpdateMedicalRecordDocument);
 
     _medicalRecordRepositoryEventSubscription =
         medicalRecordRepository.medicalRecordRepositoryEventStream.listen((event) {
@@ -31,6 +32,14 @@ class DisplayMedicalRecordDocumentsBloc
 
       if (event is DeleteMedicalRecordDocumentEvent) {
         add(OnDeleteMedicalRecordDocument(id: event.id));
+      }
+
+      if (event is UpdateMedicalRecordDocumentEvent) {
+        add(OnUpdateMedicalRecordDocument(
+          id: event.id,
+          filename: event.filename,
+          type: event.type,
+        ));
       }
     });
   }
@@ -61,6 +70,22 @@ class DisplayMedicalRecordDocumentsBloc
 
     final documents = state.documents;
     documents.removeWhere((document) => document.id == event.id);
+
+    emit(state.copyWith(documents: documents, status: DisplayMedicalRecordDocumentsStatus.success));
+  }
+
+  Future<void> _onUpdateMedicalRecordDocument(
+      OnUpdateMedicalRecordDocument event, Emitter<DisplayMedicalRecordDocumentsState> emit) async {
+    emit(state.copyWith(status: DisplayMedicalRecordDocumentsStatus.loading));
+
+    final documents = state.documents;
+
+    final documentToUpdateIndex = documents.indexWhere((document) => document.id == event.id);
+    final oldDocument = documents[documentToUpdateIndex];
+
+    final documentUpdated = Document(id: event.id, name: event.filename, url: oldDocument.url);
+
+    documents[documentToUpdateIndex] = documentUpdated;
 
     emit(state.copyWith(documents: documents, status: DisplayMedicalRecordDocumentsStatus.success));
   }

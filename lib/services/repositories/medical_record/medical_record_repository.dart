@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/services/data_sources/medical_record_data_source/medical_record_data_source.dart';
+import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 import 'package:doctodoc_mobile/services/dtos/upload_document_request.dart';
 import 'package:doctodoc_mobile/services/repositories/medical_record/medical_record_repository_event.dart';
 
@@ -49,6 +50,19 @@ class MedicalRecordRepository {
     try {
       await medicalRecordDataSource.uploadDocument(uploadDocumentRequest);
       _medicalRecordRepositoryEventController.add(UploadMedicalRecordDocumentEvent());
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<void> updateDocument(UpdateDocumentRequest updateDocumentRequest) async {
+    try {
+      final Document document = await medicalRecordDataSource.updateDocument(updateDocumentRequest);
+      _medicalRecordRepositoryEventController.add(UpdateMedicalRecordDocumentEvent(
+        id: document.id,
+        type: updateDocumentRequest.type,
+        filename: document.name,
+      ));
     } catch (error) {
       throw UnknownException();
     }

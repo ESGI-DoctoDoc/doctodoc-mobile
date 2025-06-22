@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/services/data_sources/medical_record_data_source/medical_record_data_source.dart';
+import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 import 'package:mime/mime.dart';
 
 import '../../dtos/upload_document_request.dart';
@@ -35,12 +36,23 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
 
   @override
   Future<void> uploadDocument(UploadDocumentRequest uploadDocumentRequest) async {
-    final mimeType = lookupMimeType(uploadDocumentRequest.file.path) ?? 'application/octet-stream';
+    final response = await dio.post(
+      "/patients/medical-record/documents",
+      data: jsonEncode({
+        "filename": uploadDocumentRequest.filename,
+        "type": uploadDocumentRequest.type,
+      }),
+    );
 
-    final bytes = await uploadDocumentRequest.file.readAsBytes();
+    await uploadOnS3(uploadDocumentRequest.file, response.data["data"]["id"]);
+  }
 
-    final response =
-        await dio.get("/patients/medical-record/upload-url/${uploadDocumentRequest.filename}");
+  Future<void> uploadOnS3(File file, String id) async {
+    final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+
+    final bytes = await file.readAsBytes();
+
+    final response = await dio.get("/patients/medical-record/upload-url/$id");
     String url = response.data["data"]["url"];
 
     final dioS3 = Dio(
@@ -51,7 +63,6 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
 
     await dioS3.put(
       url,
-      // data: uploadDocumentRequest.file.openRead(),
       data: bytes,
       options: Options(
         headers: {
@@ -60,18 +71,23 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
         },
       ),
     );
-
-    await dio.post(
-      "/patients/medical-record/documents",
-      data: jsonEncode({
-        "filename": uploadDocumentRequest.filename,
-        "type": uploadDocumentRequest.type,
-      }),
-    );
   }
 
   @override
   Future<void> deleteDocument(String id) async {
     await dio.delete("/patients/medical-record/documents/$id");
+  }
+
+  @override
+  Future<Document> updateDocument(UpdateDocumentRequest updateDocumentRequest) async {
+    final response = await dio.patch(
+      "/patients/medical-record/documents/${updateDocumentRequest.id}",
+      data: jsonEncode({
+        "filename": updateDocumentRequest.filename,
+        "type": updateDocumentRequest.type,
+      }),
+    );
+
+    return Document.fromJson(response.data["data"]);
   }
 }

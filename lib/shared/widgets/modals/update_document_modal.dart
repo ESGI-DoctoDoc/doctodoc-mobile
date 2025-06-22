@@ -1,12 +1,12 @@
+import 'package:doctodoc_mobile/blocs/medical_record/write_document_bloc/write_document_bloc.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
-import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
-import 'package:doctodoc_mobile/shared/widgets/inputs/email_input.dart';
+import 'package:doctodoc_mobile/shared/widgets/inputs/document_type_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
+import '../../utils/show_error_snackbar.dart';
 import '../buttons/primary_button.dart';
 import 'base/modal_base.dart';
 
@@ -20,11 +20,9 @@ class UpdateDocument {
   });
 }
 
-Future<Patient?> showUpdateDocumentModal(
-    BuildContext context,
+Future<Patient?> showUpdateDocumentModal(BuildContext context,
     String documentId,
-    String name,
-    ) {
+    String name,) {
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -32,7 +30,10 @@ Future<Patient?> showUpdateDocumentModal(
         buildModalPage(
           context: context,
           title: "Modifier le document",
-          child: _UpdateDocumentWidget(name: name),
+          child: _UpdateDocumentWidget(
+            name: name,
+            documentId: documentId,
+          ),
         ),
       ];
     },
@@ -41,8 +42,12 @@ Future<Patient?> showUpdateDocumentModal(
 
 class _UpdateDocumentWidget extends StatefulWidget {
   final String name;
+  final String documentId;
 
-  const _UpdateDocumentWidget({required this.name});
+  const _UpdateDocumentWidget({
+    required this.name,
+    required this.documentId,
+  });
 
   @override
   State<_UpdateDocumentWidget> createState() => _UpdateDocumentWidgetState();
@@ -50,6 +55,8 @@ class _UpdateDocumentWidget extends StatefulWidget {
 
 class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
   final GlobalKey<FormState> updateEmailKey = GlobalKey<FormState>();
+
+  // todo Corentin des erreurs remontent quand on tape dans le champ
   final TextEditingController name = TextEditingController();
 
   @override
@@ -60,39 +67,53 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: updateEmailKey,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                DocumentNameInput(controller: name),
-                const SizedBox(height: 20),
-                PrimaryButton(
-                  label: "Mettre à jour le document",
-                  onTap: () => _updateEmail(),
-                ),
-              ],
-            ),
-          ],
+    return BlocListener<WriteDocumentBloc, WriteDocumentState>(
+      listenWhen: (previous, current) {
+        return previous.updateStatus != current.updateStatus;
+      },
+      listener: _uploadDocumentBlocListener,
+      child: Form(
+        key: updateEmailKey,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  DocumentNameInput(controller: name),
+                  const SizedBox(height: 20),
+                  PrimaryButton(
+                    label: "Mettre à jour le document",
+                    onTap: () => _updateDocument(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _updateEmail() {
-    if (updateEmailKey.currentState!.validate()) {
-      final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
-      // todo mélissa
-      // writeCloseMemberBloc.add(OnUpdate(
-      //   id: widget.patient.id,
-      //   email: emailController.text,
-      // ));
+  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentState state) {
+    if (state.updateStatus == UpdateDocumentStatus.success) {
+      Navigator.pop(context);
+    } else if (state.updateStatus == UpdateDocumentStatus.error) {
+      showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
+    }
+  }
 
-      Navigator.of(context).pop();
+  void _updateDocument() {
+    if (updateEmailKey.currentState!.validate()) {
+      context.read<WriteDocumentBloc>().add(
+            OnUpdateDocument(
+              id: widget.documentId,
+              type:
+                  DocumentType.analysesResult.label, // todo Corentin => changer le type de document
+              filename: name.text,
+            ),
+          );
     }
   }
 }

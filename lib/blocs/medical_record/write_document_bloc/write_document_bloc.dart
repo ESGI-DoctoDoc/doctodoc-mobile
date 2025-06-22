@@ -6,6 +6,7 @@ import 'package:doctodoc_mobile/services/repositories/medical_record/medical_rec
 import 'package:meta/meta.dart';
 
 import '../../../exceptions/app_exception.dart';
+import '../../../services/dtos/update_document_request.dart';
 
 part 'write_document_event.dart';
 part 'write_document_state.dart';
@@ -18,6 +19,7 @@ class WriteDocumentBloc extends Bloc<WriteDocumentEvent, WriteDocumentState> {
   }) : super(const WriteDocumentState()) {
     on<OnUploadDocument>(_onUploadUrl);
     on<OnDeleteDocument>(_onDeleteDocument);
+    on<OnUpdateDocument>(_onUpdateDocument);
   }
 
   Future<void> _onUploadUrl(OnUploadDocument event, Emitter<WriteDocumentState> emit) async {
@@ -49,6 +51,27 @@ class WriteDocumentBloc extends Bloc<WriteDocumentEvent, WriteDocumentState> {
     } catch (e) {
       emit(state.copyWith(
         deleteStatus: DeleteDocumentStatus.error,
+        exception: AppException.from(e),
+      ));
+    }
+  }
+
+  Future<void> _onUpdateDocument(OnUpdateDocument event, Emitter<WriteDocumentState> emit) async {
+    emit(state.copyWith(updateStatus: UpdateDocumentStatus.loading));
+
+    try {
+      final request = UpdateDocumentRequest(
+        id: event.id,
+        type: event.type,
+        filename: event.filename,
+      );
+
+      await medicalRecordRepository.updateDocument(request);
+
+      emit(state.copyWith(updateStatus: UpdateDocumentStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        updateStatus: UpdateDocumentStatus.error,
         exception: AppException.from(e),
       ));
     }

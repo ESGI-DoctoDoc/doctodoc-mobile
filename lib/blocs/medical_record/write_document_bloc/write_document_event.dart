@@ -22,3 +22,15 @@ class OnDeleteDocument extends WriteDocumentEvent {
     required this.id,
   });
 }
+
+class OnUpdateDocument extends WriteDocumentEvent {
+  final String id;
+  final String type;
+  final String filename;
+
+  OnUpdateDocument({
+    required this.id,
+    required this.type,
+    required this.filename,
+  });
+}

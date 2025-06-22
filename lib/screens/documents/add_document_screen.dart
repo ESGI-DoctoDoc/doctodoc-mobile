@@ -38,6 +38,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
   final addDocumentFormKey = GlobalKey<FormState>();
 
   // todo Corentin bloquer le bouton si les deux champs + fichier ne sont pas renseignés
+  // todo des erreur dans la console remonte quand on tape dans le champ name
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
 
