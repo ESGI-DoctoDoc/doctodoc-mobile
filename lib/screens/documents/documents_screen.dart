@@ -44,6 +44,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
               child: const Icon(Icons.add),
             ),
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           SliverAppBar(
             backgroundColor: Theme.of(context).primaryColor,
