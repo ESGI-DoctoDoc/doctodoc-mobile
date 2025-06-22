@@ -57,12 +57,13 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
   final GlobalKey<FormState> updateEmailKey = GlobalKey<FormState>();
 
   // todo Corentin des erreurs remontent quand on tape dans le champ
-  final TextEditingController name = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    name.text = widget.name;
+    _nameController.text = widget.name;
   }
 
   @override
@@ -81,7 +82,9 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
               const SizedBox(height: 20),
               Column(
                 children: [
-                  DocumentNameInput(controller: name),
+                  DocumentNameInput(controller: _nameController),
+                  const SizedBox(height: 10),
+                  DocumentTypeInput(controller: _typeController),
                   const SizedBox(height: 20),
                   PrimaryButton(
                     label: "Mettre à jour le document",
@@ -107,13 +110,12 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
   void _updateDocument() {
     if (updateEmailKey.currentState!.validate()) {
       context.read<WriteDocumentBloc>().add(
-            OnUpdateDocument(
-              id: widget.documentId,
-              type:
-                  DocumentType.analysesResult.label, // todo Corentin => changer le type de document
-              filename: name.text,
-            ),
-          );
+        OnUpdateDocument(
+          id: widget.documentId,
+          type: _typeController.text,
+          filename: _nameController.text,
+        ),
+      );
     }
   }
 }
