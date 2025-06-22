@@ -45,7 +45,6 @@ class DisplayMedicalRecordDocumentsBloc
     });
   }
 
-  // todo pagination
   Future<void> _onGetInitialMedicalRecordDocuments(OnGetInitialMedicalRecordDocuments event,
       Emitter<DisplayMedicalRecordDocumentsState> emit) async {
     try {
@@ -94,7 +93,7 @@ class DisplayMedicalRecordDocumentsBloc
         status: DisplayMedicalRecordDocumentsStatus.success,
         page: page,
         isLoadingMore: isLoadingMore,
-        documents: documents,
+        documents: oldDocuments,
       ));
     } catch (error) {
       emit(state.copyWith(

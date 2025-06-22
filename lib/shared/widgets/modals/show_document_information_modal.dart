@@ -61,6 +61,7 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
   }
 
   Column _buildSuccess(DocumentDetailed document) {
+    print(document.uploadedBy.firstName);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +97,7 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
         ),
         ListTile(
           leading: const Icon(Icons.person),
-          title: const Text('Vous'), // todo mélissa à faire
+          title: Text('${document.uploadedBy.firstName} ${document.uploadedBy.lastName}'),
         ),
         const Padding(
           padding: EdgeInsets.all(16.0),
