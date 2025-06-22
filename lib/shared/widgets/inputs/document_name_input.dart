@@ -53,9 +53,6 @@ class _DocumentNameInputState extends State<DocumentNameInput> {
       placeholder: "Entrez le nom du document",
       controller: widget.controller,
       validator: _validator.validation,
-      onChange: (value) {
-        // Handle change if needed
-      },
     );
   }
 }

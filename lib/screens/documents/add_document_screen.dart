@@ -37,8 +37,6 @@ class AddDocumentScreen extends StatefulWidget {
 class _AddDocumentScreenState extends State<AddDocumentScreen> {
   final addDocumentFormKey = GlobalKey<FormState>();
 
-  // todo Corentin bloquer le bouton si les deux champs + fichier ne sont pas renseignés
-  // todo des erreur dans la console remonte quand on tape dans le champ name
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
 
@@ -198,6 +196,10 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
   }
 
   void _onUploadDocument(File file, String filename, String type) {
+    if(addDocumentFormKey.currentState?.validate() != true) {
+      showErrorSnackbar(context, 'Veuillez remplir tous les champs correctement.');
+      return;
+    }
     context.read<WriteDocumentBloc>().add(
           OnUploadDocument(
             file: file,
