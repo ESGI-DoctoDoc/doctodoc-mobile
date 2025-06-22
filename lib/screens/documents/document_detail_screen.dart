@@ -91,23 +91,22 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
 }
 
 Widget buildDocumentViewer(String url) {
-  if (url.toLowerCase().endsWith(".pdf")) {
-    return const PDF().fromUrl(
-      url,
-      placeholder: (progress) => Center(child: Text('$progress %')),
-      errorWidget: (error) => Center(child: Text('Erreur : $error')),
-    );
-  } else {
-    return Image.network(
-      url,
-      fit: BoxFit.contain,
-      loadingBuilder: (context, child, progress) {
-        if (progress == null) return child;
-        return const Center(child: CircularProgressIndicator());
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return const Center(child: Text("Erreur de chargement"));
-      },
-    );
-  }
+  return Image.network(
+    url,
+    fit: BoxFit.contain,
+    loadingBuilder: (context, child, progress) {
+      if (progress == null) return child;
+      return const Center(child: CircularProgressIndicator());
+    },
+    errorBuilder: (context, error, stackTrace) {
+      return PDF(
+        onError: (error) => Center(child: Text('Erreur : $error')),
+        onPageError: (error, page) => Center(child: Text('Erreur à la page $page : $error')),
+      ).fromUrl(
+        url,
+        placeholder: (progress) => Center(child: Text('$progress %')),
+        errorWidget: (error) => Center(child: Text('Erreur : $error')),
+      );
+    },
+  );
 }
