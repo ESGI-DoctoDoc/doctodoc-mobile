@@ -72,7 +72,6 @@ class _DocumentsTabState extends State<DocumentsTab> {
     }).toList();
 
     _isLoadingMore = isLoadingMore;
-    print(isLoadingMore);
 
     return Column(
       children: [

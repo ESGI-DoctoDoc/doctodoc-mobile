@@ -15,10 +15,14 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
   RemoteMedicalRecordDataSource({required this.dio});
 
   @override
-  Future<List<Document>> getDocuments(int page) async {
+  Future<List<Document>> getDocuments({required int page, String? type}) async {
     int defaultSize = 10;
-    final response =
-        await dio.get("/patients/medical-record/documents?page=$page&size=$defaultSize");
+
+    String request = "/patients/medical-record/documents?page=$page&size=$defaultSize";
+    if (type != null) {
+      request = "$request&type=$type";
+    }
+    final response = await dio.get(request);
 
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => Document.fromJson(jsonElement)).toList();

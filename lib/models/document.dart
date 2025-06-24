@@ -8,6 +8,10 @@ enum DocumentType {
   final String label;
 
   const DocumentType(this.label);
+
+  factory DocumentType.of(String value) {
+    return DocumentType.values.firstWhere((type) => type.name == value);
+  }
 }
 
 class Document {

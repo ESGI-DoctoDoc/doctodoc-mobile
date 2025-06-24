@@ -4,7 +4,7 @@ import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 import '../../dtos/upload_document_request.dart';
 
 abstract class MedicalRecordDataSource {
-  Future<List<Document>> getDocuments(int page);
+  Future<List<Document>> getDocuments({required int page, String? type});
 
   Future<Document> getDocumentById(String id);
 

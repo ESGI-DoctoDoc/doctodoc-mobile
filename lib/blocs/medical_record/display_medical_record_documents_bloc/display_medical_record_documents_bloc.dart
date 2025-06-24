@@ -52,7 +52,11 @@ class DisplayMedicalRecordDocumentsBloc
 
       int page = 0;
 
-      List<Document> documents = await medicalRecordRepository.getDocuments(page);
+      List<Document> documents = await medicalRecordRepository.getDocuments(
+        page: page,
+        type: event.type,
+      );
+
       bool isLoadingMore = documents.isEmpty || documents.length < 10 ? false : true;
 
       emit(state.copyWith(
@@ -84,7 +88,10 @@ class DisplayMedicalRecordDocumentsBloc
       int page = state.page + 1;
 
       List<Document> oldDocuments = List<Document>.from(state.documents);
-      List<Document> documents = await medicalRecordRepository.getDocuments(page);
+      List<Document> documents = await medicalRecordRepository.getDocuments(
+        page: page,
+        type: event.type,
+      );
 
       oldDocuments.addAll(documents);
       bool isLoadingMore = documents.isEmpty ? false : true;

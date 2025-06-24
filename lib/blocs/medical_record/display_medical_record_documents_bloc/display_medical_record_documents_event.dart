@@ -3,9 +3,17 @@ part of 'display_medical_record_documents_bloc.dart';
 @immutable
 sealed class DisplayMedicalRecordDocumentsEvent {}
 
-class OnGetInitialMedicalRecordDocuments extends DisplayMedicalRecordDocumentsEvent {}
+class OnGetInitialMedicalRecordDocuments extends DisplayMedicalRecordDocumentsEvent {
+  final String? type;
 
-class OnGetNextMedicalRecordDocuments extends DisplayMedicalRecordDocumentsEvent {}
+  OnGetInitialMedicalRecordDocuments({this.type});
+}
+
+class OnGetNextMedicalRecordDocuments extends DisplayMedicalRecordDocumentsEvent {
+  final String? type;
+
+  OnGetNextMedicalRecordDocuments({this.type});
+}
 
 class OnUpdateMedicalRecordDocument extends DisplayMedicalRecordDocumentsEvent {
   final String id;

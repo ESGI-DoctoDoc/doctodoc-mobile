@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Document {
-  final String id;
-  final String title;
-  final DateTime date;
-
-  Document({
-    required this.id,
-    required this.title,
-    required this.date,
-  });
-}
+import '../../blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
+import '../../models/document.dart';
+import '../../shared/widgets/list_tile/document_list_tile.dart';
+import '../appointment/widgets/onboarding_loading.dart';
 
 class MedicalDocumentsTypeScreen extends StatefulWidget {
   static const String routeName = '/patients/:patientId/medical/:type';
@@ -47,23 +41,18 @@ class MedicalDocumentsTypeScreen extends StatefulWidget {
 
 class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Document> _documents = [];
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _currentPage = 0;
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchInitialDocuments();
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 &&
-          !_isLoading &&
-          _hasMore) {
-        _loadMoreDocuments();
+          _isLoadingMore) {
+        _fetchNextDocuments();
       }
     });
+    _fetchInitialDocuments();
   }
 
   @override
@@ -72,77 +61,80 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
     super.dispose();
   }
 
-  Future<void> _fetchInitialDocuments() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final newDocs = await _fakeFetchDocuments(page: 0);
-    setState(() {
-      _documents.clear();
-      _documents.addAll(newDocs);
-      _currentPage = 1;
-      _isLoading = false;
-      _hasMore = newDocs.length == 10;
-    });
-  }
-
-  Future<void> _loadMoreDocuments() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final newDocs = await _fakeFetchDocuments(page: _currentPage);
-    setState(() {
-      _documents.addAll(newDocs);
-      _currentPage += 1;
-      _isLoading = false;
-      _hasMore = newDocs.length == 10;
-    });
-  }
-
-  Future<List<Document>> _fakeFetchDocuments({required int page}) async {
-    await Future.delayed(const Duration(seconds: 1));
-    if (page > 3) return [];
-
-    return List.generate(10, (index) {
-      final number = page * 10 + index + 1;
-      return Document(
-        id: 'doc_$number',
-        title: '${widget.documentType} #$number',
-        date: DateTime.now().subtract(Duration(days: number)),
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEFEFEF),
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFEFEF),
-        title: Text(widget.documentType), //todo mélissa type de document formaté
+        title: Text(DocumentType.of(widget.documentType).label),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _documents.isEmpty && _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.separated(
-                controller: _scrollController,
-                itemCount: _documents.length + (_isLoading ? 1 : 0),
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  if (index >= _documents.length) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  final doc = _documents[index];
-                  //todo mélissa nom du document
-                  // return DocumentListTile(title: "name: ${doc.title}"); // todo j'ai commenté
-                  return Placeholder();
-                },
-              ),
+        child: BlocBuilder<DisplayMedicalRecordDocumentsBloc, DisplayMedicalRecordDocumentsState>(
+          builder: (context, state) {
+            return switch (state.status) {
+              DisplayMedicalRecordDocumentsStatus.initial ||
+              DisplayMedicalRecordDocumentsStatus.initialLoading =>
+                const OnboardingLoading(),
+              DisplayMedicalRecordDocumentsStatus.success ||
+              DisplayMedicalRecordDocumentsStatus.loading =>
+                _buildSuccess(state.documents, state.isLoadingMore),
+              DisplayMedicalRecordDocumentsStatus.error => _buildError(),
+            };
+          },
+        ),
       ),
+    );
+  }
+
+  Widget _buildSuccess(List<Document> documents, bool isLoadingMore) {
+    _isLoadingMore = isLoadingMore;
+    return documents.isEmpty && isLoadingMore
+        ? const Center(child: CircularProgressIndicator())
+        : ListView.separated(
+            padding: const EdgeInsets.all(0),
+            controller: _scrollController,
+            itemCount: documents.length + (isLoadingMore ? 1 : 0),
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              if (index >= documents.length) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final document = documents[index];
+        return DocumentListTile(
+          document: document,
+        );
+      },
+    );
+  }
+
+  void _fetchInitialDocuments() {
+    if (mounted) {
+      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
+      bloc.add(OnGetInitialMedicalRecordDocuments(
+        type: DocumentType
+            .of(widget.documentType)
+            .label,
+      ));
+    }
+  }
+
+  void _fetchNextDocuments() {
+    if (mounted) {
+      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
+      bloc.add(OnGetNextMedicalRecordDocuments(
+        type: DocumentType
+            .of(widget.documentType)
+            .label,
+      ));
+    }
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
     );
   }
 }
