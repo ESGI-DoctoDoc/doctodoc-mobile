@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
+import '../../blocs/medical_record/display_medical_record_documents_type_bloc/display_medical_record_documents_type_bloc.dart';
 import '../../models/document.dart';
 import '../../shared/widgets/list_tile/document_list_tile.dart';
 import '../appointment/widgets/onboarding_loading.dart';
@@ -71,16 +71,17 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocBuilder<DisplayMedicalRecordDocumentsBloc, DisplayMedicalRecordDocumentsState>(
+        child: BlocBuilder<DisplayMedicalRecordDocumentsTypeBloc,
+            DisplayMedicalRecordDocumentsTypeState>(
           builder: (context, state) {
             return switch (state.status) {
-              DisplayMedicalRecordDocumentsStatus.initial ||
-              DisplayMedicalRecordDocumentsStatus.initialLoading =>
+              DisplayMedicalRecordDocumentsTypeStatus.initial ||
+              DisplayMedicalRecordDocumentsTypeStatus.initialLoading =>
                 const OnboardingLoading(),
-              DisplayMedicalRecordDocumentsStatus.success ||
-              DisplayMedicalRecordDocumentsStatus.loading =>
+              DisplayMedicalRecordDocumentsTypeStatus.success ||
+              DisplayMedicalRecordDocumentsTypeStatus.loading =>
                 _buildSuccess(state.documents, state.isLoadingMore),
-              DisplayMedicalRecordDocumentsStatus.error => _buildError(),
+              DisplayMedicalRecordDocumentsTypeStatus.error => _buildError(),
             };
           },
         ),
@@ -103,31 +104,27 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
               }
 
               final document = documents[index];
-        return DocumentListTile(
-          document: document,
-        );
-      },
-    );
+              return DocumentListTile(
+                document: document,
+              );
+            },
+          );
   }
 
   void _fetchInitialDocuments() {
     if (mounted) {
-      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
-      bloc.add(OnGetInitialMedicalRecordDocuments(
-        type: DocumentType
-            .of(widget.documentType)
-            .label,
+      final bloc = context.read<DisplayMedicalRecordDocumentsTypeBloc>();
+      bloc.add(OnGetInitialMedicalRecordTypeDocuments(
+        type: DocumentType.of(widget.documentType).label,
       ));
     }
   }
 
   void _fetchNextDocuments() {
     if (mounted) {
-      final bloc = context.read<DisplayMedicalRecordDocumentsBloc>();
-      bloc.add(OnGetNextMedicalRecordDocuments(
-        type: DocumentType
-            .of(widget.documentType)
-            .label,
+      final bloc = context.read<DisplayMedicalRecordDocumentsTypeBloc>();
+      bloc.add(OnGetNextMedicalRecordTypeDocuments(
+        type: DocumentType.of(widget.documentType).label,
       ));
     }
   }

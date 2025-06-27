@@ -5,7 +5,7 @@ import 'base/input_text.dart';
 
 class _DocumentNameValidator extends Validator {
   final bool required;
-  final nameRegex = RegExp(r"^[a-zA-ZÀ-ÿ'\- ]+$");
+  final nameRegex = RegExp(r"^[0-9\/a-zA-ZÀ-ÿ'\- ]+$");
 
   _DocumentNameValidator({
     this.required = true,
