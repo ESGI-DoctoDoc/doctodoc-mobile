@@ -34,7 +34,6 @@ class _DocumentsTabState extends State<DocumentsTab> {
     if (widget.scrollController.position.pixels >=
             widget.scrollController.position.maxScrollExtent &&
         _isLoadingMore) {
-      print("je fetch");
       _fetchNextDocuments();
     }
   }
