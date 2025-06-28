@@ -47,7 +47,6 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.careTrackingId);
     _getCareTrackingDetailed();
   }
 
@@ -290,7 +289,8 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                           AppointmentListTile(
                             title:
                                 "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
-                            subtitle: Jiffy.parse(appointment.date, pattern: 'yyyy-MM-dd HH:mm')
+                            subtitle: Jiffy.parse("${appointment.date} ${appointment.start}",
+                                    pattern: 'yyyy-MM-dd HH:mm')
                                 .format(pattern: 'd MMM yyyy à HH:mm'),
                             pictureUrl: appointment.doctor.pictureUrl,
                             trailing: IconButton(

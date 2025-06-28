@@ -2,6 +2,7 @@ import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/expansion_tile_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/care_tracking_menu_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 import 'appointment_list_tile.dart';
@@ -78,7 +79,9 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
               children: [
                 AppointmentListTile(
                   title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
-                  subtitle: appointment.date,
+                  subtitle: Jiffy.parse("${appointment.date} ${appointment.start}",
+                          pattern: 'yyyy-MM-dd HH:mm')
+                      .format(pattern: 'd MMM yyyy à HH:mm'),
                   pictureUrl: appointment.doctor.pictureUrl,
                 ),
                 if (index < appointments.length - 1)

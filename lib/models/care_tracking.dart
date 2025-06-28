@@ -3,11 +3,13 @@ import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 class AppointmentOfCareTracking {
   final String id;
   final String date;
+  final String start;
   final Doctor doctor;
 
   AppointmentOfCareTracking({
     required this.id,
     required this.date,
+    required this.start,
     required this.doctor,
   });
 
@@ -16,6 +18,7 @@ class AppointmentOfCareTracking {
     return AppointmentOfCareTracking(
       id: json['id'],
       date: json['date'],
+      start: json['start'],
       doctor: doctor,
     );
   }
