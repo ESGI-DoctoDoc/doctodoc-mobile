@@ -44,7 +44,14 @@ class MedicalRecordRepository {
     try {
       return await medicalRecordDataSource.getDetailDocumentById(id);
     } catch (error) {
-      print(error);
+      throw UnknownException();
+    }
+  }
+
+  Future<List<DocumentTrace>> getDocumentTracesById(String id) async {
+    try {
+      return await medicalRecordDataSource.getDocumentTracesById(id);
+    } catch (error) {
       throw UnknownException();
     }
   }
