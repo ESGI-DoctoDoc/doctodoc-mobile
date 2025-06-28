@@ -1,9 +1,9 @@
-import 'package:doctodoc_mobile/blocs/care_tracking_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
 import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/care_tracking_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/care_tracking_detail_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class CareTrackingTab extends StatefulWidget {
@@ -71,9 +71,7 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: CareTrackingListTile(
-          title: careTracking.name,
-          subtitle: "Détails de ${careTracking.description}",
-          pictureUrl: "https://via.placeholder.com/150",
+          careTracking: careTracking,
         ),
       );
     }).toList();

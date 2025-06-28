@@ -1,6 +1,6 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
-import 'package:doctodoc_mobile/blocs/care_tracking_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
+import 'package:doctodoc_mobile/blocs/care_tracking_detail_blocs/care_tracking_detail_bloc/care_tracking_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
 import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
@@ -45,6 +45,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'blocs/auth_bloc/auth_bloc.dart';
+import 'blocs/care_tracking_detail_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
 import 'blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import 'blocs/medical_record/write_document_bloc/write_document_bloc.dart';
 import 'blocs/register_bloc/register_bloc.dart';
@@ -191,6 +192,15 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => CareTrackingRepository(
+            careTrackingDataSource: RemoteCareTrackingDataSource(
+              dio: DioClient(
+                localAuthDataSource: SharedPreferencesAuthDataSource(),
+              ).dio,
+            ),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -288,6 +298,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => DisplayCareTrackingsBloc(
+              careTrackingRepository: context.read<CareTrackingRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => CareTrackingDetailBloc(
               careTrackingRepository: context.read<CareTrackingRepository>(),
             ),
           ),

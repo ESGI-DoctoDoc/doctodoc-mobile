@@ -16,4 +16,10 @@ class RemoteCareTrackingDataSource implements CareTrackingDataSource {
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => CareTracking.fromJson(jsonElement)).toList();
   }
+
+  @override
+  Future<CareTrackingDetailed> getById(String id) async {
+    final response = await dio.get("/patients/care-trackings/$id");
+    return CareTrackingDetailed.fromJson(response.data["data"]);
+  }
 }

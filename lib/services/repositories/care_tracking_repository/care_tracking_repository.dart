@@ -18,4 +18,12 @@ class CareTrackingRepository {
       throw UnknownException();
     }
   }
+
+  Future<CareTrackingDetailed> getById(String id) async {
+    try {
+      return await careTrackingDataSource.getById(id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
 }

@@ -1,19 +1,17 @@
-import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
+import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/expansion_tile_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/care_tracking_menu_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
+import 'appointment_list_tile.dart';
+
 class CareTrackingListTile extends StatefulWidget {
-  final String title;
-  final String subtitle;
-  final String pictureUrl;
+  final CareTracking careTracking;
 
   const CareTrackingListTile({
     super.key,
-    required this.title,
-    required this.subtitle,
-    required this.pictureUrl,
+    required this.careTracking,
   });
 
   @override
@@ -21,18 +19,12 @@ class CareTrackingListTile extends StatefulWidget {
 }
 
 class _CareTrackingListTileState extends State<CareTrackingListTile> {
-  final List<String> appointments = [
-    "Appointment 1",
-    "Appointment 2",
-    "Appointment 3",
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ExpansionTileBase(
-      title: widget.title,
+      title: widget.careTracking.name,
       trailing: IconButton(
-        onPressed: () => showCareTrackingMenuModal(context),
+        onPressed: () => showCareTrackingMenuModal(context, widget.careTracking.id),
         icon: Icon(Icons.more_vert),
       ),
       leading: Container(
@@ -56,14 +48,14 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: _buildAppointmentsList(context),
+            children: _buildAppointmentsList(widget.careTracking.appointments),
           ),
         )
       ],
     );
   }
 
-  List<Widget> _buildAppointmentsList(BuildContext context) {
+  List<Widget> _buildAppointmentsList(List<AppointmentOfCareTracking> appointments) {
     return [
       FixedTimeline.tileBuilder(
         theme: TimelineThemeData(
@@ -80,12 +72,14 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
           connectionDirection: ConnectionDirection.after,
           itemCount: appointments.length,
           contentsBuilder: (_, index) {
+            AppointmentOfCareTracking appointment = appointments[index];
+
             return Column(
               children: [
                 AppointmentListTile(
-                  title: widget.title,
-                  subtitle: widget.subtitle,
-                  pictureUrl: widget.pictureUrl,
+                  title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
+                  subtitle: appointment.date,
+                  pictureUrl: appointment.doctor.pictureUrl,
                 ),
                 if (index < appointments.length - 1)
                   Container(
