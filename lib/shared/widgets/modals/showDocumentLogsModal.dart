@@ -2,6 +2,7 @@ import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_b
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import 'base/modal_base.dart';
@@ -75,12 +76,15 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
           itemCount: traces.length,
           itemBuilder: (context, index) {
             final trace = traces[index];
+            final date = Jiffy.parse(trace.date, pattern: 'yyyy-MM-dd HH:mm')
+                .format(pattern: 'd MMM yyyy à HH:mm');
 
             return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.history),
-                title: Text(trace.type),
-                subtitle: Text(trace.description));
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.history),
+              title: Text('${trace.type} - $date'),
+              subtitle: Text(trace.description),
+            );
           },
         ),
       ],
