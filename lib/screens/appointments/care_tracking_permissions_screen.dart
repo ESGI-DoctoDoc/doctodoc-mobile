@@ -60,6 +60,7 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const InfoBanner(title: "Tant que vous n'avez pas autorisé le partage de vos documents, ils ne seront pas accessibles aux médecins."),
+                  _buildHeaderEnded(),
                   _buildHeader(),
                   ..._buildFiles([
                     Document(id: '1', name: 'Document 1', type: 'PDF', isShared: false),
@@ -71,6 +72,38 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderEnded() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Autoriser le suivi de dossier à être consulté par les docteurs.',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8.0),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text("J'autorise."),
+            trailing: Transform.scale(
+                scale: 0.75,
+                child: Switch(
+                  value: false, // todo mélissa ajoute ici le suivi de dossier
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      // final isShared = !doc.isShared;
+                      // print("new isShared state: $isShared");
+                    });
+                  },
+                ),
+            )
+          )
+        ],
       ),
     );
   }

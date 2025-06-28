@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/screens/documents/document_detail_screen.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentLogsModal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/show_document_information_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_document_modal.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,13 @@ class _DocumentMenuWidget extends StatelessWidget {
                 context,
                 document.id,
               ),
+            ),
+            ListTile(
+              title: const Text("Voir l'historique"),
+              leading: const Icon(Icons.history),
+              onTap: () {
+                showDocumentLogsModal(context, document.id);
+              }
             ),
             ListTile(
               title: Text(
