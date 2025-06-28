@@ -8,6 +8,7 @@ import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.d
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/list_tile_base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 import '../../shared/widgets/banners/info_banner.dart';
@@ -105,10 +106,13 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const InfoBanner(
-            title:
-                "Les documents sont strictement confidentiels et accessibles uniquement aux médecins que vous avez autorisés."),
+          title:
+              "Le suivi de dossier est géré uniquement par vous, vous pouvez gérer les permissions à tout moment.",
+        ),
         const SizedBox(height: 16),
-        _buildDoctor(careTracking.doctors), // TODO list docteurs
+        _buildDescription("Longe descritpions"),
+        const SizedBox(height: 16),
+        _buildDoctors(careTracking.doctors),
         _buildAppointments(careTracking.appointments),
         _buildDocuments(),
         Padding(
@@ -129,9 +133,36 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
     );
   }
 
-  Widget _buildDoctor(List<Doctor> doctors) {
-    Doctor doctor = doctors.first;
+  Widget _buildDescription(String description) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withAlpha(50),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Description",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(description, style: TextStyle(color: Colors.grey.shade600)),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildDoctors(List<Doctor> doctors) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -153,41 +184,50 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  doctor.pictureUrl,
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 55,
-                      width: 55,
-                      color: Colors.grey.shade200,
-                      child: const Icon(Icons.visibility_off, size: 30, color: Colors.grey),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Dr. ${doctor.firstName} ${doctor.lastName}",
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: doctors.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+            itemBuilder: (context, index) {
+              final doctor = doctors[index];
+              return Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      doctor.pictureUrl,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 55,
+                          width: 55,
+                          color: Colors.grey.shade200,
+                          child: const Icon(Icons.visibility_off, size: 30, color: Colors.grey),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 4),
-                    Text(doctor.speciality, style: TextStyle(color: Colors.grey.shade600)),
-                  ],
-                ),
-              ),
-            ],
-          )
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${doctor.firstName} ${doctor.lastName}",
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(doctor.speciality, style: TextStyle(color: Colors.grey.shade600)),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -196,6 +236,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
   Widget _buildAppointments(List<AppointmentOfCareTracking> appointments) {
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -219,72 +260,82 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          FixedTimeline.tileBuilder(
-            theme: TimelineThemeData(
-              nodePosition: 0,
-              indicatorTheme: const IndicatorThemeData(
-                position: 0.5,
-                size: 50.0,
-              ),
-              connectorTheme: const ConnectorThemeData(
-                thickness: 2.5,
-              ),
-            ),
-            builder: TimelineTileBuilder.connected(
-              connectionDirection: ConnectionDirection.after,
-              itemCount: appointments.length,
-              contentsBuilder: (_, index) {
-                AppointmentOfCareTracking appointment = appointments[index];
-
-                return Column(
-                  children: [
-                    AppointmentListTile(
-                      title: "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
-                      subtitle: appointment.date,
-                      pictureUrl: appointment.doctor.pictureUrl,
-                      trailing: IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                        onPressed: () {
-                          AppointmentDetailScreen.navigateTo(
-                            context,
-                            appointment.id,
-                          );
-                          // Navigate to appointment detail
-                        },
-                      ),
+          appointments.isEmpty
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Aucun rendez-vous n'est associé à ce suivi de dossier.",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )
+              : FixedTimeline.tileBuilder(
+                  theme: TimelineThemeData(
+                    nodePosition: 0,
+                    indicatorTheme: const IndicatorThemeData(
+                      position: 0.5,
+                      size: 50.0,
                     ),
-                    if (index < 3 - 1)
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Divider(
-                          color: Colors.grey.shade300,
-                          thickness: 0.5,
-                          height: 16,
-                        ),
-                      ),
-                  ],
-                );
-              },
-              indicatorBuilder: (_, index) {
-                if (index == 3 - 1) {
-                  return OutlinedDotIndicator(
-                    size: 12.0,
-                    borderWidth: 2.0,
-                    color: Theme.of(context).primaryColor,
-                  );
-                }
-                return DotIndicator(
-                  size: 12.0,
-                  color: Theme.of(context).primaryColor,
-                );
-              },
-              connectorBuilder: (_, index, ___) {
-                return SolidLineConnector(
-                  color: Theme.of(context).primaryColor,
-                );
-              },
-            ),
-          ),
+                    connectorTheme: const ConnectorThemeData(
+                      thickness: 2.5,
+                    ),
+                  ),
+                  builder: TimelineTileBuilder.connected(
+                    connectionDirection: ConnectionDirection.after,
+                    itemCount: appointments.length,
+                    contentsBuilder: (_, index) {
+                      AppointmentOfCareTracking appointment = appointments[index];
+
+                      return Column(
+                        children: [
+                          AppointmentListTile(
+                            title:
+                                "Dr. ${appointment.doctor.firstName} ${appointment.doctor.lastName}",
+                            subtitle: Jiffy.parse(appointment.date, pattern: 'yyyy-MM-dd HH:mm')
+                                .format(pattern: 'd MMM yyyy à HH:mm'),
+                            pictureUrl: appointment.doctor.pictureUrl,
+                            trailing: IconButton(
+                              icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                              onPressed: () {
+                                AppointmentDetailScreen.navigateTo(
+                                  context,
+                                  appointment.id,
+                                );
+                                // Navigate to appointment detail
+                              },
+                            ),
+                          ),
+                          if (index < 3 - 1)
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Divider(
+                                color: Colors.grey.shade300,
+                                thickness: 0.5,
+                                height: 16,
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                    indicatorBuilder: (_, index) {
+                      if (index == 3 - 1) {
+                        return OutlinedDotIndicator(
+                          size: 12.0,
+                          borderWidth: 2.0,
+                          color: Theme.of(context).primaryColor,
+                        );
+                      }
+                      return DotIndicator(
+                        size: 12.0,
+                        color: Theme.of(context).primaryColor,
+                      );
+                    },
+                    connectorBuilder: (_, index, ___) {
+                      return SolidLineConnector(
+                        color: Theme.of(context).primaryColor,
+                      );
+                    },
+                  ),
+                ),
           const SizedBox(height: 16),
         ],
       ),
