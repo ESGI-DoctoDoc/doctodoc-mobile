@@ -22,7 +22,9 @@ class UpdateDocument {
 
 Future<Patient?> showUpdateDocumentModal(BuildContext context,
     String documentId,
-    String name,) {
+    String name,
+    String type,
+) {
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -33,6 +35,7 @@ Future<Patient?> showUpdateDocumentModal(BuildContext context,
           child: _UpdateDocumentWidget(
             name: name,
             documentId: documentId,
+            type: type,
           ),
         ),
       ];
@@ -41,12 +44,14 @@ Future<Patient?> showUpdateDocumentModal(BuildContext context,
 }
 
 class _UpdateDocumentWidget extends StatefulWidget {
-  final String name;
   final String documentId;
+  final String name;
+  final String type;
 
   const _UpdateDocumentWidget({
     required this.name,
     required this.documentId,
+    required this.type,
   });
 
   @override
@@ -64,6 +69,7 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
   void initState() {
     super.initState();
     _nameController.text = widget.name;
+    _typeController.text = widget.type;
   }
 
   @override

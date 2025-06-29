@@ -263,11 +263,10 @@ class _InputDropdownState extends State<InputDropdown> {
     super.initState();
     _displayController.text = widget.controller.text;
     if (widget.controller.text.isNotEmpty) {
-      final selectedItem = widget.items.firstWhere(
-        (item) => item.value == widget.controller.text,
-        orElse: () => InputDropdownItem(label: '', value: ''),
-      );
-      _displayController.text = selectedItem.label;
+      final selectedItem = widget.items.where((item) => item.value == widget.controller.text).firstOrNull;
+      if(selectedItem != null) {
+        widget.controller.text = selectedItem.value;
+      }
     }
   }
 }

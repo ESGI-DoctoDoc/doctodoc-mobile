@@ -136,7 +136,12 @@ class DisplayMedicalRecordDocumentsTypeBloc
       final documentToUpdateIndex = documents.indexWhere((document) => document.id == event.id);
       final oldDocument = documents[documentToUpdateIndex];
 
-      final documentUpdated = Document(id: event.id, name: event.filename, url: oldDocument.url);
+      final documentUpdated = Document(
+        id: event.id,
+        name: event.filename,
+        url: oldDocument.url,
+        type: event.type,
+      );
 
       documents[documentToUpdateIndex] = documentUpdated;
 

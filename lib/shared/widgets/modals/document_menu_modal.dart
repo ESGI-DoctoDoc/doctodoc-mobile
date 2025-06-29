@@ -60,6 +60,7 @@ class _DocumentMenuWidget extends StatelessWidget {
                   context,
                   document.id,
                   document.name,
+                  document.type,
                 );
               },
             ),

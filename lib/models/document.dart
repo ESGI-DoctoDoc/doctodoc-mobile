@@ -18,11 +18,13 @@ class Document {
   final String id;
   final String name;
   final String url;
+  final String type;
 
   Document({
     required this.id,
     required this.name,
     required this.url,
+    required this.type,
   });
 
   factory Document.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class Document {
       id: json['id'],
       name: json['name'],
       url: json['url'],
+      type: json['type'],
     );
   }
 }
