@@ -41,6 +41,14 @@ class RemoteMedicalRecordDataSource implements MedicalRecordDataSource {
   }
 
   @override
+  Future<List<DocumentTrace>> getDocumentTracesById(String id) async {
+    final response = await dio.get("/patients/medical-record/documents/$id/traces");
+
+    final jsonList = (response.data["data"] as List?) ?? [];
+    return jsonList.map((jsonElement) => DocumentTrace.fromJson(jsonElement)).toList();
+  }
+
+  @override
   Future<void> uploadDocument(UploadDocumentRequest uploadDocumentRequest) async {
     final response = await dio.post(
       "/patients/medical-record/documents",

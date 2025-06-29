@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/services/repositories/medical_record/medical_record_repository.dart';
 import 'package:meta/meta.dart';
@@ -15,16 +17,19 @@ class DisplayDocumentDetailBloc
   DisplayDocumentDetailBloc({
     required this.medicalRecordRepository,
   }) : super(DocumentDetailInitial()) {
-    on<OnGetDocumentDetail>((event, emit) async {
-      try {
-        emit(DocumentDetailLoading());
-        DocumentDetailed document = await medicalRecordRepository.getDetailDocumentById(event.id);
-        emit(DocumentDetailLoaded(document: document));
-      } catch (error) {
-        emit(DocumentDetailError(
-          exception: AppException.from(error),
-        ));
-      }
-    });
+    on<OnGetDocumentDetail>(_onGetDocumentDetail);
+  }
+
+  Future<void> _onGetDocumentDetail(
+      OnGetDocumentDetail event, Emitter<DisplayDocumentDetailState> emit) async {
+    try {
+      emit(DocumentDetailLoading());
+      DocumentDetailed document = await medicalRecordRepository.getDetailDocumentById(event.id);
+      emit(DocumentDetailLoaded(document: document));
+    } catch (error) {
+      emit(DocumentDetailError(
+        exception: AppException.from(error),
+      ));
+    }
   }
 }

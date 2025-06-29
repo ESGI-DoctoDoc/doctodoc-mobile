@@ -34,19 +34,44 @@ class Document {
   }
 }
 
-class UploadedBy {
+class DocumentUser {
   final String firstName;
   final String lastName;
 
-  UploadedBy({
+  DocumentUser({
     required this.firstName,
     required this.lastName,
   });
 
-  factory UploadedBy.fromJson(Map<String, dynamic> json) {
-    return UploadedBy(
+  factory DocumentUser.fromJson(Map<String, dynamic> json) {
+    return DocumentUser(
       firstName: json['firstName'],
       lastName: json['lastName'],
+    );
+  }
+}
+
+class DocumentTrace {
+  final String type;
+  final String description;
+  final String date;
+  final DocumentUser user;
+
+  DocumentTrace({
+    required this.type,
+    required this.description,
+    required this.date,
+    required this.user,
+  });
+
+  factory DocumentTrace.fromJson(Map<String, dynamic> json) {
+    DocumentUser user = DocumentUser.fromJson(json['user']);
+
+    return DocumentTrace(
+      type: json['type'],
+      description: json['description'],
+      date: json['date'],
+      user: user,
     );
   }
 }
@@ -55,7 +80,7 @@ class DocumentDetailed {
   final Document document;
   final String type;
   final String uploadedAt;
-  final UploadedBy uploadedBy;
+  final DocumentUser uploadedBy;
 
   DocumentDetailed({
     required this.document,
@@ -66,7 +91,7 @@ class DocumentDetailed {
 
   factory DocumentDetailed.fromJson(Map<String, dynamic> json) {
     Document document = Document.fromJson(json);
-    UploadedBy uploadedBy = UploadedBy.fromJson(json['uploadedByUser']);
+    DocumentUser uploadedBy = DocumentUser.fromJson(json['uploadedByUser']);
 
     return DocumentDetailed(
       document: document,

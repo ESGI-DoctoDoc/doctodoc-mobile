@@ -15,4 +15,6 @@ abstract class MedicalRecordDataSource {
   Future<void> deleteDocument(String id);
 
   Future<Document> updateDocument(UpdateDocumentRequest updateDocumentRequest);
+
+  Future<List<DocumentTrace>> getDocumentTracesById(String id);
 }

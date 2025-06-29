@@ -1,4 +1,4 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_detail_bloc/display_document_detail_bloc.dart';
+import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,23 +36,23 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
   @override
   void initState() {
     super.initState();
-    _onGetDocumentDetail();
+    _onGetDocumentHistoric();
   }
 
-  void _onGetDocumentDetail() {
-    context.read<DisplayDocumentDetailBloc>().add(OnGetDocumentDetail(id: widget.documentId));
+  void _onGetDocumentHistoric() {
+    context.read<DisplayDocumentHistoricBloc>().add(OnGetDocumentTraces(id: widget.documentId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: BlocBuilder<DisplayDocumentDetailBloc, DisplayDocumentDetailState>(
+      child: BlocBuilder<DisplayDocumentHistoricBloc, DisplayDocumentHistoricState>(
         builder: (context, state) {
           return switch (state) {
-            DocumentDetailInitial() || DocumentDetailLoading() => const SizedBox.shrink(),
-            DocumentDetailError() => _buildError(), // todo Corentin revoie le build error
-            DocumentDetailLoaded() => _buildSuccess(state.document),
+            DocumentHistoricInitial() || DocumentHistoricLoading() => const SizedBox.shrink(),
+            DocumentHistoricError() => _buildError(), // todo Corentin revoie le build error
+            DocumentHistoricLoaded() => _buildSuccess(state.traces),
           };
           // return _onBuildSuccess();
         },
@@ -60,7 +60,7 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
     );
   }
 
-  Column _buildSuccess(DocumentDetailed document) {
+  Column _buildSuccess(List<DocumentTrace> traces) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,14 +73,17 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 3,
+          itemCount: traces.length,
           itemBuilder: (context, index) {
-            // final log = document.logs[index];
+            final trace = traces[index];
+            final date = Jiffy.parse(trace.date, pattern: 'yyyy-MM-dd HH:mm')
+                .format(pattern: 'd MMM yyyy à HH:mm');
+
             return ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.history),
-              title: Text('nom.action'),
-              subtitle: Text('valeur.action')
+              title: Text('${trace.type} - $date'),
+              subtitle: Text(trace.description),
             );
           },
         ),
