@@ -1,6 +1,9 @@
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/secondary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import '../../../models/doctor/doctor.dart';
 import '../../../shared/widgets/inputs/doctor_search_bar.dart';
 import '../../../shared/widgets/list_tile/doctor_list_tile.dart';
@@ -25,6 +28,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
   final TextEditingController generalPractitionerController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String _name = '';
+  final String _speciality = 'Généraliste';
   bool _isLoadingMore = false;
   String? _selectedDoctorId;
   bool canInviteDoctor = true;
@@ -33,6 +37,15 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
   void initState() {
     super.initState();
     widget.onSkip();
+    _scrollController.addListener(_onScroll);
+    // _loadingInitialDoctorSearch();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100 &&
+        _isLoadingMore) {
+      _loadNextDoctorSearch();
+    }
   }
 
   @override
@@ -54,7 +67,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
             DoctorSearchBar(
               onSearch: (value) {
                 _name = value;
-                // _loadingInitialDoctorSearch();
+                _loadingInitialDoctorSearch();
               },
             ),
             const SizedBox(height: 8.0),
@@ -73,21 +86,36 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
                 onNotification: (ScrollNotification scrollInfo) {
                   return false;
                 },
-                child: _buildSuccess([
-                  // Doctor(id: '1', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  // Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  // Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  // Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  // Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                  Doctor(id: '2', speciality: 'General Practitioner', firstName: '', lastName: '', pictureUrl: ''),
-                ], false),
+                child: BlocBuilder<DisplayDoctorBloc, DisplayDoctorState>(
+                  builder: (context, state) {
+                    return switch (state.status) {
+                      DisplayDoctorStatus.initial => _buildEmpty(),
+                      DisplayDoctorStatus.initialLoading =>
+                        const OnboardingLoading(),
+                      DisplayDoctorStatus.loading ||
+                      DisplayDoctorStatus.success =>
+                        _buildSuccess(state.doctors, state.isLoadingMore),
+                      DisplayDoctorStatus.error => _buildError(),
+                    };
+                  },
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  Widget _buildEmpty() {
+    return const Center(
+      child: Text("Veuillez faire une recherche !"),
     );
   }
 
@@ -129,7 +157,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
         }
 
         // Widget à la fin de la liste
-        if(canInviteDoctor == false) {
+        if (canInviteDoctor == false) {
           return Column(
             children: [
               const SizedBox(height: 20),
@@ -152,7 +180,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
               onTap: () async {
                 final send = await showInviteDoctorModal(context);
                 setState(() {
-                  if(send == true) {
+                  if (send == true) {
                     canInviteDoctor = false;
                   }
                 });
@@ -165,21 +193,21 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
     );
   }
 
-  // void _loadingInitialDoctorSearch() {
-  //   final displayDoctor = context.read<DisplayDoctorBloc>();
-  //   displayDoctor.add(OnGetInitialSearchDoctor(
-  //     name: _name,
-  //     speciality: _filters?['speciality'] ?? '',
-  //     languages: _filters?['languages'] ?? '',
-  //   ));
-  // }
+  void _loadingInitialDoctorSearch() {
+    final displayDoctor = context.read<DisplayDoctorBloc>();
+    displayDoctor.add(OnGetInitialSearchDoctor(
+      name: _name,
+      speciality: _speciality,
+      languages: '',
+    ));
+  }
 
-  // void _loadNextDoctorSearch() {
-  //   final displayDoctor = context.read<DisplayDoctorBloc>();
-  //   displayDoctor.add(OnGetNextSearchDoctor(
-  //     name: _name,
-  //     speciality: _filters?['speciality'] ?? '',
-  //     languages: _filters?['languages'] ?? '',
-  //   ));
-  // }
+  void _loadNextDoctorSearch() {
+    final displayDoctor = context.read<DisplayDoctorBloc>();
+    displayDoctor.add(OnGetNextSearchDoctor(
+      name: _name,
+      speciality: _speciality,
+      languages: '',
+    ));
+  }
 }

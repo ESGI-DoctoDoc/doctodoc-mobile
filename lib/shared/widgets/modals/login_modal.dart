@@ -129,7 +129,7 @@ class _LoginModalState extends State<LoginModal> {
   }
 
   void _fastLogin(bool exist) {
-    emailController.text = exist ? "patient1@example.com" : "c.lecqds@fmiqsd.cr";
+    emailController.text = exist ? "patient1@example.com" : "patient21@example.com";
     passwordController.text = "Abdcd76@";
   }
 
