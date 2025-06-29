@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../models/auth.dart';
 import '../../../models/user.dart';
@@ -18,6 +19,7 @@ class RemoteAuthDataSource extends AuthDataSource {
       data: jsonEncode({
         "identifier": email,
         "password": password,
+        "verificationUrl": dotenv.env['VERIFICATION_URL']
       }),
     );
 
