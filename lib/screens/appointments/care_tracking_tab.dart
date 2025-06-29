@@ -1,10 +1,15 @@
+import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/care_tracking_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../blocs/care_tracking_detail_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
+import '../appointment/widgets/onboarding_loading.dart';
 
 class CareTrackingTab extends StatefulWidget {
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
-  const CareTrackingTab({super.key, this.scrollController});
+  const CareTrackingTab({super.key, required this.scrollController});
 
   @override
   State<CareTrackingTab> createState() => _CareTrackingTabState();
@@ -16,21 +21,22 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
   @override
   void initState() {
     super.initState();
-    widget.scrollController?.addListener(_onScroll);
-    // _fetchInitialCareTracking();
+    widget.scrollController.addListener(_onScroll);
+    _fetchInitialCareTrackings();
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.scrollController?.removeListener(_onScroll);
+    widget.scrollController.removeListener(_onScroll);
   }
 
   void _onScroll() {
-    // if (widget.scrollController.position.pixels >= widget.scrollController.position.maxScrollExtent &&
-    //     _isLoadingMore) {
-    // _fetchMoreCareTracking();
-    // }
+    if (widget.scrollController.position.pixels >=
+            widget.scrollController.position.maxScrollExtent &&
+        _isLoadingMore) {
+      _fetchNextCareTrackings();
+    }
   }
 
   @override
@@ -40,16 +46,19 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
         [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSuccess([
-                  'Vaccin contre la grippe',
-                  'Ordonnance pour le diabète',
-                  'Résultats de la prise de sang',
-                  'Certificat médical pour le sport',
-                ]),
-              ],
+            child: BlocBuilder<DisplayCareTrackingsBloc, DisplayCareTrackingsState>(
+              builder: (context, state) {
+                return switch (state.status) {
+                  DisplayCareTrackingsStatus.initial ||
+                  DisplayCareTrackingsStatus.initialLoading =>
+                    const OnboardingLoading(),
+                  DisplayCareTrackingsStatus.loading ||
+                  DisplayCareTrackingsStatus.success =>
+                    _buildSuccess(state.careTrackings, state.isLoadingMore),
+                  DisplayCareTrackingsStatus.error => _buildError(),
+                };
+                // return _buildSuccess();
+              },
             ),
           ),
         ],
@@ -57,18 +66,43 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
     );
   }
 
-  Widget _buildSuccess(List<String> careTrackingItems) {
-    List<Widget> careTrackingWidgets = careTrackingItems.map((item) {
+  Widget _buildSuccess(List<CareTracking> careTrackings, bool isLoadingMore) {
+    List<Widget> careTrackingWidgets = careTrackings.map((careTracking) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: CareTrackingListTile(
-          title: "$item",
-          subtitle: "Détails de $item",
-          pictureUrl: "https://via.placeholder.com/150",
+          careTracking: careTracking,
         ),
       );
     }).toList();
 
-    return Column(children: careTrackingWidgets);
+    _isLoadingMore = isLoadingMore;
+
+    return Column(
+      children: [
+        ...careTrackingWidgets,
+        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+      ],
+    );
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
+  }
+
+  void _fetchInitialCareTrackings() {
+    if (mounted) {
+      final bloc = context.read<DisplayCareTrackingsBloc>();
+      bloc.add(OnGetInitialCareTrackings());
+    }
+  }
+
+  void _fetchNextCareTrackings() {
+    if (mounted) {
+      final bloc = context.read<DisplayCareTrackingsBloc>();
+      bloc.add(OnGetNextCareTrackings());
+    }
   }
 }

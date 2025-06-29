@@ -4,14 +4,16 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import '../../../screens/care_tracking/care_tracking_detail_screen.dart';
 import 'base/modal_base.dart';
 
-void showCareTrackingMenuModal(BuildContext context) {
+void showCareTrackingMenuModal(BuildContext context, String careTrackingId) {
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
       return [
         buildModalPage(
           context: context,
-          child: _CareTrackingMenuWidget(),
+          child: _CareTrackingMenuWidget(
+            careTrackingId: careTrackingId,
+          ),
         ),
       ];
     },
@@ -19,7 +21,11 @@ void showCareTrackingMenuModal(BuildContext context) {
 }
 
 class _CareTrackingMenuWidget extends StatelessWidget {
-  const _CareTrackingMenuWidget();
+  final String careTrackingId;
+
+  const _CareTrackingMenuWidget({
+    required this.careTrackingId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +34,17 @@ class _CareTrackingMenuWidget extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: const Text("Voir le détail du suivi"),
-            leading: const Icon(Icons.visibility),
-            onTap: () => CareTrackingDetailScreen.navigateTo(context, "appointmentId")
-          ),
+              title: const Text("Voir le détail du suivi"),
+              leading: const Icon(Icons.visibility),
+              onTap: () => CareTrackingDetailScreen.navigateTo(context, careTrackingId)),
           ListTile(
-            title: const Text("Ajouter un rendez-vous"),
-            leading: const Icon(Icons.add),
-            onTap: () {}
-          ),
+              title: const Text("Ajouter un rendez-vous"),
+              leading: const Icon(Icons.add),
+              onTap: () {}),
           ListTile(
-            title: const Text('Ajouter un document'),
-            leading: const Icon(Icons.attach_file),
-            onTap: () {}
-          ),
+              title: const Text('Ajouter un document'),
+              leading: const Icon(Icons.attach_file),
+              onTap: () {}),
         ],
       ),
     );
