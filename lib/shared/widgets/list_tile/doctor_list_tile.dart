@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class DoctorListTile extends StatelessWidget {
   final Doctor doctor;
   final Function? onTap;
+  final Widget? trailing;
 
   const DoctorListTile({
     super.key,
     required this.doctor,
     this.onTap,
+    this.trailing,
   });
 
   @override
@@ -18,7 +20,7 @@ class DoctorListTile extends StatelessWidget {
       title: "Dr. ${doctor.firstName} ${doctor.lastName}",
       subtitle: doctor.speciality,
       leading: _buildLeadingIcon(context),
-      trailing: const Padding(
+      trailing: trailing ?? const Padding(
         padding: EdgeInsets.only(right: 10.0),
         child: Icon(Icons.arrow_forward_ios, size: 20),
       ),
