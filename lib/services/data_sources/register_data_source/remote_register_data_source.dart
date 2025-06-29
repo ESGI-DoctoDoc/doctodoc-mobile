@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/services/data_sources/register_data_source/register_data_source.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RemoteRegisterDataSource extends RegisterDataSource {
   final Dio dio;
@@ -19,6 +20,7 @@ class RemoteRegisterDataSource extends RegisterDataSource {
         "email": email,
         "password": password,
         "phoneNumber": phoneNumber,
+        "verificationUrl": dotenv.env['VERIFICATION_URL']
       }),
     );
   }
