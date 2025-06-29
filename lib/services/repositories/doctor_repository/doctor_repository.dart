@@ -14,7 +14,14 @@ class DoctorRepository {
     try {
       return await doctorDataSource.get(id);
     } catch (error) {
-      print(error.toString());
+      throw AuthException.from(error);
+    }
+  }
+
+  Future<void> recruit(String firstName, String lastName) async {
+    try {
+      await doctorDataSource.recruit(firstName, lastName);
+    } catch (error) {
       throw AuthException.from(error);
     }
   }

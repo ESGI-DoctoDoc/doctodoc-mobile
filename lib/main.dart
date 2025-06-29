@@ -5,6 +5,7 @@ import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_me
 import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
+import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_recruitment_bloc/doctor_recruitment_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_document_detail_bloc/display_document_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_bloc/display_document_historic_bloc.dart';
@@ -310,6 +311,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => CareTrackingDetailBloc(
               careTrackingRepository: context.read<CareTrackingRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => DoctorRecruitmentBloc(
+              doctorRepository: context.read<DoctorRepository>(),
             ),
           ),
         ],

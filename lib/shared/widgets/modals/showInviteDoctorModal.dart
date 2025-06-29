@@ -1,9 +1,12 @@
+import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_recruitment_bloc/doctor_recruitment_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/firstname_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/lastname_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../utils/show_error_snackbar.dart';
 import '../buttons/primary_button.dart';
 import 'base/modal_base.dart';
 
@@ -36,28 +39,36 @@ class _InviteDoctorWidgetState extends State<_InviteDoctorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: inviteDoctorKey,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                FirstnameInput(controller: _firstnameController),
-                const SizedBox(height: 10),
-                LastnameInput(controller: _lastnameController),
-                const SizedBox(height: 10),
-                InfoBanner(title: "Nous allons contacter votre médecin traitant pour l'inviter à rejoindre Doctodoc."),
-                const SizedBox(height: 20),
-                PrimaryButton(
-                  label: "Inviter mon médecin",
-                  onTap: () => _inviteDoctor(),
-                ),
-              ],
-            ),
-          ],
+    return BlocListener<DoctorRecruitmentBloc, DoctorRecruitmentState>(
+      listenWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      listener: _doctorRecruitmentListener,
+      child: Form(
+        key: inviteDoctorKey,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  FirstnameInput(controller: _firstnameController),
+                  const SizedBox(height: 10),
+                  LastnameInput(controller: _lastnameController),
+                  const SizedBox(height: 10),
+                  const InfoBanner(
+                      title:
+                          "Nous allons contacter votre médecin traitant pour l'inviter à rejoindre Doctodoc."),
+                  const SizedBox(height: 20),
+                  PrimaryButton(
+                    label: "Inviter mon médecin",
+                    onTap: () => _inviteDoctor(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -65,9 +76,21 @@ class _InviteDoctorWidgetState extends State<_InviteDoctorWidget> {
 
   void _inviteDoctor() {
     if (inviteDoctorKey.currentState!.validate()) {
-      // Call the API to invite the doctor
-      // If success, close the modal
-      Navigator.of(context).pop(true);
+      context.read<DoctorRecruitmentBloc>().add(
+            OnDoctorRecruitment(
+              firstName: _firstnameController.text,
+              lastName: _lastnameController.text,
+            ),
+          );
     }
+  }
+
+  void _doctorRecruitmentListener(BuildContext context, DoctorRecruitmentState state) {
+    if (state.status == DoctorRecruitmentStatus.success) {
+      Navigator.of(context).pop(true);
+    } else if (state.status == DoctorRecruitmentStatus.error) {
+      showErrorSnackbar(context, state.exception);
+    }
+    // todo loading mettre un loader
   }
 }
