@@ -12,11 +12,13 @@ import '../../../shared/widgets/modals/showInviteDoctorModal.dart';
 class OnboardingGeneralPractitionerStep extends StatefulWidget {
   final void Function(String generalPractitioner) onFinished;
   final void Function() onSkip;
+  final void Function() onEnd;
 
   const OnboardingGeneralPractitionerStep({
     super.key,
     required this.onFinished,
     required this.onSkip,
+    required this.onEnd,
   });
 
   @override
@@ -38,7 +40,6 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
     super.initState();
     widget.onSkip();
     _scrollController.addListener(_onScroll);
-    // _loadingInitialDoctorSearch();
   }
 
   void _onScroll() {
@@ -70,8 +71,6 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
                 _loadingInitialDoctorSearch();
               },
             ),
-            const SizedBox(height: 8.0),
-            const Text("Vous pouvez aussi passer cette étape"),
             const SizedBox(height: 8.0),
             const Text(
               'Résultats',
@@ -121,6 +120,17 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
 
   Widget _buildSuccess(List<Doctor> doctors, bool isLoadingMore) {
     _isLoadingMore = isLoadingMore;
+
+    if(_name.isEmpty) {
+      return Center(
+        child: Column(
+          children: [
+            Text("Veuillez faire une recherche !"),
+            const Text("Vous pouvez aussi passer cette étape"),
+          ],
+        ),
+      );
+    }
 
     return ListView.separated(
       controller: _scrollController,
@@ -182,6 +192,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
                 setState(() {
                   if (send == true) {
                     canInviteDoctor = false;
+                    widget.onEnd();
                   }
                 });
               },

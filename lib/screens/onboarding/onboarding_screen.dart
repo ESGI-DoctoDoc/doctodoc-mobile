@@ -124,6 +124,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                 ),
                 OnboardingGeneralPractitionerStep(
+                  onEnd: () {
+                    setState(() {
+                      _userData.generalPractitioner = "";
+                      canGoNext = true;
+                      _onBoardingDone(context);
+                    });
+                  },
                   onFinished: (doctorId) {
                     _userData.generalPractitioner = doctorId;
                     canGoNext = true;
