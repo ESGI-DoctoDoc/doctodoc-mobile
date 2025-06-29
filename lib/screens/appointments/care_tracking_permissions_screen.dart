@@ -1,13 +1,14 @@
 import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:flutter/material.dart';
 
-class Document {
+class DocumentPermission {
+  // todo rename
   final String id;
   final String name;
   final String type;
   final bool isShared;
 
-  Document({
+  DocumentPermission({
     required this.id,
     required this.name,
     required this.type,
@@ -63,9 +64,9 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
                   _buildHeaderEnded(),
                   _buildHeader(),
                   ..._buildFiles([
-                    Document(id: '1', name: 'Document 1', type: 'PDF', isShared: false),
-                    Document(id: '2', name: 'Document 2', type: 'Image', isShared: true),
-                    Document(id: '3', name: 'Document 3', type: 'Text', isShared: false),
+                    DocumentPermission(id: '1', name: 'Document 1', type: 'PDF', isShared: false),
+                    DocumentPermission(id: '2', name: 'Document 2', type: 'Image', isShared: true),
+                    DocumentPermission(id: '3', name: 'Document 3', type: 'Text', isShared: false),
                   ]),
                 ],
               ),
@@ -123,7 +124,7 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
     );
   }
 
-  List<Widget> _buildFiles(List<Document> documents) {
+  List<Widget> _buildFiles(List<DocumentPermission> documents) {
     // Widget buildFileTile(Document doc) {
     //   return DocumentListTile(
     //     title: doc.name,

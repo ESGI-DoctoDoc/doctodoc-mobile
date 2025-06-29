@@ -1,6 +1,7 @@
 import 'package:doctodoc_mobile/blocs/care_tracking_detail_blocs/care_tracking_detail_bloc/care_tracking_detail_bloc.dart';
 import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor.dart';
+import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/base/button_base.dart';
@@ -109,11 +110,11 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
               "Le suivi de dossier est géré uniquement par vous, vous pouvez gérer les permissions à tout moment.",
         ),
         const SizedBox(height: 16),
-        _buildDescription("Longe descritpions"),
+        _buildDescription(careTracking.careTracking.description),
         const SizedBox(height: 16),
         _buildDoctors(careTracking.doctors),
         _buildAppointments(careTracking.appointments),
-        _buildDocuments(),
+        _buildDocuments(careTracking.documents),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: ButtonBase(
@@ -342,7 +343,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
     );
   }
 
-  Widget _buildDocuments() {
+  Widget _buildDocuments(List<Document> documents) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.only(top: 16.0),
@@ -375,25 +376,30 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                 onTap: () {
                   showDocumentCareTrackingUploadModal(
                     context,
-                    careTrackingId: 'careTrackingId',
+                    careTrackingId: widget.careTrackingId,
                   );
                 },
               )
             ],
           ),
           const SizedBox(height: 16),
-          for (int i = 0; i < 3; i++)
-            ListTileBase.flat(
-              title: "Document ${i + 1}",
-              subtitle: "Description du document ${i + 1}",
-              leading: const Icon(Icons.description),
-              trailing: IconButton(
-                icon: const Icon(Icons.download, size: 16),
-                onPressed: () {
-                  // Handle document download
-                },
-              ),
-            ),
+          ...List.generate(
+            documents.length.clamp(0, 3),
+            (i) {
+              final document = documents[i];
+              return ListTileBase.flat(
+                title: document.name,
+                subtitle: document.type,
+                leading: const Icon(Icons.description),
+                trailing: IconButton(
+                  icon: const Icon(Icons.download, size: 16),
+                  onPressed: () {
+                    // Handle document download
+                  },
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
