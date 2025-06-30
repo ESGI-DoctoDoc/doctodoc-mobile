@@ -1,5 +1,7 @@
 import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 
+import 'document.dart';
+
 class AppointmentOfCareTracking {
   final String id;
   final String date;
@@ -57,11 +59,13 @@ class CareTrackingDetailed {
   final CareTracking careTracking;
   final List<Doctor> doctors;
   final List<AppointmentOfCareTracking> appointments;
+  final List<Document> documents;
 
   CareTrackingDetailed({
     required this.careTracking,
     required this.doctors,
     required this.appointments,
+    required this.documents,
   });
 
   factory CareTrackingDetailed.fromJson(Map<String, dynamic> json) {
@@ -76,10 +80,15 @@ class CareTrackingDetailed {
         .map((jsonElement) => AppointmentOfCareTracking.fromJson(jsonElement))
         .toList();
 
+    final jsonDocumentsList = (json["documents"] as List?) ?? [];
+    List<Document> documents =
+        jsonDocumentsList.map((jsonElement) => Document.fromJson(jsonElement)).toList();
+
     return CareTrackingDetailed(
       careTracking: careTracking,
       doctors: doctors,
       appointments: appointments,
+      documents: documents,
     );
   }
 }
