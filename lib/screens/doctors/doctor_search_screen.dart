@@ -10,12 +10,28 @@ import 'doctor_detail_screen.dart';
 
 class DoctorSearchScreen extends StatefulWidget {
   static const String routeName = '/doctors/search';
+  static const String routeName2 = '/doctors/search?speciality=:speciality';
 
   static void navigateTo(BuildContext context) {
     Navigator.pushNamed(context, routeName);
   }
 
-  const DoctorSearchScreen({super.key});
+  static void navigateToWithFilters(
+    BuildContext context,
+    Map<String, String>? filters,
+  ) {
+    Navigator.pushNamed(context, routeName2, arguments: filters);
+  }
+  static Widget routeBuilder(Object? args) {
+    print(args);
+    if (args is Map<String, String>) {
+      return DoctorSearchScreen(filters: args);
+    }
+    return const DoctorSearchScreen();
+  }
+
+  final Map<String, String>? filters;
+  const DoctorSearchScreen({super.key, this.filters});
 
   @override
   State<DoctorSearchScreen> createState() => _DoctorSearchPageState();
@@ -35,6 +51,11 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
       _focusNode.requestFocus();
     });
     _scrollController.addListener(_onScroll);
+
+    if(widget.filters != null) {
+      _filters = widget.filters;
+      _loadingInitialDoctorSearch();
+    }
   }
 
   @override
@@ -126,7 +147,7 @@ class _DoctorSearchPageState extends State<DoctorSearchScreen> {
       return const Center(
         child: Text("Tapez pour rechercher un médecin"),
       );
-    } else if( doctors.isEmpty) {
+    } else if (doctors.isEmpty) {
       return const Center(
         child: Text("Aucun médecin trouvé pour cette recherche."),
       );

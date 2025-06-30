@@ -26,6 +26,7 @@ class DynamicRouterConfig {
     MedicalPatientDetailsScreen.routeName: (args) => MedicalPatientDetailsScreen.routeBuilder(args),
     MedicalDocumentsTypeScreen.routeName: (args) => MedicalDocumentsTypeScreen.routeBuilder(args),
     DoctorSearchScreen.routeName: (args) => const DoctorSearchScreen(),
+    DoctorSearchScreen.routeName2: (args) => DoctorSearchScreen.routeBuilder(args),
     DoctorDetailScreen.routeName: (args) => DoctorDetailScreen.routeBuilder(args),
     AppointmentDetailScreen.routeName: (args) => AppointmentDetailScreen.routeBuilder(args),
     CareTrackingPermissionsScreen.routeName: (args) => CareTrackingPermissionsScreen.routeBuilder(args),

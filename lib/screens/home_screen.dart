@@ -87,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     // search bar
-                    const SizedBox(height: 20),
                     DoctorSearchBar(
                       focusNode: _searchFocusNode,
                       onSearch: (search) {
@@ -170,29 +169,36 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.horizontal,
       itemCount: specialities.length,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue.shade100,
-                  shape: BoxShape.circle,
+        return GestureDetector(
+          onTap: () {
+            DoctorSearchScreen.navigateToWithFilters(context, {
+              'speciality': specialities[index].name,
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue.shade100,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.medical_services,
+                    color: Colors.blue.shade800,
+                    size: 30,
+                  ),
                 ),
-                child: Icon(
-                  Icons.medical_services, // You can change this icon
-                  color: Colors.blue.shade800,
-                  size: 30,
+                const SizedBox(height: 5),
+                Text(
+                  specialities[index].name,
+                  style: TextStyle(fontSize: 12),
                 ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                specialities[index].name,
-                style: TextStyle(fontSize: 12),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
