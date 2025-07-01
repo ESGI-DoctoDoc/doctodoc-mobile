@@ -118,22 +118,24 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 top: 20,
                 right: 5,
                 child: SafeArea(
-                  child: IconButton(
-                    icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
-                    onPressed: () {
-                      final doctor = AppointmentFlowDoctorData(
-                        doctorId: widget.doctorId,
-                        firstName: doctorDetailed.basicInformation.firstName,
-                        lastName: doctorDetailed.basicInformation.lastName,
-                        pictureUrl: doctorDetailed.basicInformation.pictureUrl,
-                        address: AppointmentFlowAddressData(
-                          latitude: doctorDetailed.address.latitude,
-                          longitude: doctorDetailed.address.longitude,
-                        ),
-                      );
-                      AppointmentScreen.navigateTo(context, doctor);
-                    },
-                  ),
+                child: (true) //todo mélissa il faut ajouter les motifs de consulations
+                    ? IconButton(
+                        icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
+                        onPressed: () {
+                          final doctor = AppointmentFlowDoctorData(
+                            doctorId: widget.doctorId,
+                            firstName: doctorDetailed.basicInformation.firstName,
+                            lastName: doctorDetailed.basicInformation.lastName,
+                            pictureUrl: doctorDetailed.basicInformation.pictureUrl,
+                            address: AppointmentFlowAddressData(
+                              latitude: doctorDetailed.address.latitude,
+                              longitude: doctorDetailed.address.longitude,
+                            ),
+                          );
+                          AppointmentScreen.navigateTo(context, doctor);
+                        },
+                      )
+                    : const SizedBox.shrink(),
                 ),
               ),
             ],
