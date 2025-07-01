@@ -1,6 +1,7 @@
 import 'package:doctodoc_mobile/shared/config/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class InputDate extends StatefulWidget {
   final TextEditingController controller;
@@ -36,6 +37,7 @@ class _InputDateState extends State<InputDate> {
         if (now.isAfter(last)) return last;
         return now;
       }(),
+      locale: const Locale('fr', 'FR'),
     );
     if (picked != null) {
       if (picked.isAfter(widget.min) && picked.isBefore(widget.max)) {

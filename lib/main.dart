@@ -41,6 +41,7 @@ import 'package:doctodoc_mobile/services/repositories/user_repository/user_repos
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:doctodoc_mobile/shared/config/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -325,6 +326,15 @@ class MyApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: ThemeMode.system,
+          supportedLocales: const [
+            Locale('fr', 'FR'),
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: const Locale('fr', 'FR'),
           home: nextScreen,
         ),
       ),
