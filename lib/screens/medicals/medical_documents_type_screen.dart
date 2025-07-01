@@ -91,6 +91,10 @@ class _MedicalDocumentsTypeScreenState extends State<MedicalDocumentsTypeScreen>
 
   Widget _buildSuccess(List<Document> documents, bool isLoadingMore) {
     _isLoadingMore = isLoadingMore;
+    if(documents.isEmpty && !isLoadingMore) {
+      return const Center(child: Text("Vous n'avez pas de documents."));
+    }
+
     return documents.isEmpty && isLoadingMore
         ? const Center(child: CircularProgressIndicator())
         : ListView.separated(
