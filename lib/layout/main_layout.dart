@@ -7,10 +7,9 @@ import '../screens/home_screen.dart';
 
 class MainLayout extends StatefulWidget {
   static navigateTo(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const MainLayout(),
-      ),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const MainLayout()),
+      (route) => false,
     );
   }
 
