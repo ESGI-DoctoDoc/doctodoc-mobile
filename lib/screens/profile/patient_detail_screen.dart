@@ -206,26 +206,6 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
         ),
 
         const SizedBox(height: 24),
-
-        // Medical
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Dossier médical',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListTile(
-          leading: const Icon(Icons.folder_shared),
-          title: Text('Mes documents médicaux'),
-          trailing: Icon(Icons.chevron_right),
-          onTap: () => MedicalPatientDetailsScreen.navigateTo(
-            context,
-            patientId: closeMember.id,
-          ),
-        ),
-
-        const SizedBox(height: 24),
         ListTile(
           leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
           title: Text(
