@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
+import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
+import '../../../layout/main_layout.dart';
 import '../../../shared/widgets/maps/maps_viewer.dart';
 
 class _AppointmentConfirmWidget extends StatefulWidget {
@@ -25,7 +27,11 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   Widget build(BuildContext context) {
     return BlocListener<AppointmentBloc, AppointmentState>(
       listenWhen: appointmentListener,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if(state is AppointmentConfirm && state.status == AppointmentConfirmStatus.success) {
+          MainLayout.navigateTo(context);
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
