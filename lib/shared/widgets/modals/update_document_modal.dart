@@ -25,6 +25,9 @@ Future<Patient?> showUpdateDocumentModal(BuildContext context,
     String name,
     String type,
 ) {
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {

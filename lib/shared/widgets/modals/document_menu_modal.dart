@@ -85,29 +85,35 @@ class _DocumentMenuWidget extends StatelessWidget {
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Confirmer la suppression"),
-                    content: const Text("Voulez-vous vraiment supprimer ce document ?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Annuler
-                        },
-                        child: const Text("Annuler"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<WriteDocumentBloc>().add(OnDeleteDocument(id: document.id));
-                        },
-                        child: const Text("Oui"),
-                      ),
-                    ],
-                  );
-                },
-              ),
+              onTap: () {
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context);
+                }
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Confirmer la suppression"),
+                      content: const Text("Voulez-vous vraiment supprimer ce document ?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Annuler
+                          },
+                          child: const Text("Annuler"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.read<WriteDocumentBloc>().add(OnDeleteDocument(id: document.id));
+                            Navigator.of(context).pop(); // Fermer la dialog après confirmation
+                          },
+                          child: const Text("Oui"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),

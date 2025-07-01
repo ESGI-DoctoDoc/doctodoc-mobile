@@ -8,6 +8,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import 'base/modal_base.dart';
 
 void showDocumentLogsModal(BuildContext context, String documentId) {
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
