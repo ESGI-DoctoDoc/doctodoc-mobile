@@ -8,6 +8,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import 'base/modal_base.dart';
 
 void showDocumentInformationModal(BuildContext context, String documentId) {
+  if(Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -37,6 +40,7 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
   void initState() {
     super.initState();
     _onGetDocumentDetail();
+    Jiffy.setLocale('fr-FR');
   }
 
   void _onGetDocumentDetail() {
@@ -66,51 +70,27 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Nom du document',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
         ListTile(
           leading: const Icon(Icons.description),
-          title: Text(document.document.name),
-        ),
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Type de document',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+          title: Text("Nom du document"),
+          subtitle: Text(document.document.name),
         ),
         ListTile(
           leading: const Icon(Icons.category),
-          title: Text(document.type),
-        ),
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Uploadé par',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+          title: Text('Type de document'),
+          subtitle: Text(document.type),
         ),
         ListTile(
           leading: const Icon(Icons.person),
-          title: Text('${document.uploadedBy.firstName} ${document.uploadedBy.lastName}'),
-        ),
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Uploadé le',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+          title: Text('Uploadé par'),
+          subtitle: Text('${document.uploadedBy.firstName} ${document.uploadedBy.lastName}'),
         ),
         ListTile(
           leading: const Icon(Icons.calendar_today),
-          title: Text(Jiffy.parse(document.uploadedAt, pattern: "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-              .format(pattern: "dd/MM/yyyy à HH:mm")),
-          // title: Text(document.uploadedAt),
+          title: Text('Uploadé le'),
+          subtitle: Text(
+            Jiffy.parseFromDateTime(DateTime.parse(document.uploadedAt)).format(pattern: "dd/MM/yyyy à HH:mm"),
+          ),
         ),
       ],
     );
