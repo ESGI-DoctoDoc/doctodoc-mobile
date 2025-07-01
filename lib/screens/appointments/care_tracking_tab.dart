@@ -76,12 +76,15 @@ class _CareTrackingTabState extends State<CareTrackingTab> {
       );
     }).toList();
 
+    if (careTrackingWidgets.isEmpty) {
+      return const Center(child: Text("Vous n'avez pas encore de suivi de dossier."));
+    }
     _isLoadingMore = isLoadingMore;
 
     return Column(
       children: [
         ...careTrackingWidgets,
-        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+        if (isLoadingMore) const CircularProgressIndicator() else const SizedBox.shrink(),
       ],
     );
   }

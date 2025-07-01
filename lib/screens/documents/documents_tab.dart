@@ -70,12 +70,18 @@ class _DocumentsTabState extends State<DocumentsTab> {
       );
     }).toList();
 
+    if(documentWidgets.isEmpty) {
+      return const Center(
+        child: Text("Vous n'avez pas encore de documents."),
+      );
+    }
+
     _isLoadingMore = isLoadingMore;
 
     return Column(
       children: [
         ...documentWidgets,
-        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+        if (isLoadingMore) const CircularProgressIndicator() else const SizedBox.shrink(),
       ],
     );
   }

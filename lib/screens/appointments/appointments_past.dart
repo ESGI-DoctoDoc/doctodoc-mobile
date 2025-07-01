@@ -64,12 +64,17 @@ class _AppointmentPastState extends State<AppointmentPast> {
       );
     }).toList();
 
+    if(appointmentWidgets.isEmpty) {
+      return const Center(
+        child: Text("Vous n'avez pas de rendez-vous passés."),
+      );
+    }
     _isLoadingMore = isLoadingMore;
 
     return Column(
       children: [
         ...appointmentWidgets,
-        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+        if (isLoadingMore) const CircularProgressIndicator() else const SizedBox.shrink(),
       ],
     );
   }

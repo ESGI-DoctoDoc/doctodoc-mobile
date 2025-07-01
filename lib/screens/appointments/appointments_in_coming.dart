@@ -64,12 +64,17 @@ class _AppointmentInComingState extends State<AppointmentInComing> {
       );
     }).toList();
 
+    if(appointmentWidgets.isEmpty) {
+      return const Center(
+        child: Text("Pas de rendez-vous à venir."),
+      );
+    }
     _isLoadingMore = isLoadingMore;
 
     return Column(
       children: [
         ...appointmentWidgets,
-        if (isLoadingMore) const CircularProgressIndicator() else const Text('Rien à charger'),
+        if (isLoadingMore) const CircularProgressIndicator() else const SizedBox.shrink(),
       ],
     );
   }
