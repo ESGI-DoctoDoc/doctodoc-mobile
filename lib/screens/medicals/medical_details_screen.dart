@@ -90,29 +90,25 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
                     break;
                 }
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        docType.label,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        leading: Icon(icon),
+                        title: Text(docType.label),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () {
+                          MedicalDocumentsTypeScreen.navigateTo(
+                            context,
+                            patientId: widget.patientId,
+                            type: docType.name,
+                          );
+                        },
                       ),
-                    ),
-                    ListTile(
-                      leading: Icon(icon),
-                      title: Text(docType.label),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        MedicalDocumentsTypeScreen.navigateTo(
-                          context,
-                          patientId: widget.patientId,
-                          type: docType.name,
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               }).toList(),
             ]),
