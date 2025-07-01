@@ -24,6 +24,12 @@ class _AppointmentConfirmWidget extends StatefulWidget {
 
 class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   @override
+  void initState() {
+    super.initState();
+    Jiffy.setLocale('fr-FR');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AppointmentBloc, AppointmentState>(
       listenWhen: appointmentListener,
