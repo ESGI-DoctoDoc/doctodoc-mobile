@@ -5,8 +5,8 @@ import 'base/input_text.dart';
 
 class PasswordValidator extends Validator {
   final bool required;
-  final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@\-_#$]).{6,}$');
-  final String errorMessage = "Le mot de passe est invalide";
+  final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@\-_#!*$]).{6,}$');
+  final String errorMessage = "Contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial (@, -, _, #, !, *)";
 
   PasswordValidator({this.required = true});
 
@@ -14,11 +14,20 @@ class PasswordValidator extends Validator {
   String? validation(String? value) {
     if (value == null || value.isEmpty) {
       return required ? "Le mot de passe est requis" : null;
-    } else if (!passwordRegex.hasMatch(value)) {
-      return errorMessage;
-    } else {
-      return null;
     }
+    if (value.length < 6) {
+      return "Doit contenir au moins 6 caractères";
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return "Doit contenir au moins une majuscule";
+    }
+    if (!RegExp(r'\d').hasMatch(value)) {
+      return "Doit contenir au moins un chiffre";
+    }
+    if (!RegExp(r'[@\-_#!*$]').hasMatch(value)) {
+      return "Doit contenir (@, -, _, #, !, *)";
+    }
+    return null;
   }
 }
 
