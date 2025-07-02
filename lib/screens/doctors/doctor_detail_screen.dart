@@ -352,7 +352,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12), // Adjust radius as needed
                   child: Image.network(
-                    "https://www.shutterstock.com/image-photo/covid19-coronavirus-outbreak-healthcare-workers-260nw-1779353891.jpg",
+                    doctor.basicInformation.pictureUrl,
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,
