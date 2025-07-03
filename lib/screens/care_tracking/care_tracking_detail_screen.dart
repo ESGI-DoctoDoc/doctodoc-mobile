@@ -7,12 +7,14 @@ import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.d
 import 'package:doctodoc_mobile/shared/widgets/buttons/base/button_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/list_tile_base.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/document_menu_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 import '../../shared/widgets/banners/info_banner.dart';
+import '../../shared/widgets/modals/document_care_tracking_menu_modal.dart';
 import '../../shared/widgets/modals/show_document_care_tracking_upload_modal.dart';
 import '../appointments/care_tracking_permissions_screen.dart';
 
@@ -384,7 +386,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
           ),
           const SizedBox(height: 16),
           ...List.generate(
-            documents.length.clamp(0, 3),
+            documents.length,
             (i) {
               final document = documents[i];
               return ListTileBase.flat(
@@ -392,9 +394,9 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                 subtitle: document.type,
                 leading: const Icon(Icons.description),
                 trailing: IconButton(
-                  icon: const Icon(Icons.download, size: 16),
+                  icon: const Icon(Icons.more_vert),
                   onPressed: () {
-                    // Handle document download
+                    showDocumentCareTrackingMenuModal(context, documents[i], "");
                   },
                 ),
               );
