@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/medical_record/write_document_bloc/write_document_bloc.dart';
+import '../../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../utils/show_error_snackbar.dart';
 import 'base/modal_base.dart';
 

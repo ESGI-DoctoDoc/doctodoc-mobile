@@ -1,14 +1,15 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_detail_bloc/display_document_detail_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/document/display_document_detail_bloc/display_document_detail_bloc.dart';
 import 'base/modal_base.dart';
 
-void showDocumentCareTrackingInformationModal(BuildContext context, String documentId, String careTrackingId) {
-  if(Navigator.canPop(context)) {
+void showDocumentCareTrackingInformationModal(
+    BuildContext context, String documentId, String careTrackingId) {
+  if (Navigator.canPop(context)) {
     Navigator.pop(context);
   }
   WoltModalSheet.show(
@@ -41,13 +42,15 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
   @override
   void initState() {
     super.initState();
-    //todo mélissa care tracking
     _onGetDocumentDetail();
     Jiffy.setLocale('fr-FR');
   }
 
   void _onGetDocumentDetail() {
-    context.read<DisplayDocumentDetailBloc>().add(OnGetDocumentDetail(id: widget.documentId));
+    context.read<DisplayDocumentDetailBloc>().add(OnGetDocumentDetailInCareTracking(
+          careTrackingId: widget.careTrackingId,
+          id: widget.documentId,
+        ));
   }
 
   @override
@@ -61,7 +64,6 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
             DocumentDetailError() => _buildError(), // todo Corentin revoie le build error
             DocumentDetailLoaded() => _buildSuccess(state.document),
           };
-          // return _onBuildSuccess();
         },
       ),
     );
@@ -92,7 +94,8 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
           leading: const Icon(Icons.calendar_today),
           title: Text('Uploadé le'),
           subtitle: Text(
-            Jiffy.parseFromDateTime(DateTime.parse(document.uploadedAt)).format(pattern: "dd/MM/yyyy à HH:mm"),
+            Jiffy.parseFromDateTime(DateTime.parse(document.uploadedAt))
+                .format(pattern: "dd/MM/yyyy à HH:mm"),
           ),
         ),
       ],

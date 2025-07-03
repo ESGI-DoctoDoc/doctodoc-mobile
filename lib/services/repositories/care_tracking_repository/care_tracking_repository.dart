@@ -55,4 +55,28 @@ class CareTrackingRepository {
       throw UnknownException();
     }
   }
+
+  Future<Document> getDocumentById(String careTrackingId, String id) async {
+    try {
+      return await careTrackingDataSource.getDocumentById(careTrackingId, id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<DocumentDetailed> getDetailDocumentById(String careTrackingId, String id) async {
+    try {
+      return await careTrackingDataSource.getDetailDocumentById(careTrackingId, id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<List<DocumentTrace>> getDocumentTracesById(String careTrackingId, String id) async {
+    try {
+      return await careTrackingDataSource.getDocumentTracesById(careTrackingId, id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
 }

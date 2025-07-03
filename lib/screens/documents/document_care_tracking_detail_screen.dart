@@ -1,8 +1,9 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+
+import '../../blocs/document/display_document_content_bloc/display_document_content_bloc.dart';
 
 class DocumentCareTrackingDetailScreen extends StatefulWidget {
   static const String routeName = "/care-tracking/:careTrackingId/documents/:documentId";
@@ -56,12 +57,12 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
   Widget build(BuildContext context) {
     return BlocBuilder<DisplayDocumentContentBloc, DisplayDocumentContentState>(
       builder: (context, state) {
-        return switch (state.status) {
-          DisplayDocumentContentStatus.initial ||
-          DisplayDocumentContentStatus.loading =>
+        return switch (state.displayDocumentContentOfCareTrackingStatus) {
+          DisplayDocumentContentOfCareTrackingStatus.initial ||
+          DisplayDocumentContentOfCareTrackingStatus.loading =>
             const SizedBox.shrink(),
-          DisplayDocumentContentStatus.success => _buildSuccess(state.document),
-          DisplayDocumentContentStatus.error => _buildError(),
+          DisplayDocumentContentOfCareTrackingStatus.success => _buildSuccess(state.document),
+          DisplayDocumentContentOfCareTrackingStatus.error => _buildError(),
         };
       },
     );
@@ -98,7 +99,11 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
   }
 
   void _getUrl() {
-    context.read<DisplayDocumentContentBloc>().add(OnGetContent(id: widget.documentId));
+    print(widget.careTrackingId);
+    context.read<DisplayDocumentContentBloc>().add(OnGetContentOnCareTracking(
+          careTrackingId: widget.careTrackingId,
+          id: widget.documentId,
+        ));
   }
 }
 

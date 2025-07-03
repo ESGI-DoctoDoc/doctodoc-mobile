@@ -1,15 +1,11 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
 import 'package:doctodoc_mobile/blocs/care_tracking_detail_blocs/care_tracking_detail_bloc/care_tracking_detail_bloc.dart';
-import 'package:doctodoc_mobile/blocs/care_tracking_detail_blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
 import 'package:doctodoc_mobile/blocs/close_member_blocs/display_detail_close_member_bloc/display_detail_close_member_bloc.dart';
 import 'package:doctodoc_mobile/blocs/display_specialities_bloc/display_specialities_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/display_doctor_bloc/display_doctor_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_recruitment_bloc/doctor_recruitment_bloc.dart';
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_detail_bloc/display_document_detail_bloc.dart';
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_type_bloc/display_medical_record_documents_type_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
@@ -51,7 +47,11 @@ import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart
 import 'blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/care_tracking_detail_blocs/display_care_trackings_bloc/display_care_trackings_bloc.dart';
 import 'blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
-import 'blocs/medical_record/write_document_bloc/write_document_bloc.dart';
+import 'blocs/document/display_document_content_bloc/display_document_content_bloc.dart';
+import 'blocs/document/display_document_detail_bloc/display_document_detail_bloc.dart';
+import 'blocs/document/display_document_historic_bloc/display_document_historic_bloc.dart';
+import 'blocs/document/write_document_bloc/write_document_bloc.dart';
+import 'blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
 import 'blocs/register_bloc/register_bloc.dart';
 import 'blocs/user_blocs/user_bloc/user_bloc.dart';
 import 'layout/main_layout.dart';
@@ -283,6 +283,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => DisplayDocumentContentBloc(
               medicalRecordRepository: context.read<MedicalRecordRepository>(),
+              careTrackingRepository: context.read<CareTrackingRepository>(),
             ),
           ),
           BlocProvider(
@@ -293,11 +294,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => DisplayDocumentDetailBloc(
               medicalRecordRepository: context.read<MedicalRecordRepository>(),
+              careTrackingRepository: context.read<CareTrackingRepository>(),
             ),
           ),
           BlocProvider(
             create: (context) => DisplayDocumentHistoricBloc(
               medicalRecordRepository: context.read<MedicalRecordRepository>(),
+              careTrackingRepository: context.read<CareTrackingRepository>(),
             ),
           ),
           BlocProvider(

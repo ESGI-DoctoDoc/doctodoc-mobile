@@ -1,8 +1,9 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_content_bloc/display_document_content_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+
+import '../../blocs/document/display_document_content_bloc/display_document_content_bloc.dart';
 
 class DocumentDetailScreen extends StatefulWidget {
   static const String routeName = "/documents/:documentId";
@@ -46,12 +47,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<DisplayDocumentContentBloc, DisplayDocumentContentState>(
       builder: (context, state) {
-        return switch (state.status) {
-          DisplayDocumentContentStatus.initial ||
-          DisplayDocumentContentStatus.loading =>
+        return switch (state.displayDocumentContentOfMedicalRecordStatus) {
+          DisplayDocumentContentOfMedicalRecordStatus.initial ||
+          DisplayDocumentContentOfMedicalRecordStatus.loading =>
             const SizedBox.shrink(),
-          DisplayDocumentContentStatus.success => _buildSuccess(state.document),
-          DisplayDocumentContentStatus.error => _buildError(),
+          DisplayDocumentContentOfMedicalRecordStatus.success => _buildSuccess(state.document),
+          DisplayDocumentContentOfMedicalRecordStatus.error => _buildError(),
         };
       },
     );
@@ -86,7 +87,9 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   }
 
   void _getUrl() {
-    context.read<DisplayDocumentContentBloc>().add(OnGetContent(id: widget.documentId));
+    context
+        .read<DisplayDocumentContentBloc>()
+        .add(OnGetContentOnMedicalRecord(id: widget.documentId));
   }
 }
 

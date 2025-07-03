@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/blocs/medical_record/write_document_bloc/write_document_bloc.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_type_input.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../utils/show_error_snackbar.dart';
 import '../buttons/primary_button.dart';
 import 'base/modal_base.dart';

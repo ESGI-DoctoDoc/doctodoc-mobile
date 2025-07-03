@@ -4,7 +4,7 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/medical_record/write_document_bloc/write_document_bloc.dart';
+import '../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/document_type_input.dart';

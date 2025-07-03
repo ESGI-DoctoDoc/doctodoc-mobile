@@ -1,10 +1,10 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/document/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'base/modal_base.dart';
 
 void showDocumentLogsModal(BuildContext context, String documentId) {
@@ -43,7 +43,9 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
   }
 
   void _onGetDocumentHistoric() {
-    context.read<DisplayDocumentHistoricBloc>().add(OnGetDocumentTraces(id: widget.documentId));
+    context
+        .read<DisplayDocumentHistoricBloc>()
+        .add(OnGetDocumentTracesInMedicalRecord(id: widget.documentId));
   }
 
   @override

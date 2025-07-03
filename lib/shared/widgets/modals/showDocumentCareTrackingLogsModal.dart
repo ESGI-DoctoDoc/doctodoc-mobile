@@ -1,13 +1,14 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/document/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'base/modal_base.dart';
 
-void showDocumentCareTrackingLogsModal(BuildContext context, String documentId, String careTrackingId) {
+void showDocumentCareTrackingLogsModal(
+    BuildContext context, String documentId, String careTrackingId) {
   if (Navigator.canPop(context)) {
     Navigator.pop(context);
   }
@@ -41,12 +42,14 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
   @override
   void initState() {
     super.initState();
-    //todo mélissa care tracking
     _onGetDocumentHistoric();
   }
 
   void _onGetDocumentHistoric() {
-    context.read<DisplayDocumentHistoricBloc>().add(OnGetDocumentTraces(id: widget.documentId));
+    context.read<DisplayDocumentHistoricBloc>().add(OnGetDocumentTracesInCareTracking(
+          careTrackingId: widget.careTrackingId,
+          id: widget.documentId,
+        ));
   }
 
   @override

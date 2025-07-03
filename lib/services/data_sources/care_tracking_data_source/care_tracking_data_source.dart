@@ -9,4 +9,10 @@ abstract class CareTrackingDataSource {
   Future<void> uploadDocument(String id, uploadDocumentRequest);
 
   Future<List<Document>> getDocumentsById(String id);
+
+  Future<Document> getDocumentById(String careTrackingId, String id);
+
+  Future<DocumentDetailed> getDetailDocumentById(careTrackingId, String id);
+
+  Future<List<DocumentTrace>> getDocumentTracesById(String careTrackingId, String id);
 }

@@ -1,10 +1,10 @@
-import 'package:doctodoc_mobile/blocs/medical_record/display_document_detail_bloc/display_document_detail_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../../blocs/document/display_document_detail_bloc/display_document_detail_bloc.dart';
 import 'base/modal_base.dart';
 
 void showDocumentInformationModal(BuildContext context, String documentId) {
@@ -44,7 +44,9 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
   }
 
   void _onGetDocumentDetail() {
-    context.read<DisplayDocumentDetailBloc>().add(OnGetDocumentDetail(id: widget.documentId));
+    context
+        .read<DisplayDocumentDetailBloc>()
+        .add(OnGetDocumentDetailInMedicalRecord(id: widget.documentId));
   }
 
   @override

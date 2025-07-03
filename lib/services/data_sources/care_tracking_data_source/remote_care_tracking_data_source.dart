@@ -74,4 +74,24 @@ class RemoteCareTrackingDataSource implements CareTrackingDataSource {
       ),
     );
   }
+
+  @override
+  Future<Document> getDocumentById(String careTrackingId, String id) async {
+    final response = await dio.get("/patients/care-trackings/$careTrackingId/documents/$id");
+    return Document.fromJson(response.data["data"]);
+  }
+
+  @override
+  Future<DocumentDetailed> getDetailDocumentById(careTrackingId, String id) async {
+    final response = await dio.get("/patients/care-trackings/$careTrackingId/documents/detail/$id");
+    return DocumentDetailed.fromJson(response.data["data"]);
+  }
+
+  @override
+  Future<List<DocumentTrace>> getDocumentTracesById(String careTrackingId, String id) async {
+    final response = await dio.get("/patients/care-trackings/$careTrackingId/documents/$id/traces");
+
+    final jsonList = (response.data["data"] as List?) ?? [];
+    return jsonList.map((jsonElement) => DocumentTrace.fromJson(jsonElement)).toList();
+  }
 }

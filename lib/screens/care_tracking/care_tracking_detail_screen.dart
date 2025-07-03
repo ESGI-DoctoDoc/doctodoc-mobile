@@ -7,7 +7,6 @@ import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.d
 import 'package:doctodoc_mobile/shared/widgets/buttons/base/button_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/list_tile_base.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/document_menu_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
@@ -396,7 +395,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.more_vert),
                   onPressed: () {
-                    showDocumentCareTrackingMenuModal(context, documents[i], "");
+                    showDocumentCareTrackingMenuModal(context, documents[i], widget.careTrackingId);
                   },
                 ),
               );

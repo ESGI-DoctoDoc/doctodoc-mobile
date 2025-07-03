@@ -1,20 +1,18 @@
 import 'package:doctodoc_mobile/models/document.dart';
-import 'package:doctodoc_mobile/screens/documents/document_detail_screen.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentCareTRackingLogsModal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentCareTrackingInformationModal.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/show_document_information_modal.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentCareTrackingLogsModal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_document_care_tracking_modal.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/update_document_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/medical_record/write_document_bloc/write_document_bloc.dart';
+import '../../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../../screens/documents/document_care_tracking_detail_screen.dart';
 import '../../utils/show_error_snackbar.dart';
 import 'base/modal_base.dart';
 
-void showDocumentCareTrackingMenuModal(BuildContext context, Document document, String careTrackingId) {
+void showDocumentCareTrackingMenuModal(
+    BuildContext context, Document document, String careTrackingId) {
   WoltModalSheet.show(
     context: context,
     pageListBuilder: (context) {
@@ -83,12 +81,11 @@ class _DocumentMenuWidget extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text("Voir l'historique"),
-              leading: const Icon(Icons.history),
-              onTap: () {
-                showDocumentCareTrackingLogsModal(context, document.id, careTrackingId);
-              }
-            ),
+                title: const Text("Voir l'historique"),
+                leading: const Icon(Icons.history),
+                onTap: () {
+                  showDocumentCareTrackingLogsModal(context, document.id, careTrackingId);
+                }),
             ListTile(
               title: Text(
                 "Supprimer le document",
@@ -115,7 +112,9 @@ class _DocumentMenuWidget extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             //todo mélissa care tracking
-                            context.read<WriteDocumentBloc>().add(OnDeleteDocument(id: document.id));
+                            context
+                                .read<WriteDocumentBloc>()
+                                .add(OnDeleteDocument(id: document.id));
                             Navigator.of(context).pop(); // Fermer la dialog après confirmation
                           },
                           child: const Text("Oui"),
