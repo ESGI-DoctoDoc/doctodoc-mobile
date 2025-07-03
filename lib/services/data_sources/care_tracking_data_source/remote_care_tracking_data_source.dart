@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/models/document.dart';
+import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 import 'package:mime/mime.dart';
 
 import 'care_tracking_data_source.dart';
@@ -93,5 +94,25 @@ class RemoteCareTrackingDataSource implements CareTrackingDataSource {
 
     final jsonList = (response.data["data"] as List?) ?? [];
     return jsonList.map((jsonElement) => DocumentTrace.fromJson(jsonElement)).toList();
+  }
+
+  @override
+  Future<void> deleteDocument(String careTrackingId, String id) async {
+    await dio.delete("/patients/care-trackings/$careTrackingId/documents/$id");
+  }
+
+  @override
+  Future<Document> updateDocument(
+      String careTrackingId, UpdateDocumentRequest updateDocumentRequest) async {
+    print(careTrackingId);
+    final response = await dio.patch(
+      "/patients/care-trackings/$careTrackingId/documents/${updateDocumentRequest.id}",
+      data: jsonEncode({
+        "filename": updateDocumentRequest.filename,
+        "type": updateDocumentRequest.type,
+      }),
+    );
+
+    return Document.fromJson(response.data["data"]);
   }
 }

@@ -21,11 +21,25 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
   }) : super(CareTrackingDetailInitial()) {
     on<OnGetCareTrackingDetail>(_onGetCareTrackingDetail);
     on<OnGetUpdatedDocuments>(_onGetUpdatedDocuments);
+    on<OnDeleteDocument>(_onDeleteDocument);
+    on<OnUpdateDocument>(_onUpdateDocument);
 
     _careTrackingRepositoryEventSubscription =
         careTrackingRepository.careTrackingRepositoryEventStream.listen((event) {
       if (event is UploadCareTrackingDocumentEvent) {
         add(OnGetUpdatedDocuments(careTrackingId: event.id));
+      }
+
+      if (event is DeleteCareTrackingDocumentEvent) {
+        add(OnDeleteDocument(id: event.id));
+      }
+
+      if (event is UpdateCareTrackingDocumentEvent) {
+        add(OnUpdateDocument(
+          id: event.id,
+          type: event.type,
+          filename: event.filename,
+        ));
       }
     });
   }
@@ -57,6 +71,49 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
     } catch (error) {
       emit(CareTrackingDetailError(exception: AppException.from(error)));
     }
+  }
+
+  Future<void> _onDeleteDocument(
+      OnDeleteDocument event, Emitter<CareTrackingDetailState> emit) async {
+    try {
+      if (state is! CareTrackingDetailLoaded) return;
+
+      final currentState = state as CareTrackingDetailLoaded;
+
+      emit(CareTrackingDetailLoading());
+
+      final documents = currentState.careTracking.documents;
+      documents.removeWhere((document) => document.id == event.id);
+
+      emit(CareTrackingDetailLoaded(careTracking: currentState.careTracking));
+    } catch (error) {
+      emit(CareTrackingDetailError(exception: AppException.from(error)));
+    }
+  }
+
+  Future<void> _onUpdateDocument(
+      OnUpdateDocument event, Emitter<CareTrackingDetailState> emit) async {
+    if (state is! CareTrackingDetailLoaded) return;
+
+    final currentState = state as CareTrackingDetailLoaded;
+
+    emit(CareTrackingDetailLoading());
+
+    final documents = currentState.careTracking.documents;
+
+    final documentToUpdateIndex = documents.indexWhere((document) => document.id == event.id);
+    final oldDocument = documents[documentToUpdateIndex];
+
+    final documentUpdated = Document(
+      id: event.id,
+      name: event.filename,
+      url: oldDocument.url,
+      type: event.type,
+    );
+
+    documents[documentToUpdateIndex] = documentUpdated;
+
+    emit(CareTrackingDetailLoaded(careTracking: currentState.careTracking));
   }
 
   @override

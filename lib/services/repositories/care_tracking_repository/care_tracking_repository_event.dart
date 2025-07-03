@@ -8,22 +8,22 @@ class UploadCareTrackingDocumentEvent extends CareTrackingRepositoryEvent {
   });
 }
 
-class UpdateMedicalRecordDocumentEvent extends CareTrackingRepositoryEvent {
+class UpdateCareTrackingDocumentEvent extends CareTrackingRepositoryEvent {
   final String id;
   final String type;
   final String filename;
 
-  UpdateMedicalRecordDocumentEvent({
+  UpdateCareTrackingDocumentEvent({
     required this.id,
     required this.type,
     required this.filename,
   });
 }
 
-class DeleteMedicalRecordDocumentEvent extends CareTrackingRepositoryEvent {
+class DeleteCareTrackingDocumentEvent extends CareTrackingRepositoryEvent {
   final String id;
 
-  DeleteMedicalRecordDocumentEvent({
+  DeleteCareTrackingDocumentEvent({
     required this.id,
   });
 }

@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/models/document.dart';
+import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 
 abstract class CareTrackingDataSource {
   Future<List<CareTracking>> getAll(int page);
@@ -15,4 +16,9 @@ abstract class CareTrackingDataSource {
   Future<DocumentDetailed> getDetailDocumentById(careTrackingId, String id);
 
   Future<List<DocumentTrace>> getDocumentTracesById(String careTrackingId, String id);
+
+  Future<void> deleteDocument(String careTrackingId, String id);
+
+  Future<Document> updateDocument(
+      String careTrackingId, UpdateDocumentRequest updateDocumentRequest);
 }

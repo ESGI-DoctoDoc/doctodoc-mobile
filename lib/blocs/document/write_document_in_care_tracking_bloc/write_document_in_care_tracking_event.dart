@@ -18,19 +18,23 @@ class OnUploadDocument extends WriteDocumentInCareTrackingEvent {
 }
 
 class OnDeleteDocument extends WriteDocumentInCareTrackingEvent {
+  final String careTrackingId;
   final String id;
 
   OnDeleteDocument({
+    required this.careTrackingId,
     required this.id,
   });
 }
 
 class OnUpdateDocument extends WriteDocumentInCareTrackingEvent {
+  final String careTrackingId;
   final String id;
   final String type;
   final String filename;
 
   OnUpdateDocument({
+    required this.careTrackingId,
     required this.id,
     required this.type,
     required this.filename,

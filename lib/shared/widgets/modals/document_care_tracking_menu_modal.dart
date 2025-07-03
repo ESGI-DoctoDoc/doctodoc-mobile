@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentCareTrackingInformationModal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/showDocumentCareTrackingLogsModal.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../../screens/documents/document_care_tracking_detail_screen.dart';
 import '../../utils/show_error_snackbar.dart';
 import 'base/modal_base.dart';
@@ -40,7 +40,7 @@ class _DocumentMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WriteDocumentBloc, WriteDocumentState>(
+    return BlocListener<WriteDocumentInCareTrackingBloc, WriteDocumentInCareTrackingState>(
       listenWhen: (previous, current) {
         return previous.deleteStatus != current.deleteStatus;
       },
@@ -111,10 +111,10 @@ class _DocumentMenuWidget extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            //todo mélissa care tracking
-                            context
-                                .read<WriteDocumentBloc>()
-                                .add(OnDeleteDocument(id: document.id));
+                            context.read<WriteDocumentInCareTrackingBloc>().add(OnDeleteDocument(
+                                  careTrackingId: careTrackingId,
+                                  id: document.id,
+                                ));
                             Navigator.of(context).pop(); // Fermer la dialog après confirmation
                           },
                           child: const Text("Oui"),
@@ -131,7 +131,7 @@ class _DocumentMenuWidget extends StatelessWidget {
     );
   }
 
-  void _deleteDocumentBlocListener(BuildContext context, WriteDocumentState state) {
+  void _deleteDocumentBlocListener(BuildContext context, WriteDocumentInCareTrackingState state) {
     if (state.deleteStatus == DeleteDocumentStatus.success) {
       Navigator.of(context).pop();
     } else if (state.deleteStatus == DeleteDocumentStatus.error) {

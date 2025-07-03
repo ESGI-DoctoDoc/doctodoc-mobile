@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/services/data_sources/care_tracking_data_source/care_tracking_data_source.dart';
+import 'package:doctodoc_mobile/services/dtos/update_document_request.dart';
 import 'package:doctodoc_mobile/services/dtos/upload_document_request.dart';
 
 import 'care_tracking_repository_event.dart';
@@ -78,5 +79,33 @@ class CareTrackingRepository {
     } catch (error) {
       throw UnknownException();
     }
+  }
+
+  Future<void> deleteDocument(String careTrackingId, String id) async {
+    try {
+      await careTrackingDataSource.deleteDocument(careTrackingId, id);
+      _careTrackingRepositoryEventController.add(DeleteCareTrackingDocumentEvent(id: id));
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<void> updateDocument(
+      String careTrackingId, UpdateDocumentRequest updateDocumentRequest) async {
+    try {
+      final Document document =
+          await careTrackingDataSource.updateDocument(careTrackingId, updateDocumentRequest);
+      _careTrackingRepositoryEventController.add(UpdateCareTrackingDocumentEvent(
+        id: document.id,
+        type: updateDocumentRequest.type,
+        filename: document.name,
+      ));
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  dispose() {
+    _careTrackingRepositoryEventController.close();
   }
 }
