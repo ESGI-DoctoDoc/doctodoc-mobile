@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550305889364",
+    "project_id": "docto-doc",
+    "storage_bucket": "docto-doc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550305889364:android:2c85a7082f0cee6dae41c1",
+        "android_client_info": {
+          "package_name": "com.doctodoc_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgq3YkKAb3X6DJeRaIaiDDC6a4dwQBbP8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,7 @@ class AuthException extends AppException {
   AuthException({super.code = defaultCode});
 
   static AppException from(dynamic exception) {
+    print('AuthException.from: $exception');
     if (exception is AppException) return exception;
     if (exception is DioException) {
       if(exception.response?.data is Map<String, dynamic>) {

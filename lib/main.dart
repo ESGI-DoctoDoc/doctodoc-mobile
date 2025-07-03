@@ -12,6 +12,7 @@ import 'package:doctodoc_mobile/blocs/medical_record/display_document_historic_b
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_type_bloc/display_medical_record_documents_type_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
+import 'package:doctodoc_mobile/firebase_options.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/onboarding/onboarding_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/appointment_data_source/remote_appointment_data_source.dart';
@@ -27,6 +28,7 @@ import 'package:doctodoc_mobile/services/data_sources/search_data_source/remote_
 import 'package:doctodoc_mobile/services/data_sources/speciality_data_source/remote_speciality_data_source.dart';
 import 'package:doctodoc_mobile/services/data_sources/user_data_source/remote_user_data_source.dart';
 import 'package:doctodoc_mobile/services/dio_client.dart';
+import 'package:doctodoc_mobile/services/notification_service.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_flow_repository/appointment_flow_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/appointment_repository/appointment_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/auth_repository/auth_repository.dart';
@@ -40,10 +42,14 @@ import 'package:doctodoc_mobile/services/repositories/speciality_repository/spec
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:doctodoc_mobile/shared/config/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'dart:io';
 
 import 'blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
@@ -55,8 +61,19 @@ import 'blocs/register_bloc/register_bloc.dart';
 import 'blocs/user_blocs/user_bloc/user_bloc.dart';
 import 'layout/main_layout.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) {
+    //todo mélissa déplacer ce bout de code et l'activer dés qu'il est connecté (et une fois)
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    final notificationService = NotificationService();
+    await notificationService.initFCM();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
   await dotenv.load(fileName: ".env");
 
   final sharedPreferences = SharedPreferencesAuthDataSource();
@@ -321,6 +338,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          navigatorKey: navigatorKey,
           title: titleApp,
           onGenerateRoute: DynamicRouterConfig.generateRoute,
           theme: lightTheme,
@@ -340,4 +358,8 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Background message received: ${message.notification?.title} - ${message.notification?.body}");
 }
