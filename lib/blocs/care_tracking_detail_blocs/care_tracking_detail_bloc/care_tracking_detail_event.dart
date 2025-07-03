@@ -10,3 +10,11 @@ class OnGetCareTrackingDetail extends CareTrackingDetailEvent {
     required this.id,
   });
 }
+
+class OnGetUpdatedDocuments extends CareTrackingDetailEvent {
+  final String careTrackingId;
+
+  OnGetUpdatedDocuments({
+    required this.careTrackingId,
+  });
+}

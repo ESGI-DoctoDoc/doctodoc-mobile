@@ -59,7 +59,7 @@ class CareTrackingDetailed {
   final CareTracking careTracking;
   final List<Doctor> doctors;
   final List<AppointmentOfCareTracking> appointments;
-  final List<Document> documents;
+  List<Document> documents;
 
   CareTrackingDetailed({
     required this.careTracking,

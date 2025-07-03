@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/care_tracking.dart';
+import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/services/data_sources/care_tracking_data_source/care_tracking_data_source.dart';
+import 'package:doctodoc_mobile/services/dtos/upload_document_request.dart';
+
+import 'care_tracking_repository_event.dart';
 
 class CareTrackingRepository {
   final CareTrackingDataSource careTrackingDataSource;
@@ -10,6 +14,12 @@ class CareTrackingRepository {
   CareTrackingRepository({
     required this.careTrackingDataSource,
   });
+
+  final _careTrackingRepositoryEventController =
+      StreamController<CareTrackingRepositoryEvent>.broadcast();
+
+  Stream<CareTrackingRepositoryEvent> get careTrackingRepositoryEventStream =>
+      _careTrackingRepositoryEventController.stream;
 
   Future<List<CareTracking>> getAll(int page) async {
     try {
@@ -22,6 +32,25 @@ class CareTrackingRepository {
   Future<CareTrackingDetailed> getById(String id) async {
     try {
       return await careTrackingDataSource.getById(id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<List<Document>> getDocumentsById(String id) async {
+    try {
+      return await careTrackingDataSource.getDocumentsById(id);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<void> uploadDocument(String id, UploadDocumentRequest uploadDocumentRequest) async {
+    try {
+      await careTrackingDataSource.uploadDocument(id, uploadDocumentRequest);
+      _careTrackingRepositoryEventController.add(UploadCareTrackingDocumentEvent(
+        id: id,
+      ));
     } catch (error) {
       throw UnknownException();
     }
