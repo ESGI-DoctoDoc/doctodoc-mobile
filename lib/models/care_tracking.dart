@@ -65,7 +65,7 @@ class CareTrackingDetailed {
     required this.careTracking,
     required this.doctors,
     required this.appointments,
-    required this.documents,
+    this.documents = const [],
   });
 
   factory CareTrackingDetailed.fromJson(Map<String, dynamic> json) {

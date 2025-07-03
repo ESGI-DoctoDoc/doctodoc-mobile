@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_appointment_availability.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
+import 'package:doctodoc_mobile/models/care_tracking.dart';
 
 import 'appointment_flow_data_source.dart';
 
@@ -39,5 +40,13 @@ class RemoteAppointmentFlowDataSource implements AppointmentFlowDataSource {
     return jsonList
         .map((jsonElement) => MedicalConcernAppointmentAvailability.fromJson(jsonElement))
         .toList();
+  }
+
+  @override
+  Future<List<CareTracking>> getCareTrackings() async {
+    final response = await dio.get("/patients/care-trackings-for-appointment");
+
+    final jsonList = (response.data["data"] as List?) ?? [];
+    return jsonList.map((jsonElement) => CareTracking.fromJson(jsonElement)).toList();
   }
 }
