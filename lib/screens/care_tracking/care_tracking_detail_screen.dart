@@ -345,6 +345,9 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
   }
 
   Widget _buildDocuments(List<Document> documents) {
+    final initialDocs = documents.take(3).toList();
+    final hasMore = documents.length > 3;
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.only(top: 16.0),
@@ -384,25 +387,48 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          ...List.generate(
-            documents.length,
-            (i) {
-              final document = documents[i];
-              return ListTileBase.flat(
-                title: document.name,
-                subtitle: document.type,
-                leading: const Icon(Icons.description),
-                trailing: IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () {
-                    showDocumentCareTrackingMenuModal(context, documents[i], widget.careTrackingId);
-                  },
-                ),
+          if (!hasMore)
+            ..._buildDocumentList(documents)
+          else ...[
+            ..._buildDocumentList(initialDocs),
+            ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("Afficher tous les documents"),
+              ),
+              childrenPadding: EdgeInsets.zero,
+              children: _buildDocumentList(documents.skip(3).toList()),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
+              collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildDocumentList(List<Document> documents) {
+    return List.generate(
+      documents.length,
+      (i) {
+        final document = documents[i];
+        return ListTileBase.flat(
+          title: document.name,
+          subtitle: document.type,
+          leading: const Icon(Icons.description),
+          trailing: IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              showDocumentCareTrackingMenuModal(
+                context,
+                document,
+                widget.careTrackingId,
               );
             },
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
