@@ -11,10 +11,10 @@ class OnGetCareTrackingDetail extends CareTrackingDetailEvent {
   });
 }
 
-class OnGetUpdatedDocuments extends CareTrackingDetailEvent {
+class OnGetDocuments extends CareTrackingDetailEvent {
   final String careTrackingId;
 
-  OnGetUpdatedDocuments({
+  OnGetDocuments({
     required this.careTrackingId,
   });
 }
@@ -31,10 +31,12 @@ class OnUpdateDocument extends CareTrackingDetailEvent {
   final String id;
   final String type;
   final String filename;
+  final bool isShared;
 
   OnUpdateDocument({
     required this.id,
     required this.type,
     required this.filename,
+    required this.isShared,
   });
 }

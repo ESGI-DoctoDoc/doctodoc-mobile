@@ -20,14 +20,14 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
     required this.careTrackingRepository,
   }) : super(CareTrackingDetailInitial()) {
     on<OnGetCareTrackingDetail>(_onGetCareTrackingDetail);
-    on<OnGetUpdatedDocuments>(_onGetUpdatedDocuments);
+    on<OnGetDocuments>(_onGetUpdatedDocuments);
     on<OnDeleteDocument>(_onDeleteDocument);
     on<OnUpdateDocument>(_onUpdateDocument);
 
     _careTrackingRepositoryEventSubscription =
         careTrackingRepository.careTrackingRepositoryEventStream.listen((event) {
       if (event is UploadCareTrackingDocumentEvent) {
-        add(OnGetUpdatedDocuments(careTrackingId: event.id));
+        add(OnGetDocuments(careTrackingId: event.id));
       }
 
       if (event is DeleteCareTrackingDocumentEvent) {
@@ -39,6 +39,7 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
           id: event.id,
           type: event.type,
           filename: event.filename,
+          isShared: event.isShared,
         ));
       }
     });
@@ -55,8 +56,8 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
     }
   }
 
-  Future<void> _onGetUpdatedDocuments(
-      OnGetUpdatedDocuments event, Emitter<CareTrackingDetailState> emit) async {
+  Future<void> _onGetUpdatedDocuments(OnGetDocuments event,
+      Emitter<CareTrackingDetailState> emit) async {
     try {
       if (state is! CareTrackingDetailLoaded) return;
 
@@ -109,6 +110,7 @@ class CareTrackingDetailBloc extends Bloc<CareTrackingDetailEvent, CareTrackingD
       name: event.filename,
       url: oldDocument.url,
       type: event.type,
+      isShared: event.isShared,
     );
 
     documents[documentToUpdateIndex] = documentUpdated;

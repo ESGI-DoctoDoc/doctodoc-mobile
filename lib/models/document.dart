@@ -19,12 +19,14 @@ class Document {
   final String name;
   final String url;
   final String type;
+  final bool isShared;
 
   Document({
     required this.id,
     required this.name,
     required this.url,
     required this.type,
+    this.isShared = false,
   });
 
   factory Document.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class Document {
       name: json['name'],
       url: json['url'],
       type: json['type'],
+      isShared: json['isShared'] ?? false,
     );
   }
 }
