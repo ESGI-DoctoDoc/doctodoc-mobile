@@ -1,10 +1,10 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
-import 'package:doctodoc_mobile/models/care_tracking.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../models/appointment/care_tracking_for_appointment.dart';
 import '../../../shared/widgets/inputs/care_tracking_selection.dart';
 
 class AppointmentStepCareTracking extends StatefulWidget {
@@ -63,7 +63,7 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
     );
   }
 
-  Widget _buildSuccess(List<CareTracking> careTrackings) {
+  Widget _buildSuccess(List<CareTrackingForAppointment> careTrackings) {
     if (careTrackings.isEmpty) {
       return const Text(
         "Aucun suivi de dossier n'est disponible pour le moment.",
@@ -75,9 +75,9 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
         careTrackingName: 'Ne pas lier',
       ),
       ...careTrackings.map(
-        (ct) => CareTrackingItem(
-          careTrackingId: ct.id,
-          careTrackingName: ct.name,
+        (careTracking) => CareTrackingItem(
+          careTrackingId: careTracking.id,
+          careTrackingName: careTracking.name,
         ),
       ),
     ];

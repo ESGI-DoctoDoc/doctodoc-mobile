@@ -16,7 +16,7 @@ class AppointmentFlowState {
   final List<MedicalConcern> medicalConcerns;
   final List<MedicalConcernQuestion> questions;
   final List<MedicalConcernAppointmentAvailability> appointmentAvailability;
-  final List<CareTracking> careTrackings;
+  final List<CareTrackingForAppointment> careTrackings;
   final AppException? exception;
 
   AppointmentFlowState({
@@ -38,7 +38,7 @@ class AppointmentFlowState {
     GetCareTrackingsStatus? getCareTrackingsStatus,
     List<MedicalConcern>? medicalConcerns,
     List<MedicalConcernQuestion>? questions,
-    List<CareTracking>? careTrackings,
+    List<CareTrackingForAppointment>? careTrackings,
     List<MedicalConcernAppointmentAvailability>? appointmentAvailability,
     AppException? exception,
   }) {
