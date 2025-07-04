@@ -1,7 +1,10 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/appointment_label.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../models/appointment/care_tracking_for_appointment.dart';
 import '../../../shared/widgets/inputs/care_tracking_selection.dart';
 
 class AppointmentStepCareTracking extends StatefulWidget {
@@ -22,26 +25,15 @@ class AppointmentStepCareTracking extends StatefulWidget {
 
 class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTracking> {
   final TextEditingController _careTrackingController = TextEditingController();
-  bool _isLoading = true;
-  bool _hasError = false;
-  List<CareTrackingItem> _careTrackings = [];
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 150), () {
-      setState(() {
-        _isLoading = false;
-        _careTrackings = const [];
-      });
-
-      if (_careTrackings.isEmpty) {
-        widget.onEmpty?.call();
-      }
-    });
+    context.read<AppointmentFlowBloc>().add(GetCareTrackings());
   }
 
-  Widget _buildSuccess() {
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
         key: widget.formKey,
@@ -53,19 +45,17 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
                 label: "Souhaitez-vous lier ce rendez-vous avec votre suivi de dossier ?",
               ),
               const SizedBox(height: 10),
-              if (_careTrackings.isEmpty)
-                const Text(
-                  "Aucun suivi de dossier n'est disponible pour le moment.",
-                ),
-              CareTrackingSelection(
-                controller: _careTrackingController,
-                careTrackings: _careTrackings,
-                required: false,
-                onChange: (item) {
-                  print("Selected care tracking: ${item.label}");
-                  widget.onNext(item.value);
+              BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
+                builder: (context, state) {
+                  return switch (state.getCareTrackingsStatus) {
+                    GetCareTrackingsStatus.initial ||
+                    GetCareTrackingsStatus.loading =>
+                      const OnboardingLoading(),
+                    GetCareTrackingsStatus.success => _buildSuccess(state.careTrackings),
+                    GetCareTrackingsStatus.error => _buildError(),
+                  };
                 },
-              )
+              ),
             ],
           ),
         ),
@@ -73,20 +63,39 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
     );
   }
 
+  Widget _buildSuccess(List<CareTrackingForAppointment> careTrackings) {
+    if (careTrackings.isEmpty) {
+      return const Text(
+        "Aucun suivi de dossier n'est disponible pour le moment.",
+      );
+    }
+    final List<CareTrackingItem> careTrackingItems = [
+      const CareTrackingItem(
+        careTrackingId: '',
+        careTrackingName: 'Ne pas lier',
+      ),
+      ...careTrackings.map(
+        (careTracking) => CareTrackingItem(
+          careTrackingId: careTracking.id,
+          careTrackingName: careTracking.name,
+        ),
+      ),
+    ];
+
+    return CareTrackingSelection(
+      controller: _careTrackingController,
+      careTrackings: careTrackingItems,
+      required: false,
+      onChange: (item) {
+        print('Selected care tracking: ${item.label}');
+        widget.onNext(item.value);
+      },
+    );
+  }
+
   Widget _buildError() {
     return const Center(
       child: Text("Une erreur s'est produite."),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const OnboardingLoading();
-    } else if (_hasError) {
-      return _buildError();
-    } else {
-      return _buildSuccess();
-    }
   }
 }

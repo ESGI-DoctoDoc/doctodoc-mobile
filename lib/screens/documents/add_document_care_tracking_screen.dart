@@ -4,37 +4,40 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/document/write_document_bloc/write_document_bloc.dart';
+import '../../blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
 import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/buttons/primary_button.dart';
 import '../../shared/widgets/inputs/document_type_input.dart';
 
-class AddDocumentScreen extends StatefulWidget {
+class AddDocumentCareTrackingScreen extends StatefulWidget {
   final File file;
-  final String? careTrackingId;
+  final String careTrackingId;
 
-  static const String routeName = '/documents/add';
+  static const String routeName = 'care-tracking/documents/add';
 
-  static void navigateTo(BuildContext context, File file, String? careTrackingId) {
+  static void navigateTo(BuildContext context, File file, String careTrackingId) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => AddDocumentScreen(file: file, careTrackingId: careTrackingId),
+        builder: (context) => AddDocumentCareTrackingScreen(
+          file: file,
+          careTrackingId: careTrackingId,
+        ),
       ),
     );
   }
 
-  const AddDocumentScreen({
+  const AddDocumentCareTrackingScreen({
     super.key,
     required this.file,
-    this.careTrackingId,
+    required this.careTrackingId,
   });
 
   @override
-  State<AddDocumentScreen> createState() => _AddDocumentScreenState();
+  State<AddDocumentCareTrackingScreen> createState() => _AddDocumentCareTrackingScreenState();
 }
 
-class _AddDocumentScreenState extends State<AddDocumentScreen> {
+class _AddDocumentCareTrackingScreenState extends State<AddDocumentCareTrackingScreen> {
   final addDocumentFormKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
@@ -42,7 +45,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WriteDocumentBloc, WriteDocumentState>(
+    return BlocListener<WriteDocumentInCareTrackingBloc, WriteDocumentInCareTrackingState>(
       listenWhen: (previous, current) {
         return previous.uploadStatus != current.uploadStatus;
       },
@@ -187,7 +190,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     );
   }
 
-  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentState state) {
+  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentInCareTrackingState state) {
     if (state.uploadStatus == UploadDocumentStatus.success) {
       Navigator.pop(context);
     } else if (state.uploadStatus == UploadDocumentStatus.error) {
@@ -196,12 +199,13 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
   }
 
   void _onUploadDocument(File file, String filename, String type) {
-    if(addDocumentFormKey.currentState?.validate() != true) {
+    if (addDocumentFormKey.currentState?.validate() != true) {
       showErrorSnackbar(context, 'Veuillez remplir tous les champs correctement.');
       return;
     }
-    context.read<WriteDocumentBloc>().add(
+    context.read<WriteDocumentInCareTrackingBloc>().add(
           OnUploadDocument(
+            id: widget.careTrackingId,
             file: file,
             type: type,
             filename: filename,

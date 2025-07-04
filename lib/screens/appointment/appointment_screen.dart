@@ -117,6 +117,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     },
                   );
                 case 3:
+                  // todo : compare appointmentData.patientData.patientId with local auth data source,
                   return AppointmentStepCareTracking(
                     formKey: forms[3],
                     onEmpty: () {},
@@ -203,6 +204,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         patientId: appointmentData.patientData.patientId,
         medicalConcernId: appointmentData.medicalConcernId!,
         slotId: appointmentData.slotData.slotId,
+        careTrackingId: appointmentData.careTrackingId,
         date: appointmentData.slotData.date,
         time: appointmentData.slotData.time,
         answers: appointmentData.answers.map(

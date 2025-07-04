@@ -7,7 +7,8 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import '../../../blocs/document/display_document_historic_bloc/display_document_historic_bloc.dart';
 import 'base/modal_base.dart';
 
-void showDocumentLogsModal(BuildContext context, String documentId) {
+void showDocumentCareTrackingLogsModal(
+    BuildContext context, String documentId, String careTrackingId) {
   if (Navigator.canPop(context)) {
     Navigator.pop(context);
   }
@@ -17,7 +18,7 @@ void showDocumentLogsModal(BuildContext context, String documentId) {
       return [
         buildModalPage(
           context: context,
-          child: _DocumentLogsWidget(documentId: documentId),
+          child: _DocumentLogsWidget(documentId: documentId, careTrackingId: careTrackingId),
         ),
       ];
     },
@@ -25,10 +26,12 @@ void showDocumentLogsModal(BuildContext context, String documentId) {
 }
 
 class _DocumentLogsWidget extends StatefulWidget {
+  final String careTrackingId;
   final String documentId;
 
   const _DocumentLogsWidget({
     required this.documentId,
+    required this.careTrackingId,
   });
 
   @override
@@ -43,9 +46,10 @@ class _DocumentLogsWidgetState extends State<_DocumentLogsWidget> {
   }
 
   void _onGetDocumentHistoric() {
-    context
-        .read<DisplayDocumentHistoricBloc>()
-        .add(OnGetDocumentTracesInMedicalRecord(id: widget.documentId));
+    context.read<DisplayDocumentHistoricBloc>().add(OnGetDocumentTracesInCareTracking(
+          careTrackingId: widget.careTrackingId,
+          id: widget.documentId,
+        ));
   }
 
   @override

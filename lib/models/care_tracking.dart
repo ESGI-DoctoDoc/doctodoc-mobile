@@ -26,16 +26,27 @@ class AppointmentOfCareTracking {
   }
 }
 
+enum CareTrackingStatus {
+  open,
+  closed,
+}
+
 class CareTracking {
   final String id;
   final String name;
   final String description;
+  final String createdAt;
+  final String closedAt;
+  final CareTrackingStatus status;
   final List<AppointmentOfCareTracking> appointments;
 
   CareTracking({
     required this.id,
     required this.name,
     required this.description,
+    required this.createdAt,
+    required this.closedAt,
+    required this.status,
     required this.appointments,
   });
 
@@ -50,6 +61,9 @@ class CareTracking {
       id: json['id'],
       name: json['name'],
       description: json['description'],
+      createdAt: json['createdAt'],
+      closedAt: json['closedAt'] ?? '',
+      status: json['closedAt'] == null ? CareTrackingStatus.open : CareTrackingStatus.closed,
       appointments: appointments.length > 3 ? appointments.sublist(0, 3) : appointments,
     );
   }
@@ -59,13 +73,13 @@ class CareTrackingDetailed {
   final CareTracking careTracking;
   final List<Doctor> doctors;
   final List<AppointmentOfCareTracking> appointments;
-  final List<Document> documents;
+  List<Document> documents;
 
   CareTrackingDetailed({
     required this.careTracking,
     required this.doctors,
     required this.appointments,
-    required this.documents,
+    this.documents = const [],
   });
 
   factory CareTrackingDetailed.fromJson(Map<String, dynamic> json) {

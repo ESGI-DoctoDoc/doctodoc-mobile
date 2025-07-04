@@ -6,6 +6,8 @@ import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dar
 import 'package:doctodoc_mobile/services/repositories/appointment_flow_repository/appointment_flow_repository.dart';
 import 'package:meta/meta.dart';
 
+import '../../../models/appointment/care_tracking_for_appointment.dart';
+
 part 'appointment_flow_event.dart';
 part 'appointment_flow_state.dart';
 
@@ -16,6 +18,7 @@ class AppointmentFlowBloc extends Bloc<AppointmentFlowEvent, AppointmentFlowStat
     on<GetMedicalConcerns>(_onGetMedicalConcerns);
     on<GetQuestions>(_onGetQuestions);
     on<GetAppointmentsAvailability>(_onGetAppointmentsAvailability);
+    on<GetCareTrackings>(_GetCareTrackings);
   }
 
   Future<void> _onGetMedicalConcerns(
@@ -52,6 +55,25 @@ class AppointmentFlowBloc extends Bloc<AppointmentFlowEvent, AppointmentFlowStat
     } catch (error) {
       emit(state.copyWith(
         getQuestionStatus: GetQuestionStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _GetCareTrackings(GetCareTrackings event, Emitter<AppointmentFlowState> emit) async {
+    try {
+      emit(state.copyWith(getCareTrackingsStatus: GetCareTrackingsStatus.loading));
+
+      List<CareTrackingForAppointment> careTrackings =
+          await appointmentFlowRepository.getCareTrackings();
+
+      emit(state.copyWith(
+        getCareTrackingsStatus: GetCareTrackingsStatus.success,
+        careTrackings: careTrackings,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        getCareTrackingsStatus: GetCareTrackingsStatus.error,
         exception: AppException.from(error),
       ));
     }

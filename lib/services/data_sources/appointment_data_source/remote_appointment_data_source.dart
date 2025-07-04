@@ -21,6 +21,7 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
         "patientId": request.patientId,
         "medicalConcernId": request.medicalConcernId,
         "slotId": request.slotId,
+        "careTrackingId": request.careTrackingId,
         "date": request.date,
         "time": request.time,
         "responses": request.answers

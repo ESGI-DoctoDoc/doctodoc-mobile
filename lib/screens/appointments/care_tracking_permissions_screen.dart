@@ -1,20 +1,12 @@
+import 'package:doctodoc_mobile/blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
+import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DocumentPermission {
-  // todo rename
-  final String id;
-  final String name;
-  final String type;
-  final bool isShared;
-
-  DocumentPermission({
-    required this.id,
-    required this.name,
-    required this.type,
-    required this.isShared,
-  });
-}
+import '../../blocs/care_tracking_detail_blocs/care_tracking_detail_bloc/care_tracking_detail_bloc.dart';
+import '../../models/document.dart';
+import '../../shared/widgets/list_tile/document_list_tile.dart';
 
 class CareTrackingPermissionsScreen extends StatefulWidget {
   static const String routeName = '/appointment/:appointmentId/permissions';
@@ -60,51 +52,28 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const InfoBanner(title: "Tant que vous n'avez pas autorisé le partage de vos documents, ils ne seront pas accessibles aux médecins."),
-                  _buildHeaderEnded(),
+                  const InfoBanner(
+                      title:
+                          "Tant que vous n'avez pas autorisé le partage de vos documents, ils ne seront pas accessibles aux médecins."),
                   _buildHeader(),
-                  ..._buildFiles([
-                    DocumentPermission(id: '1', name: 'Document 1', type: 'PDF', isShared: false),
-                    DocumentPermission(id: '2', name: 'Document 2', type: 'Image', isShared: true),
-                    DocumentPermission(id: '3', name: 'Document 3', type: 'Text', isShared: false),
-                  ]),
+                  BlocBuilder<CareTrackingDetailBloc, CareTrackingDetailState>(
+                    builder: (context, state) {
+                      return switch (state) {
+                        CareTrackingDetailInitial() ||
+                        CareTrackingDetailLoading() =>
+                          const OnboardingLoading(),
+                        CareTrackingDetailError() => _buildError(),
+                        CareTrackingDetailLoaded() =>
+                          Column(children: _buildFiles(state.careTracking.documents)),
+                      };
+                      // return _buildFiles([]);
+                    },
+                  ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeaderEnded() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Autoriser le suivi de dossier à être consulté par les docteurs.',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8.0),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text("J'autorise."),
-            trailing: Transform.scale(
-                scale: 0.75,
-                child: Switch(
-                  value: false, // todo mélissa ajoute ici le suivi de dossier
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      // final isShared = !doc.isShared;
-                      // print("new isShared state: $isShared");
-                    });
-                  },
-                ),
-            )
-          )
-        ],
       ),
     );
   }
@@ -124,31 +93,40 @@ class _CareTrackingPermissionsScreenState extends State<CareTrackingPermissionsS
     );
   }
 
-  List<Widget> _buildFiles(List<DocumentPermission> documents) {
-    // Widget buildFileTile(Document doc) {
-    //   return DocumentListTile(
-    //     title: doc.name,
-    //     trailing: Transform.scale(
-    //       scale: 0.75,
-    //       child: Switch(
-    //         value: doc.isShared,
-    //         onChanged: (bool newValue) {
-    //           setState(() {
-    //             // todo mélissa appel
-    //             final isShared = !doc.isShared;
-    //             print("new isShared state: $isShared");
-    //           });
-    //         },
-    //       ),
-    //     ),
-    //   );
-    // }
+  List<Widget> _buildFiles(List<Document> documents) {
+    Widget buildFileTile(Document doc) {
+      return DocumentListTile(
+        document: doc,
+        trailing: Transform.scale(
+          scale: 0.75,
+          child: Switch(
+            value: doc.isShared,
+            onChanged: (bool newValue) {
+              _onShareDocument(doc);
+            },
+          ),
+        ),
+      );
+    }
 
     return documents.map((doc) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
-        // child: buildFileTile(doc), // todo j'ai commenté
+        child: buildFileTile(doc),
       );
     }).toList();
+  }
+
+  void _onShareDocument(Document doc) {
+    context.read<WriteDocumentInCareTrackingBloc>().add(OnShareDocument(
+          careTrackingId: widget.appointmentId,
+          document: doc,
+        ));
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
+    );
   }
 }

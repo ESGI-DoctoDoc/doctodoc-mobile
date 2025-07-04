@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
-import 'package:file_picker/file_picker.dart';
 
-import '../../../screens/documents/add_document_screen.dart';
+import '../../../screens/documents/add_document_care_tracking_screen.dart';
 import 'base/modal_base.dart';
 
 void showDocumentCareTrackingUploadModal(
@@ -50,7 +50,7 @@ class _DocumentUploadWidget extends StatelessWidget {
 
               if (photo != null) {
                 File file = File(photo.path);
-                AddDocumentScreen.navigateTo(context, file, null);
+                AddDocumentCareTrackingScreen.navigateTo(context, file, careTrackingId);
               } else {
                 print("Photo non prise ou annulée.");
               }
@@ -88,7 +88,7 @@ class _DocumentUploadWidget extends StatelessWidget {
   void handleFileSelection(FilePickerResult? result, BuildContext context) {
     if (result != null && result.files.isNotEmpty) {
       File file = File(result.files.single.path!);
-      AddDocumentScreen.navigateTo(context, file, careTrackingId);
+      AddDocumentCareTrackingScreen.navigateTo(context, file, careTrackingId);
     } else {
       print("No file selected or file selection was cancelled.");
     }

@@ -27,13 +27,14 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
         patientId: event.patientId,
         medicalConcernId: event.medicalConcernId,
         slotId: event.slotId,
+        careTrackingId: event.careTrackingId,
         date: event.date,
         time: event.time,
         answers: event.answers,
       );
 
       String appointmentLockedId = await appointmentRepository.lockedAppointment(request);
-      print(appointmentLockedId);
+
       emit(AppointmentLocked(
         status: AppointmentLockedStatus.success,
         appointmentLockedId: appointmentLockedId,

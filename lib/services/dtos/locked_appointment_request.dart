@@ -5,6 +5,7 @@ class LockedAppointmentRequest {
   final String patientId;
   final String medicalConcernId;
   final String slotId;
+  final String? careTrackingId;
   final String date;
   final String time;
   final List<PreAppointmentAnswers> answers;
@@ -14,6 +15,7 @@ class LockedAppointmentRequest {
     required this.patientId,
     required this.medicalConcernId,
     required this.slotId,
+    required this.careTrackingId,
     required this.date,
     required this.time,
     required this.answers,

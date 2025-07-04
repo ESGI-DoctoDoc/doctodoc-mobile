@@ -5,20 +5,25 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 import '../../blocs/document/display_document_content_bloc/display_document_content_bloc.dart';
 
-class DocumentDetailScreen extends StatefulWidget {
-  static const String routeName = "/documents/:documentId";
+class DocumentCareTrackingDetailScreen extends StatefulWidget {
+  static const String routeName = "/care-tracking/:careTrackingId/documents/:documentId";
 
-  static void navigateTo(BuildContext context, String documentId) {
+  static void navigateTo(BuildContext context, String documentId, careTrackingId) {
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DocumentDetailScreen(documentId: documentId),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => DocumentCareTrackingDetailScreen(
+            documentId: documentId, careTrackingId: careTrackingId),
+      ),
+    );
   }
 
   static Widget routeBuilder(Map<String, dynamic> arguments) {
-    if (arguments['documentId'] is String) {
-      return DocumentDetailScreen(documentId: arguments['documentId']);
+    if (arguments['documentId'] is String && arguments['careTrackingId'] is String) {
+      return DocumentCareTrackingDetailScreen(
+        documentId: arguments['documentId'],
+        careTrackingId: arguments['careTrackingId'],
+      );
     } else {
       return const Scaffold(
         body: Center(
@@ -29,14 +34,19 @@ class DocumentDetailScreen extends StatefulWidget {
   }
 
   final String documentId;
+  final String careTrackingId;
 
-  const DocumentDetailScreen({super.key, required this.documentId});
+  const DocumentCareTrackingDetailScreen({
+    super.key,
+    required this.documentId,
+    required this.careTrackingId,
+  });
 
   @override
-  State<DocumentDetailScreen> createState() => _DocumentDetailScreenState();
+  State<DocumentCareTrackingDetailScreen> createState() => _DocumentCareTrackingDetailScreenState();
 }
 
-class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
+class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingDetailScreen> {
   @override
   void initState() {
     super.initState();
@@ -47,12 +57,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<DisplayDocumentContentBloc, DisplayDocumentContentState>(
       builder: (context, state) {
-        return switch (state.displayDocumentContentOfMedicalRecordStatus) {
-          DisplayDocumentContentOfMedicalRecordStatus.initial ||
-          DisplayDocumentContentOfMedicalRecordStatus.loading =>
+        return switch (state.displayDocumentContentOfCareTrackingStatus) {
+          DisplayDocumentContentOfCareTrackingStatus.initial ||
+          DisplayDocumentContentOfCareTrackingStatus.loading =>
             const SizedBox.shrink(),
-          DisplayDocumentContentOfMedicalRecordStatus.success => _buildSuccess(state.document),
-          DisplayDocumentContentOfMedicalRecordStatus.error => _buildError(),
+          DisplayDocumentContentOfCareTrackingStatus.success => _buildSuccess(state.document),
+          DisplayDocumentContentOfCareTrackingStatus.error => _buildError(),
         };
       },
     );
@@ -81,15 +91,19 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   }
 
   Widget _buildError() {
-    return const Center(
-      child: Text("Une erreur s'est produite."),
+    return const Scaffold(
+      body: Center(
+        child: Text("Une erreur s'est produite."),
+      ),
     );
   }
 
   void _getUrl() {
-    context
-        .read<DisplayDocumentContentBloc>()
-        .add(OnGetContentOnMedicalRecord(id: widget.documentId));
+    print(widget.careTrackingId);
+    context.read<DisplayDocumentContentBloc>().add(OnGetContentOnCareTracking(
+          careTrackingId: widget.careTrackingId,
+          id: widget.documentId,
+        ));
   }
 }
 

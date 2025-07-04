@@ -5,6 +5,7 @@ import 'package:doctodoc_mobile/models/appointment/medical_concern.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_appointment_availability.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
 
+import '../../../models/appointment/care_tracking_for_appointment.dart';
 import '../../data_sources/appointment_flow_data_source/appointment_flow_data_source.dart';
 
 class AppointmentFlowRepository {
@@ -37,6 +38,14 @@ class AppointmentFlowRepository {
     try {
       return await appointmentFlowDataSource.getAppointmentsAvailabilityByMedicalConcernIdAndDate(
           medicalConcernId, date);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
+  Future<List<CareTrackingForAppointment>> getCareTrackings() async {
+    try {
+      return await appointmentFlowDataSource.getCareTrackings();
     } catch (error) {
       throw UnknownException();
     }

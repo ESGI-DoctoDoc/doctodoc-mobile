@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/document/write_document_in_care_tracking_bloc/write_document_in_care_tracking_bloc.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_name_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/document_type_input.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/document/write_document_bloc/write_document_bloc.dart';
 import '../../utils/show_error_snackbar.dart';
 import '../buttons/primary_button.dart';
 import 'base/modal_base.dart';
@@ -20,11 +20,11 @@ class UpdateDocument {
   });
 }
 
-Future<Patient?> showUpdateDocumentModal(
-  BuildContext context,
-  String documentId,
-  String name,
-  String type,
+Future<Patient?> showDocumentCareTrackingUpdateModal(BuildContext context,
+    String documentId,
+    String name,
+    String type,
+    String careTrackingId,
 ) {
   if (Navigator.canPop(context)) {
     Navigator.pop(context);
@@ -40,6 +40,7 @@ Future<Patient?> showUpdateDocumentModal(
             name: name,
             documentId: documentId,
             type: type,
+            careTrackingId: careTrackingId,
           ),
         ),
       ];
@@ -51,11 +52,13 @@ class _UpdateDocumentWidget extends StatefulWidget {
   final String documentId;
   final String name;
   final String type;
+  final String careTrackingId;
 
   const _UpdateDocumentWidget({
     required this.name,
     required this.documentId,
     required this.type,
+    required this.careTrackingId,
   });
 
   @override
@@ -65,7 +68,6 @@ class _UpdateDocumentWidget extends StatefulWidget {
 class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
   final GlobalKey<FormState> updateEmailKey = GlobalKey<FormState>();
 
-  // todo Corentin des erreurs remontent quand on tape dans le champ
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
 
@@ -78,7 +80,7 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WriteDocumentBloc, WriteDocumentState>(
+    return BlocListener<WriteDocumentInCareTrackingBloc, WriteDocumentInCareTrackingState>(
       listenWhen: (previous, current) {
         return previous.updateStatus != current.updateStatus;
       },
@@ -109,7 +111,7 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
     );
   }
 
-  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentState state) {
+  void _uploadDocumentBlocListener(BuildContext context, WriteDocumentInCareTrackingState state) {
     if (state.updateStatus == UpdateDocumentStatus.success) {
       Navigator.pop(context);
     } else if (state.updateStatus == UpdateDocumentStatus.error) {
@@ -119,8 +121,10 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
 
   void _updateDocument() {
     if (updateEmailKey.currentState!.validate()) {
-      context.read<WriteDocumentBloc>().add(
+      //todo mélissa care tracking
+      context.read<WriteDocumentInCareTrackingBloc>().add(
             OnUpdateDocument(
+              careTrackingId: widget.careTrackingId,
               id: widget.documentId,
               type: _typeController.text,
               filename: _nameController.text,

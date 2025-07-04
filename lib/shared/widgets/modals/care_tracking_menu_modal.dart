@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/shared/widgets/modals/show_document_care_tracking_upload_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -44,7 +45,12 @@ class _CareTrackingMenuWidget extends StatelessWidget {
           ListTile(
               title: const Text('Ajouter un document'),
               leading: const Icon(Icons.attach_file),
-              onTap: () {}),
+              onTap: () {
+                showDocumentCareTrackingUploadModal(
+                  context,
+                  careTrackingId: careTrackingId,
+                );
+              }),
         ],
       ),
     );
