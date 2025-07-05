@@ -7,6 +7,7 @@ class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
   static const _userOnBoardingStatusKey = 'user_on_boarding_status';
   static const _userTwoFactorStatusKey = 'user_two_factor_status';
   static const _userPatientId = 'user_patient_id';
+  static const _userTokenFcm = 'user_token_fcm';
 
   @override
   Future<void> saveToken(String token) async {
@@ -58,11 +59,24 @@ class SharedPreferencesAuthDataSource implements LocalAuthDataSource {
     await preferences.remove(_userTwoFactorStatusKey);
     await preferences.remove(_userOnBoardingStatusKey);
     await preferences.remove(_userPatientId);
+    await preferences.remove(_userTokenFcm);
   }
 
   @override
   Future<String?> retrieveUserPatientId() async {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getString(_userPatientId) ?? '';
+  }
+
+  @override
+  Future<String?> retrieveUserFcmToken() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getString(_userTokenFcm);
+  }
+
+  @override
+  Future<void> saveFcmToken(String fcmToken) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(_userTokenFcm, fcmToken);
   }
 }

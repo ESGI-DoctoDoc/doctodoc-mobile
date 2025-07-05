@@ -39,4 +39,14 @@ class RemoteUserDataSource implements UserDataSource {
 
     return Patient.fromJson(response.data["data"]);
   }
+
+  @override
+  Future<void> saveFcmToken(String fcmToken) async {
+    await dio.put(
+      "/patients/user/token-fcm",
+      data: {
+        "token": fcmToken,
+      },
+    );
+  }
 }

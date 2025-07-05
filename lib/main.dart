@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_detail_bloc/appointment_detail_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
 import 'package:doctodoc_mobile/blocs/care_tracking_detail_blocs/care_tracking_detail_bloc/care_tracking_detail_bloc.dart';
@@ -46,8 +48,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'dart:io';
-
 import 'blocs/appointment_blocs/appointment_bloc/appointment_bloc.dart';
 import 'blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'blocs/auth_bloc/auth_bloc.dart';
@@ -65,14 +65,9 @@ import 'layout/main_layout.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
-    //todo mélissa déplacer ce bout de code et l'activer dés qu'il est connecté (et une fois)
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
-    final notificationService = NotificationService();
-    await notificationService.initFCM();
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   await dotenv.load(fileName: ".env");
@@ -233,9 +228,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => UserBloc(
-              userRepository: context.read<UserRepository>(),
-              closeMemberRepository: context.read<CloseMemberRepository>(),
-            ),
+                userRepository: context.read<UserRepository>(),
+                closeMemberRepository: context.read<CloseMemberRepository>(),
+                notificationService: NotificationService(
+                  localAuthDataSource: SharedPreferencesAuthDataSource(),
+                  userRepository: context.read<UserRepository>(),
+                )),
           ),
           BlocProvider(
             create: (context) => WriteUserBloc(
@@ -371,5 +369,6 @@ class MyApp extends StatelessWidget {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Background message received: ${message.notification?.title} - ${message.notification?.body}");
+  print(
+      "Background message received: ${message.notification?.title} - ${message.notification?.body}");
 }

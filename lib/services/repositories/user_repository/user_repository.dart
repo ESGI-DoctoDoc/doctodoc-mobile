@@ -58,6 +58,14 @@ class UserRepository {
     }
   }
 
+  Future<void> saveFcmToken(String fcmToken) async {
+    try {
+      await userDataSource.saveFcmToken(fcmToken);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
   dispose() {
     _userRepositoryEventController.close();
   }

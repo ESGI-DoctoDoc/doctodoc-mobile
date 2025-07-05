@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/patient.dart';
+import 'package:doctodoc_mobile/services/notification_service.dart';
 import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/close_member_repository/close_member_repository_event.dart';
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository_event.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
 
 import '../../../models/user.dart';
@@ -16,6 +18,7 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepository userRepository;
+  final NotificationService notificationService;
   final CloseMemberRepository closeMemberRepository;
 
   late StreamSubscription _closeMemberRepositoryEventSubscription;
@@ -23,6 +26,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc({
     required this.userRepository,
+    required this.notificationService,
     required this.closeMemberRepository,
   }) : super(UserInitial()) {
     on<OnUserLoadedBasicInfos>(_onUserLoadedBasicInfos);
@@ -67,7 +71,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       OnUserLoadedBasicInfos event, Emitter<UserState> emit) async {
     try {
       emit(UserLoading());
+      await notificationService.initFCM();
       final user = await userRepository.getUser();
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       emit(UserLoaded(user));
     } catch (error) {
       emit(UserError(exception: AppException.from(error)));
@@ -176,4 +182,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     _userRepositoryEventSubscription.cancel();
     return super.close();
   }
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('here');
+  print(
+      "Background message received: ${message.notification?.title} - ${message.notification?.body}");
 }

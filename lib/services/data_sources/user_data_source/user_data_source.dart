@@ -9,4 +9,6 @@ abstract class UserDataSource {
   Future<List<Patient>> getUserCloseMembers(String userPatientId);
 
   Future<Patient> updateProfile(UpdateProfileRequest request);
+
+  Future<void> saveFcmToken(String fcmToken);
 }

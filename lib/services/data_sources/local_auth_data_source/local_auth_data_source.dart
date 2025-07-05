@@ -16,4 +16,8 @@ abstract class LocalAuthDataSource {
   Future<void> reset();
 
   Future<String?> retrieveUserPatientId();
+
+  Future<String?> retrieveUserFcmToken();
+
+  Future<void> saveFcmToken(String fcmToken);
 }

@@ -1,20 +1,40 @@
-import 'package:flutter/material.dart';
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
+import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/local_auth_data_source.dart';
+import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class NotificationService {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
+  final LocalAuthDataSource localAuthDataSource;
+  final UserRepository userRepository;
+
+  NotificationService({
+    required this.localAuthDataSource,
+    required this.userRepository,
+  });
+
   initFCM() async {
     await _firebaseMessaging.requestPermission();
 
-    final fcmToken = await _firebaseMessaging.getToken();
-    if (fcmToken != null) {
-      print("FCM Token: $fcmToken");
-    } else {
-      print("Failed to get FCM token");
+    String? userTokenFcm = await localAuthDataSource.retrieveUserFcmToken();
+
+    if (userTokenFcm == null) {
+      final fcmToken = await _firebaseMessaging.getToken();
+      if (fcmToken != null) {
+        print("Create new FCM Token: $fcmToken");
+        try {
+          await userRepository.saveFcmToken(fcmToken);
+          await localAuthDataSource.saveFcmToken(fcmToken);
+        } catch (error) {
+          print("Failed to save FCM token");
+        }
+      } else {
+        print("Failed to get FCM token");
+      }
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
