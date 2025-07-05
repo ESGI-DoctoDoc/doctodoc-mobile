@@ -369,6 +369,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Background message received: ${message.notification?.title} - ${message.notification?.body}");
 }
