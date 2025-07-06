@@ -28,8 +28,10 @@ class DisplayDoctorBloc extends Bloc<DisplayDoctorEvent, DisplayDoctorState> {
       String name = event.name;
       String speciality = event.speciality;
       String languages = event.languages;
+      bool valid = event.valid;
 
-      List<Doctor> doctors = await searchRepository.searchDoctor(name, speciality, languages, page);
+      List<Doctor> doctors =
+          await searchRepository.searchDoctor(name, speciality, languages, valid, page);
 
       bool isLoadingMore = doctors.isEmpty || doctors.length < 10 ? false : true;
 
@@ -66,7 +68,10 @@ class DisplayDoctorBloc extends Bloc<DisplayDoctorEvent, DisplayDoctorState> {
       String name = event.name;
       String speciality = event.speciality;
       String languages = event.languages;
-      List<Doctor> doctors = await searchRepository.searchDoctor(name, speciality, languages, page);
+      bool valid = event.valid;
+
+      List<Doctor> doctors =
+          await searchRepository.searchDoctor(name, speciality, languages, valid, page);
 
       oldDoctors.addAll(doctors);
       bool isLoadingMore = doctors.isEmpty ? false : true;

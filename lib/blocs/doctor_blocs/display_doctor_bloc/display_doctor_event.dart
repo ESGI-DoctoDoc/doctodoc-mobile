@@ -7,11 +7,13 @@ class OnGetInitialSearchDoctor extends DisplayDoctorEvent {
   final String name;
   final String speciality;
   final String languages;
+  final bool valid;
 
   OnGetInitialSearchDoctor({
     required this.name,
     required this.speciality,
     required this.languages,
+    this.valid = true,
   });
 }
 
@@ -19,10 +21,12 @@ class OnGetNextSearchDoctor extends DisplayDoctorEvent {
   final String name;
   final String speciality;
   final String languages;
+  final bool valid;
 
   OnGetNextSearchDoctor({
     required this.name,
     required this.speciality,
     required this.languages,
+    this.valid = true,
   });
 }
