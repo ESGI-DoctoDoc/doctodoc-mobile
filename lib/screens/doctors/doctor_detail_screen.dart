@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor_detailed.dart';
 import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
@@ -40,6 +41,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   void initState() {
     super.initState();
     _onLoadDoctorDetail();
+    _onLoadMedicalConcern();
   }
 
   @override
@@ -118,30 +120,58 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 top: 20,
                 right: 5,
                 child: SafeArea(
-                child: (true) //todo mélissa il faut ajouter les motifs de consulations
-                    ? IconButton(
-                        icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
-                        onPressed: () {
-                          final doctor = AppointmentFlowDoctorData(
-                            doctorId: widget.doctorId,
-                            firstName: doctorDetailed.basicInformation.firstName,
-                            lastName: doctorDetailed.basicInformation.lastName,
-                            pictureUrl: doctorDetailed.basicInformation.pictureUrl,
-                            address: AppointmentFlowAddressData(
-                              latitude: doctorDetailed.address.latitude,
-                              longitude: doctorDetailed.address.longitude,
-                            ),
-                          );
-                          AppointmentScreen.navigateTo(context, doctor);
-                        },
-                      )
-                    : const SizedBox.shrink(),
+                  child: BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
+                    builder: (context, state) {
+                      return switch (state.getMedicalConcernsStatus) {
+                        GetMedicalConcernsStatus.initial ||
+                        GetMedicalConcernsStatus.loading =>
+                          _buildLoadingWhenGetMedicalConcern(),
+                        GetMedicalConcernsStatus.success => state.medicalConcerns.isNotEmpty
+                            ? _buildWhenHaveMedicalConcern(doctorDetailed)
+                            : const SizedBox.shrink(),
+                        GetMedicalConcernsStatus.error => _buildErrorWhenGetMedicalConcern(),
+                      };
+                    },
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildErrorWhenGetMedicalConcern() {
+    return IconButton(
+      icon: const Icon(Icons.error_outline, size: 26, color: Colors.red),
+      onPressed: () {},
+    );
+  }
+
+  Widget _buildLoadingWhenGetMedicalConcern() {
+    return IconButton(
+      icon: const Icon(Icons.downloading, size: 26, color: Colors.yellow),
+      onPressed: () {},
+    );
+  }
+
+  IconButton _buildWhenHaveMedicalConcern(DoctorDetailed doctorDetailed) {
+    return IconButton(
+      icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
+      onPressed: () {
+        final doctor = AppointmentFlowDoctorData(
+          doctorId: widget.doctorId,
+          firstName: doctorDetailed.basicInformation.firstName,
+          lastName: doctorDetailed.basicInformation.lastName,
+          pictureUrl: doctorDetailed.basicInformation.pictureUrl,
+          address: AppointmentFlowAddressData(
+            latitude: doctorDetailed.address.latitude,
+            longitude: doctorDetailed.address.longitude,
+          ),
+        );
+        AppointmentScreen.navigateTo(context, doctor);
+      },
     );
   }
 
@@ -410,5 +440,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   _onLoadDoctorDetail() {
     final doctorDetailedBloc = context.read<DoctorDetailBloc>();
     doctorDetailedBloc.add(OnGetDoctorDetail(id: widget.doctorId));
+  }
+
+  _onLoadMedicalConcern() {
+    final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
+    appointmentFlowBloc.add(GetMedicalConcerns(doctorId: widget.doctorId));
   }
 }
