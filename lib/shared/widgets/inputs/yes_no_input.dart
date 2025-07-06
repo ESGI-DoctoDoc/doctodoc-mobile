@@ -8,11 +8,13 @@ class YesNoInput extends StatelessWidget {
     InputChoiceItem(label: "Non", value: "no"),
   ];
   final bool? required;
+  final Function(InputChoiceItem)? onChange;
 
   const YesNoInput({
     super.key,
     required this.controller,
     this.required = true,
+    this.onChange,
   });
 
   @override
@@ -21,7 +23,11 @@ class YesNoInput extends StatelessWidget {
       controller: controller,
       items: items,
       required: required,
-      onChange: (value) {},
+      onChange: (value) {
+        if (onChange != null) {
+          onChange!(value);
+        }
+      },
     );
   }
 }

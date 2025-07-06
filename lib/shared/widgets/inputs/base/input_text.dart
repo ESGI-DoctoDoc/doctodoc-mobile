@@ -96,7 +96,7 @@ class _InputTextState extends State<InputText> {
           });
 
           if (widget.onChange != null) {
-            widget.onChange!();
+            widget.onChange!(value);
           }
         },
       ),

@@ -5,6 +5,8 @@ import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_text.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/yes_no_input.dart';
 import 'package:flutter/material.dart';
 
+import 'base/input_choice.dart';
+
 class DoctorQuestion {
   final MedicalConcernQuestionType type;
   final String questionId;
@@ -71,7 +73,16 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
                   ? '${widget.question.question} *'
                   : widget.question.question,
             ),
-            YesNoInput(controller: widget.controller, required: widget.question.required),
+            YesNoInput(
+              controller: widget.controller,
+              required: widget.question.required,
+              onChange: (InputChoiceItem value) {
+                widget.question.onChange(InputSelectionItem(
+                  label: value.label,
+                  value: value.value,
+                ));
+              },
+            ),
           ],
         );
       case MedicalConcernQuestionType.text:
@@ -87,6 +98,12 @@ class _DoctorQuestionInputState extends State<DoctorQuestionInput> {
               label: "",
               placeholder: widget.question.question,
               required: widget.question.required,
+              onChange: (String value) {
+                widget.question.onChange(InputSelectionItem(
+                  label: value,
+                  value: value,
+                ));
+              },
             ),
           ],
         );
