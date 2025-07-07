@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 
@@ -18,5 +20,14 @@ class RemoteReferentDoctorDataSource implements ReferentDoctorDataSource {
     } else {
       return Doctor.fromJson(response.data["data"]);
     }
+  }
+
+  @override
+  Future<Doctor> set(String doctorId) async {
+    final response = await dio.post("/patients/referent-doctor",
+        data: jsonEncode({
+          "doctorId": doctorId,
+        }));
+    return Doctor.fromJson(response.data["data"]);
   }
 }

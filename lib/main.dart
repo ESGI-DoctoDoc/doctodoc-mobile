@@ -12,6 +12,7 @@ import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_recruitment_bloc/docto
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_bloc/display_medical_record_documents_bloc.dart';
 import 'package:doctodoc_mobile/blocs/medical_record/display_medical_record_documents_type_bloc/display_medical_record_documents_type_bloc.dart';
 import 'package:doctodoc_mobile/blocs/referent_doctor_blocs/display_referent_doctor_bloc/display_referent_doctor_bloc.dart';
+import 'package:doctodoc_mobile/blocs/referent_doctor_blocs/write_referent_doctor_bloc/write_referent_doctor_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/firebase_options.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
@@ -363,6 +364,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => DisplayReferentDoctorBloc(
+              referentDoctorRepository: context.read<ReferentDoctorRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => WriteReferentDoctorBloc(
               referentDoctorRepository: context.read<ReferentDoctorRepository>(),
             ),
           ),
