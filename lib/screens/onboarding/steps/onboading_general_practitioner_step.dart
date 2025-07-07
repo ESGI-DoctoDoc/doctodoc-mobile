@@ -210,6 +210,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
       name: _name,
       speciality: _speciality,
       languages: '',
+      valid: false,
     ));
   }
 
@@ -219,6 +220,7 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
       name: _name,
       speciality: _speciality,
       languages: '',
+      valid: false,
     ));
   }
 }

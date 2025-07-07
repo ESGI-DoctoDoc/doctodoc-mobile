@@ -10,10 +10,10 @@ class SearchRepository {
     required this.searchDataSource,
   });
 
-  Future<List<Doctor>> searchDoctor(
-      String name, String speciality, String languages, int page) async {
+  Future<List<Doctor>> searchDoctor(String name, String speciality, String languages, bool valid,
+      int page) async {
     try {
-      return await searchDataSource.searchDoctor(name, speciality, languages, page);
+      return await searchDataSource.searchDoctor(name, speciality, languages, valid, page);
     } catch (error) {
       throw AuthException.from(error);
     }

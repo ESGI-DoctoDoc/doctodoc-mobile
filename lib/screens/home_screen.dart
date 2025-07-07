@@ -1,3 +1,4 @@
+import 'package:doctodoc_mobile/blocs/appointment_blocs/display_appointments_bloc/display_appointments_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/models/speciality.dart';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _onLoadSpecialities();
     _onGetMostRecentUpComingAppointmentBloc();
+    _onGetMostRecentPastAppointmentsBloc();
   }
 
   @override
@@ -148,11 +150,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const ListTitle(title: "Historique"),
-                    ListTileBase(
-                      title: "Aucun rendez-vous récent.",
-                      leading: const Icon(Icons.history_outlined),
-                      onTap: () {},
-                    ),
+                    BlocBuilder<DisplayAppointmentsBloc, DisplayAppointmentsState>(
+                        builder: (context, state) {
+                      return switch (state.status) {
+                        DisplayAppointmentsStatus.initial ||
+                        DisplayAppointmentsStatus.initialLoading ||
+                        DisplayAppointmentsStatus.loading =>
+                          const SizedBox.shrink(),
+                        DisplayAppointmentsStatus.success =>
+                          _buildMostRecentPastAppointments(state.appointments),
+                        DisplayAppointmentsStatus.error => _buildErrorForMostRecentUpComing(),
+                      };
+                    }),
                     // const DoctorListTile(),
                     const SizedBox(height: 8),
                     // const DoctorListTile(),
@@ -164,6 +173,30 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildMostRecentPastAppointments(List<Appointment> appointments) {
+    if (appointments.isEmpty) {
+      return ListTileBase(
+        title: "Aucun rendez-vous récent.",
+        leading: const Icon(Icons.history_outlined),
+        onTap: () {},
+      );
+    } else {
+      List<Appointment> firstThreeAppointments =
+          appointments.length >= 3 ? appointments.sublist(0, 3) : appointments;
+
+      List<Widget> appointmentWidgets = firstThreeAppointments
+          .map((appointment) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: AppointmentCard(appointment: appointment),
+              ))
+          .toList();
+
+      return Column(
+        children: appointmentWidgets,
+      );
+    }
   }
 
   Widget _buildMostRecentUpComingAppointment(Appointment? appointment) {
@@ -283,6 +316,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onGetMostRecentUpComingAppointmentBloc() {
     context.read<MostRecentUpcomingAppointmentBloc>().add(OnGet());
+  }
+
+  void _onGetMostRecentPastAppointmentsBloc() {
+    context.read<DisplayAppointmentsBloc>().add(OnGetInitialPast());
   }
 
   void _logoutUser(BuildContext context) {
