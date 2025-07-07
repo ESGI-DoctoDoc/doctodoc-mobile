@@ -16,7 +16,7 @@ abstract class AppointmentDataSource {
 
   Future<AppointmentDetailed> getById(String id);
 
-  Future<void> cancel(String id);
+  Future<void> cancel(String id, String reason);
 
   Future<Appointment> getMostRecentUpComingAppointment();
 }

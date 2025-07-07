@@ -123,8 +123,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
             label: "Annuler le rendez-vous",
             onTap: () async {
               final reason = await showReasonSelectionModal(context);
-              if(reason != null) {
-                _onCancelAppointment();
+              if (reason != null) {
+                _onCancelAppointment(reason);
               }
             },
           ),
@@ -132,8 +132,11 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
-  void _onCancelAppointment() {
-    context.read<AppointmentBloc>().add(OnCancelAppointment(id: widget.appointmentId));
+  void _onCancelAppointment(String reason) {
+    context.read<AppointmentBloc>().add(OnCancelAppointment(
+          id: widget.appointmentId,
+          reason: reason,
+        ));
     Navigator.of(context).pop();
   }
 

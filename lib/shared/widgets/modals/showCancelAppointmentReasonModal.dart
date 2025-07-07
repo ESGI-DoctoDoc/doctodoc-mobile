@@ -34,12 +34,18 @@ class _ReasonSelectionWidget extends StatefulWidget {
 
 class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
   final List<InputDropdownItem> reasons = [
-    InputDropdownItem(label: "Je ne suis plus disponible à ce créneau", value: "not_available"),
-    InputDropdownItem(label: "J’ai obtenu un rendez-vous plus tôt ailleurs", value: "earlier_appointment_elsewhere"),
-    InputDropdownItem(label: "Mon état de santé s’est amélioré", value: "health_improved"),
-    InputDropdownItem(label: "Je veux reporter mon rendez-vous", value: "reschedule"),
-    InputDropdownItem(label: "Je ne peux pas me déplacer", value: "cannot_travel"),
-    InputDropdownItem(label: "Rendez-vous pris par erreur", value: "mistaken_booking"),
+    InputDropdownItem(
+        label: "Je ne suis plus disponible à ce créneau",
+        value: "Je ne suis plus disponible à ce créneau"),
+    InputDropdownItem(
+        label: "J’ai obtenu un rendez-vous plus tôt ailleurs",
+        value: "J’ai obtenu un rendez-vous plus tôt ailleurs"),
+    InputDropdownItem(
+        label: "Mon état de santé s’est amélioré", value: "Mon état de santé s’est amélioré"),
+    InputDropdownItem(
+        label: "Je veux reporter mon rendez-vous", value: "Je veux reporter mon rendez-vous"),
+    InputDropdownItem(label: "Je ne peux pas me déplacer", value: "Je ne peux pas me déplacer"),
+    InputDropdownItem(label: "Rendez-vous pris par erreur", value: "Rendez-vous pris par erreur"),
   ];
 
   @override

@@ -31,8 +31,10 @@ class OnConfirmAppointment extends AppointmentEvent {}
 
 class OnCancelAppointment extends AppointmentEvent {
   final String id;
+  final String reason;
 
   OnCancelAppointment({
     required this.id,
+    required this.reason,
   });
 }

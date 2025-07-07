@@ -85,9 +85,9 @@ class AppointmentRepository {
     }
   }
 
-  Future<void> cancel(String id) async {
+  Future<void> cancel(String id, String reason) async {
     try {
-      await appointmentDataSource.cancel(id);
+      await appointmentDataSource.cancel(id, reason);
       _appointmentRepositoryEventController.add(CancelAppointmentEvent(id: id));
     } catch (error) {
       throw UnknownException();

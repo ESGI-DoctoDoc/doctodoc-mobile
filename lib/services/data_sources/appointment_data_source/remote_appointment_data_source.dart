@@ -80,7 +80,12 @@ class RemoteAppointmentDataSource implements AppointmentDataSource {
   }
 
   @override
-  Future<void> cancel(String id) async {
-    await dio.delete("/patients/appointments/cancel/$id");
+  Future<void> cancel(String id, String reason) async {
+    await dio.delete("/patients/appointments/cancel/$id",
+        data: jsonEncode(
+          {
+            "reason": reason,
+          },
+        ));
   }
 }

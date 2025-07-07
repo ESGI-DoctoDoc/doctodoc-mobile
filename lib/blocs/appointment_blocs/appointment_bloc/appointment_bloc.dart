@@ -91,7 +91,7 @@ class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentState> {
       OnCancelAppointment event, Emitter<AppointmentState> emit) async {
     try {
       emit(AppointmentCancel(status: AppointmentCancelStatus.loading));
-      appointmentRepository.cancel(event.id);
+      appointmentRepository.cancel(event.id, event.reason);
       emit(AppointmentCancel(status: AppointmentCancelStatus.success));
     } catch (error) {
       emit(AppointmentCancel(
