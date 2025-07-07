@@ -1,6 +1,8 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/display_appointments_bloc/display_appointments_bloc.dart';
 import 'package:doctodoc_mobile/blocs/appointment_blocs/most_recent_upcoming_appointment_bloc/most_recent_upcoming_appointment_bloc.dart';
+import 'package:doctodoc_mobile/blocs/referent_doctor_blocs/display_referent_doctor_bloc/display_referent_doctor_bloc.dart';
 import 'package:doctodoc_mobile/models/appointment/appointment.dart';
+import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:doctodoc_mobile/models/speciality.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/doctors/doctor_search_screen.dart';
@@ -45,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _onLoadSpecialities();
     _onGetMostRecentUpComingAppointmentBloc();
+    _onLoadReferentDoctor();
     _onGetMostRecentPastAppointmentsBloc();
   }
 
@@ -152,7 +155,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    ..._buildMyDoctorSection(),
+                    BlocBuilder<DisplayReferentDoctorBloc, DisplayReferentDoctorState>(
+                      builder: (context, state) {
+                        return switch (state) {
+                          ReferentDoctorInitial() ||
+                          ReferentDoctorLoading() =>
+                            const SizedBox.shrink(),
+                          ReferentDoctorEmpty() => Column(
+                              children: _buildMyDoctorSectionEmpty(),
+                            ),
+                          ReferentDoctorLoaded() => Column(
+                              children: _buildMyDoctorSection(state.doctor),
+                            ),
+                          _ => _buildError(),
+                        };
+                      },
+                    ),
 
                     const ListTitle(title: "Historique"),
                     BlocBuilder<DisplayAppointmentsBloc, DisplayAppointmentsState>(
@@ -178,53 +196,45 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<Widget> _buildMyDoctorSection() {
-    final hasGeneralDoctor = false;
-    //todo mélissa add
-    if (hasGeneralDoctor) {
-      return [
-        const SizedBox(height: 20),
-        ListTitle(
-          title: "Mon médecin traitant",
-          trailing: hasGeneralDoctor ? "Modifier" : null,
-          onTrailingTap: () {
-            if (hasGeneralDoctor) {
-              SaveGeneralDoctor.navigateTo(context);
-            }
+  List<Widget> _buildMyDoctorSection(Doctor doctor) {
+    return [
+      const SizedBox(height: 20),
+      ListTitle(
+        title: "Mon médecin traitant",
+        trailing: "Modifier",
+        onTrailingTap: () {
+          SaveGeneralDoctor.navigateTo(context);
+        },
+      ),
+      DoctorListTile(
+        doctor: doctor,
+        trailing: IconButton(
+          icon: const Icon(Icons.chevron_right),
+          onPressed: () {
+            DoctorDetailScreen.navigateTo(context, doctor.id);
           },
         ),
-        /*return [
-        const SizedBox(height: 20),
-        const ListTitle(title: "Mon médecin traitant"),
-        DoctorListTile(
-          doctor: ,
-          trailing: IconButton(
-            icon: const Icon(Icons.chevron_right),
-            onPressed: () {
-              DoctorDetailScreen.navigateTo(context, doctor.id);
-            },
-          ),
+      ),
+      const SizedBox(height: 20),
+    ];
+  }
+
+  List<Widget> _buildMyDoctorSectionEmpty() {
+    return [
+      const SizedBox(height: 20),
+      const ListTitle(title: "Mon médecin traitant"),
+      ListTileBase(
+        title: "Ajouter un médecin traitant",
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: const Icon(Icons.add),
         ),
-        const SizedBox(height: 20),
-      ]; */
-      ];
-    } else {
-      return [
-        const SizedBox(height: 20),
-        const ListTitle(title: "Mon médecin traitant"),
-        ListTileBase(
-          title: "Ajouter un médecin traitant",
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: const Icon(Icons.add),
-          ),
-          onTap: () {
-            SaveGeneralDoctor.navigateTo(context);
-          },
-        ),
-        const SizedBox(height: 20)
-      ];
-    }
+        onTap: () {
+          SaveGeneralDoctor.navigateTo(context);
+        },
+      ),
+      const SizedBox(height: 20)
+    ];
   }
 
   Widget _buildMostRecentPastAppointments(List<Appointment> appointments) {
@@ -368,6 +378,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onGetMostRecentUpComingAppointmentBloc() {
     context.read<MostRecentUpcomingAppointmentBloc>().add(OnGet());
+  }
+
+  void _onLoadReferentDoctor() {
+    context.read<DisplayReferentDoctorBloc>().add(OnGetReferentDoctor());
   }
 
   void _onGetMostRecentPastAppointmentsBloc() {
