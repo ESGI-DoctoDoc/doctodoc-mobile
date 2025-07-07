@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../shared/widgets/buttons/primary_button.dart';
+import '../../shared/widgets/modals/showReportDoctorModal.dart';
 import '../appointment/types/appointment_flow_doctor_data.dart';
 
 class DoctorDetailScreen extends StatefulWidget {
@@ -121,22 +123,31 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 top: 20,
                 right: 5,
                 child: SafeArea(
-                  child: BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
-                    builder: (context, state) {
-                      return switch (state.getMedicalConcernsStatus) {
-                        GetMedicalConcernsStatus.initial ||
-                        GetMedicalConcernsStatus.loading =>
-                          _buildLoadingWhenGetMedicalConcern(),
-                        GetMedicalConcernsStatus.success => state.medicalConcerns.isNotEmpty
-                            ? _buildWhenHaveMedicalConcern(doctorDetailed)
-                            : const SizedBox.shrink(),
-                        GetMedicalConcernsStatus.error => _buildErrorWhenGetMedicalConcern(),
-                      };
+                  child: IconButton(
+                    icon: const Icon(Icons.report_outlined, size: 26, color: Colors.black),
+                    onPressed: () {
+                      final reason = showReportDoctorModal(context);
+                      if(reason != null) {
+                        //todo mélissa add
+                      }
                     },
                   ),
                 ),
               ),
             ],
+          ),
+          bottomNavigationBar: BlocBuilder<AppointmentFlowBloc, AppointmentFlowState>(
+            builder: (context, state) {
+              return switch (state.getMedicalConcernsStatus) {
+                GetMedicalConcernsStatus.initial ||
+                GetMedicalConcernsStatus.loading =>
+                  _buildLoadingWhenGetMedicalConcern(),
+                GetMedicalConcernsStatus.success => state.medicalConcerns.isNotEmpty
+                    ? _buildWhenHaveMedicalConcern(doctorDetailed)
+                    : const SizedBox.shrink(),
+                GetMedicalConcernsStatus.error => _buildErrorWhenGetMedicalConcern(),
+              };
+            },
           ),
         ),
       ),
@@ -157,22 +168,25 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     );
   }
 
-  IconButton _buildWhenHaveMedicalConcern(DoctorDetailed doctorDetailed) {
-    return IconButton(
-      icon: const Icon(Icons.calendar_month_outlined, size: 26, color: Colors.black),
-      onPressed: () {
-        final doctor = AppointmentFlowDoctorData(
-          doctorId: widget.doctorId,
-          firstName: doctorDetailed.basicInformation.firstName,
-          lastName: doctorDetailed.basicInformation.lastName,
-          pictureUrl: doctorDetailed.basicInformation.pictureUrl,
-          address: AppointmentFlowAddressData(
-            latitude: doctorDetailed.address.latitude,
-            longitude: doctorDetailed.address.longitude,
-          ),
-        );
-        AppointmentScreen.navigateTo(context, doctor);
-      },
+  Widget _buildWhenHaveMedicalConcern(DoctorDetailed doctorDetailed) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: PrimaryButton(
+        label: 'Prendre rendez-vous',
+        onTap: () {
+          final doctor = AppointmentFlowDoctorData(
+            doctorId: widget.doctorId,
+            firstName: doctorDetailed.basicInformation.firstName,
+            lastName: doctorDetailed.basicInformation.lastName,
+            pictureUrl: doctorDetailed.basicInformation.pictureUrl,
+            address: AppointmentFlowAddressData(
+              latitude: doctorDetailed.address.latitude,
+              longitude: doctorDetailed.address.longitude,
+            ),
+          );
+          AppointmentScreen.navigateTo(context, doctor);
+        },
+      ),
     );
   }
 
