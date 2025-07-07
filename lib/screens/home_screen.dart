@@ -3,6 +3,7 @@ import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/models/speciality.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/doctors/doctor_search_screen.dart';
+import 'package:doctodoc_mobile/screens/notifications/notifications_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +77,21 @@ class _HomeScreenState extends State<HomeScreen> {
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: const Text('Doctodoc'),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: const Text('Doctodoc'),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications_none_outlined),
+                    onPressed: () {
+                      NotificationsScreen.navigateTo(context);
+                    },
+                  ),
+                ],
+              ),
               background: Container(
                 color: Color(0xFFEFEFEF),
               ),

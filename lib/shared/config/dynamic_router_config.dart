@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/screens/documents/document_care_tracking_detail_
 import 'package:doctodoc_mobile/screens/medicals/medical_details_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_documents_type_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_documents_type_screen.dart';
+import 'package:doctodoc_mobile/screens/notifications/notifications_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,7 @@ class DynamicRouterConfig {
     AppointmentDetailScreen.routeName: (args) => AppointmentDetailScreen.routeBuilder(args),
     CareTrackingPermissionsScreen.routeName: (args) => CareTrackingPermissionsScreen.routeBuilder(args),
     DocumentCareTrackingDetailScreen.routeName: (args) => DocumentCareTrackingDetailScreen.routeBuilder(args),
+    NotificationsScreen.routeName: (args) => const NotificationsScreen(),
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
