@@ -54,6 +54,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
             automaticallyImplyLeading: false,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: const Text('Documents'),
               background: Container(
                 color: Color(0xFFEFEFEF),

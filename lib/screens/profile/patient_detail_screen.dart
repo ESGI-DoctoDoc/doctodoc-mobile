@@ -7,7 +7,6 @@ import '../../blocs/close_member_blocs/display_detail_close_member_bloc/display_
 import '../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../../shared/widgets/modals/confirm_modal.dart';
 import '../../shared/widgets/modals/update_patient_modal.dart';
-import '../medicals/medical_patient_details_screen.dart';
 
 class PatientDetailsScreen extends StatefulWidget {
   final String patientId;
@@ -85,6 +84,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
               automaticallyImplyLeading: false,
               expandedHeight: 100.0,
               flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,

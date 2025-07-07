@@ -51,6 +51,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
             automaticallyImplyLeading: false,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: const Text('Rendez-vous'),
               background: Container(
                 color: Color(0xFFEFEFEF),

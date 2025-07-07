@@ -47,6 +47,7 @@ class _AccountScreenState extends State<AccountScreen> {
             automaticallyImplyLeading: false,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: const Text('Compte'),
               background: Container(
                 color: Color(0xFFEFEFEF),

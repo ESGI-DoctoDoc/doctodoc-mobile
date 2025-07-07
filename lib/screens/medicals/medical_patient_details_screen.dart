@@ -44,6 +44,7 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
             automaticallyImplyLeading: false,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,

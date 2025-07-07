@@ -84,6 +84,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                       final top = constraints.biggest.height;
                       final isCollapsed = top <= 190;
                       return FlexibleSpaceBar(
+                        centerTitle: true,
                         background: Container(
                           color: Color(0xFFEFEFEF),
                         ),

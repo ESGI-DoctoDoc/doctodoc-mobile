@@ -71,9 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
             floating: true,
             snap: true,
             pinned: true,
+            centerTitle: true,
             automaticallyImplyLeading: false,
             expandedHeight: 100.0,
             flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
               title: const Text('Doctodoc'),
               background: Container(
                 color: Color(0xFFEFEFEF),
