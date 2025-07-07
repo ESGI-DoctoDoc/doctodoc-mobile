@@ -16,7 +16,10 @@ import '../services/data_sources/local_auth_data_source/shared_preferences_auth_
 import '../shared/widgets/cards/appointment_card.dart';
 import '../shared/widgets/inputs/doctor_search_bar.dart';
 import '../shared/widgets/list_tile/base/list_tile_base.dart';
+import '../shared/widgets/list_tile/doctor_list_tile.dart';
 import '../shared/widgets/texts/list_title.dart';
+import 'doctors/doctor_detail_screen.dart';
+import 'doctors/save_general_doctor.dart';
 import 'introduction_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -149,6 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
+                    ..._buildMyDoctorSection(),
+
                     const ListTitle(title: "Historique"),
                     BlocBuilder<DisplayAppointmentsBloc, DisplayAppointmentsState>(
                         builder: (context, state) {
@@ -162,9 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         DisplayAppointmentsStatus.error => _buildErrorForMostRecentUpComing(),
                       };
                     }),
-                    // const DoctorListTile(),
                     const SizedBox(height: 8),
-                    // const DoctorListTile(),
                   ],
                 ),
               )
@@ -173,6 +176,55 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildMyDoctorSection() {
+    final hasGeneralDoctor = false;
+    //todo mélissa add
+    if (hasGeneralDoctor) {
+      return [
+        const SizedBox(height: 20),
+        ListTitle(
+          title: "Mon médecin traitant",
+          trailing: hasGeneralDoctor ? "Modifier" : null,
+          onTrailingTap: () {
+            if (hasGeneralDoctor) {
+              SaveGeneralDoctor.navigateTo(context);
+            }
+          },
+        ),
+        /*return [
+        const SizedBox(height: 20),
+        const ListTitle(title: "Mon médecin traitant"),
+        DoctorListTile(
+          doctor: ,
+          trailing: IconButton(
+            icon: const Icon(Icons.chevron_right),
+            onPressed: () {
+              DoctorDetailScreen.navigateTo(context, doctor.id);
+            },
+          ),
+        ),
+        const SizedBox(height: 20),
+      ]; */
+      ];
+    } else {
+      return [
+        const SizedBox(height: 20),
+        const ListTitle(title: "Mon médecin traitant"),
+        ListTileBase(
+          title: "Ajouter un médecin traitant",
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: const Icon(Icons.add),
+          ),
+          onTap: () {
+            SaveGeneralDoctor.navigateTo(context);
+          },
+        ),
+        const SizedBox(height: 20)
+      ];
+    }
   }
 
   Widget _buildMostRecentPastAppointments(List<Appointment> appointments) {

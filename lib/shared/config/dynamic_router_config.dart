@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/appointments/care_tracking_permissions_screen.dart';
+import 'package:doctodoc_mobile/screens/doctors/save_general_doctor.dart';
 import 'package:doctodoc_mobile/screens/documents/document_care_tracking_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_details_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_documents_type_screen.dart';
@@ -34,6 +35,7 @@ class DynamicRouterConfig {
     CareTrackingPermissionsScreen.routeName: (args) => CareTrackingPermissionsScreen.routeBuilder(args),
     DocumentCareTrackingDetailScreen.routeName: (args) => DocumentCareTrackingDetailScreen.routeBuilder(args),
     NotificationsScreen.routeName: (args) => const NotificationsScreen(),
+    SaveGeneralDoctor.routeName: (args) => const SaveGeneralDoctor(),
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
