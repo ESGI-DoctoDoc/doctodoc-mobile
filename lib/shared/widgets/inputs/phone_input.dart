@@ -14,7 +14,7 @@ class PhoneValidator extends Validator {
   String? validation(String? value) {
     if (value == null || value.isEmpty) {
       return required ? "Le numéro de téléphone est requis" : null;
-    } else if (value.length != 14) {
+    } else if (value.length != 10) {
       return errorMessage;
     } else {
       return null;

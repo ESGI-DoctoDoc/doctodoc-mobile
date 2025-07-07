@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
+import 'package:doctodoc_mobile/shared/widgets/modals/show_validate_otp_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -19,7 +20,7 @@ Future<Patient?> showUpdatePhoneModal(
         buildModalPage(
           context: context,
           title: "Modifier mon numéro de téléphone",
-          child: _UpdatePhoneWidget(phone: phone),
+          child: _UpdatePhoneWidget(phone: phone.replaceAll("+33", "0"))
         ),
       ];
     },
@@ -60,7 +61,7 @@ class _UpdatePhoneWidgetState extends State<_UpdatePhoneWidget> {
                 PhoneInput(controller: phoneController),
                 const SizedBox(height: 20),
                 PrimaryButton(
-                  label: "Envouer le code de validation",
+                  label: "Envoyer le code de vérification",
                   onTap: () => _todo(),
                 ),
               ],
@@ -73,14 +74,9 @@ class _UpdatePhoneWidgetState extends State<_UpdatePhoneWidget> {
 
   void _todo() {
     if (updatePhoneKey.currentState!.validate()) {
-      final writeCloseMemberBloc = context.read<WriteCloseMemberBloc>();
-      // todo mélissa
-      // writeCloseMemberBloc.add(OnUpdate(
-      //   id: widget.patient.id,
-      //   phone: phoneController.text,
-      // ));
+      //todo mélissa send message
 
-      Navigator.of(context).pop();
+      showValidateOtp(context);
     }
   }
 }
