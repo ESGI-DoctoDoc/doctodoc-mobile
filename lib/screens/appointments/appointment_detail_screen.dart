@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../shared/widgets/modals/showCancelAppointmentReasonModal.dart';
+
 class AppointmentDetailScreen extends StatefulWidget {
   static const String routeName = '/appointment/:appointmentId';
 
@@ -119,8 +121,11 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         if (DateTime.now().isBefore(DateTime.parse('${appointment.date} ${appointment.start}')))
           ErrorButton(
             label: "Annuler le rendez-vous",
-            onTap: () {
-              _onCancelAppointment(); // todo : faire une pop up pour confirmer l'annulation
+            onTap: () async {
+              final reason = await showReasonSelectionModal(context);
+              if(reason != null) {
+                _onCancelAppointment();
+              }
             },
           ),
       ],
