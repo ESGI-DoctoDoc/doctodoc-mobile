@@ -1,18 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:doctodoc_mobile/blocs/notifications_blocs/display_notifications_bloc/display_notifications_bloc.dart';
+import 'package:flutter/material.dart' hide Notification;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Notification {
-  final String title;
-  final String? content;
-  final DateTime createdAt;
-  final bool isRead;
-
-  const Notification({
-    required this.title,
-    this.content,
-    required this.createdAt,
-    this.isRead = false,
-  });
-}
+import '../../models/notification.dart';
 
 class NotificationsScreen extends StatefulWidget {
   static const String routeName = '/notifications';
@@ -28,123 +18,14 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  List<Notification> _notifications = [
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    Notification(
-      title: 'Rendez-vous confirmé',
-      content: 'Votre rendez-vous du 10 juillet est confirmé.',
-      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Notification(
-      title: 'Nouveau message',
-      content: 'Dr. Dupont vous a envoyé un message.',
-      createdAt: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-    Notification(
-      title: 'Rappel',
-      content: 'Consultation prévue demain à 14h.',
-      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    context.read<DisplayNotificationsBloc>().add(OnGetNotifications());
+  }
 
-  void _removeNotification(int index) {
-    //todo mélissa add
+  void _removeNotification(String id) {
+    context.read<DisplayNotificationsBloc>().add(OnSetReadNotification(id: id));
   }
 
   @override
@@ -157,28 +38,50 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           appBar: AppBar(
             title: const Text('Notifications'),
           ),
-          body: _notifications.isEmpty
-              ? const Center(child: Text('Aucune notification.'))
-              : Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ListView.separated(
-                    itemCount: _notifications.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 4),
-                    itemBuilder: (context, index) {
-                      final notif = _notifications[index];
-                      return ListTile(
-                        title: Text(notif.title),
-                        subtitle: notif.content != null ? Text(notif.content!) : null,
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _removeNotification(index),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+          body: BlocBuilder<DisplayNotificationsBloc, DisplayNotificationsState>(
+            builder: (context, state) {
+              return switch (state.status) {
+                DisplayNotificationsStatus.initial ||
+                DisplayNotificationsStatus.loading =>
+                  const SizedBox.shrink(),
+                DisplayNotificationsStatus.success => _buildSuccess(state.notifications),
+                DisplayNotificationsStatus.error => _buildError(),
+              };
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSuccess(List<Notification> notifications) {
+    if (notifications.isEmpty) {
+      return const Center(child: Text('Aucune notification.'));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView.separated(
+          itemCount: notifications.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 4),
+          itemBuilder: (context, index) {
+            final notification = notifications[index];
+            return ListTile(
+              title: Text(notification.title),
+              subtitle: Text(notification.content),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _removeNotification(notification.id),
+              ),
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Widget _buildError() {
+    return const Center(
+      child: Text("Une erreur s'est produite."),
     );
   }
 }
