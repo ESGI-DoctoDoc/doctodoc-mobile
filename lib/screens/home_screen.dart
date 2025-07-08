@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Mon médecin traitant",
         trailing: "Modifier",
         onTrailingTap: () {
-          SaveGeneralDoctor.navigateTo(context);
+          SaveGeneralDoctor.navigateTo(context, doctor.id);
         },
       ),
       DoctorListTile(
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: const Icon(Icons.add),
         ),
         onTap: () {
-          SaveGeneralDoctor.navigateTo(context);
+          SaveGeneralDoctor.navigateTo(context, null);
         },
       ),
       const SizedBox(height: 20)

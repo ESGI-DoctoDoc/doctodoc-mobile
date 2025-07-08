@@ -10,13 +10,24 @@ import '../../shared/widgets/inputs/doctor_search_bar.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 
 class SaveGeneralDoctor extends StatefulWidget {
-  static const String routeName = '/save-general-doctor';
+  static const String routeName = '/save-general-doctor/:doctorId';
 
-  static void navigateTo(BuildContext context) {
-    Navigator.pushNamed(context, routeName);
+  static void navigateTo(BuildContext context, String? doctorId) {
+    Navigator.pushNamed(context, routeName, arguments: {
+      'doctorId': doctorId,
+    });
   }
 
-  const SaveGeneralDoctor({super.key});
+  static Widget routeBuilder(Map<String, dynamic> arguments) {
+    if (arguments['doctorId'] is String?) {
+      return SaveGeneralDoctor(doctorId: arguments['doctorId'] as String?);
+    }
+    return const Center(child: Text('Doctor not found'));
+  }
+
+  final String? doctorId;
+
+  const SaveGeneralDoctor({super.key, this.doctorId});
 
   @override
   State<SaveGeneralDoctor> createState() => _SaveGeneralDoctorState();
@@ -147,6 +158,9 @@ class _SaveGeneralDoctorState extends State<SaveGeneralDoctor> {
         itemBuilder: (context, index) {
           if (index < doctors.length) {
             final doctor = doctors[index];
+            if (doctor.id == widget.doctorId) {
+              _selectedDoctorId = doctor.id;
+            }
             return DoctorListTile(
               doctor: doctor,
               trailing: Radio<String>(
