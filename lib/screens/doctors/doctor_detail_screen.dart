@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/blocs/appointment_blocs/appointment_flow_bloc/appointment_flow_bloc.dart';
 import 'package:doctodoc_mobile/blocs/doctor_blocs/doctor_detail_bloc/doctor_detail_bloc.dart';
+import 'package:doctodoc_mobile/blocs/report_doctor_bloc/report_doctor_bloc.dart';
 import 'package:doctodoc_mobile/models/doctor/doctor_detailed.dart';
 import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
@@ -125,10 +126,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 child: SafeArea(
                   child: IconButton(
                     icon: const Icon(Icons.report_outlined, size: 26, color: Colors.black),
-                    onPressed: () {
-                      final reason = showReportDoctorModal(context);
-                      if(reason != null) {
-                        //todo mélissa add
+                    onPressed: () async {
+                      final reason = await showReportDoctorModal(context);
+                      if (reason != null) {
+                        _reportDoctor(reason);
                       }
                     },
                   ),
@@ -152,6 +153,13 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
         ),
       ),
     );
+  }
+
+  void _reportDoctor(String reason) {
+    context.read<ReportDoctorBloc>().add(OnReportDoctor(
+          doctorId: widget.doctorId,
+          explanation: reason,
+        ));
   }
 
   Widget _buildErrorWhenGetMedicalConcern() {

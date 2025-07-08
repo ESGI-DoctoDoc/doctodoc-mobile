@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/shared/widgets/banners/info_banner.dart';
 import 'package:doctodoc_mobile/shared/widgets/banners/warning_banner.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/secondary_button.dart';
@@ -36,11 +35,18 @@ class _ReasonSelectionWidget extends StatefulWidget {
 
 class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
   final List<InputDropdownItem> reasons = [
-    InputDropdownItem(label: "Comportement inapproprié", value: "inappropriate_behavior"),
-    InputDropdownItem(label: "Motif de consultation inapproprié", value: "inappropriate_consultation_reason"),
-    InputDropdownItem(label: "Questions déplacées ou non professionnelles", value: "unprofessional_questions"),
-    InputDropdownItem(label: "Annulation fréquente sans raison valable", value: "frequent_cancellations"),
-    InputDropdownItem(label: "Informations incorrectes sur le profil", value: "incorrect_profile_info"),
+    InputDropdownItem(label: "Comportement inapproprié", value: "Comportement inapproprié"),
+    InputDropdownItem(
+        label: "Motif de consultation inapproprié", value: "Motif de consultation inapproprié"),
+    InputDropdownItem(
+        label: "Questions déplacées ou non professionnelles",
+        value: "Questions déplacées ou non professionnelles"),
+    InputDropdownItem(
+        label: "Annulation fréquente sans raison valable",
+        value: "Annulation fréquente sans raison valable"),
+    InputDropdownItem(
+        label: "Informations incorrectes sur le profil",
+        value: "Informations incorrectes sur le profil"),
   ];
 
   @override
@@ -51,7 +57,8 @@ class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
         child: Column(
           children: [
             const WarningBanner(
-              title: 'Le signalement d’un professionnel de santé est une démarche sérieuse. Chaque signalement fait l’objet d’une vérification manuelle. Merci de ne le faire que si cela est réellement justifié.',
+              title:
+                  'Le signalement d’un professionnel de santé est une démarche sérieuse. Chaque signalement fait l’objet d’une vérification manuelle. Merci de ne le faire que si cela est réellement justifié.',
             ),
             const SizedBox(height: 20),
             InputDropdown(
