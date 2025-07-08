@@ -62,7 +62,14 @@ class _AppointmentCardState extends State<AppointmentCard> {
               margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.green.shade50,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary.withAlpha(55),
+                    Theme.of(context).colorScheme.primary.withAlpha(125),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(

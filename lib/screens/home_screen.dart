@@ -295,12 +295,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Colors.lightBlue.shade100,
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary.withAlpha(55),
+                        Theme.of(context).colorScheme.primary.withAlpha(125),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.medical_services,
-                    color: Colors.blue.shade800,
+                    color: Colors.green.shade800,
                     size: 30,
                   ),
                 ),
