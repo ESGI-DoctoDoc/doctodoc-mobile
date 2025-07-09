@@ -15,7 +15,13 @@ class GetQuestions extends AppointmentFlowEvent {
   GetQuestions({required this.medicalConcernId});
 }
 
-class GetCareTrackings extends AppointmentFlowEvent {}
+class GetCareTrackings extends AppointmentFlowEvent {
+  final String patientId;
+
+  GetCareTrackings({
+    required this.patientId,
+  });
+}
 
 class GetAppointmentsAvailability extends AppointmentFlowEvent {
   final String medicalConcernId;

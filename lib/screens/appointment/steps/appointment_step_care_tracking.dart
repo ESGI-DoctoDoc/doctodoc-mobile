@@ -11,11 +11,13 @@ class AppointmentStepCareTracking extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function(String) onNext;
   final VoidCallback? onEmpty;
+  final String patientId;
 
   const AppointmentStepCareTracking({
     super.key,
     required this.formKey,
     required this.onNext,
+    required this.patientId,
     this.onEmpty,
   });
 
@@ -29,7 +31,7 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
   @override
   void initState() {
     super.initState();
-    context.read<AppointmentFlowBloc>().add(GetCareTrackings());
+    context.read<AppointmentFlowBloc>().add(GetCareTrackings(patientId: widget.patientId));
   }
 
   @override

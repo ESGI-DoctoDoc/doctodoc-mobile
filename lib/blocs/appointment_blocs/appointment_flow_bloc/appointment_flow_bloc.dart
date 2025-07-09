@@ -18,7 +18,7 @@ class AppointmentFlowBloc extends Bloc<AppointmentFlowEvent, AppointmentFlowStat
     on<GetMedicalConcerns>(_onGetMedicalConcerns);
     on<GetQuestions>(_onGetQuestions);
     on<GetAppointmentsAvailability>(_onGetAppointmentsAvailability);
-    on<GetCareTrackings>(_GetCareTrackings);
+    on<GetCareTrackings>(_getCareTrackings);
   }
 
   Future<void> _onGetMedicalConcerns(
@@ -60,12 +60,12 @@ class AppointmentFlowBloc extends Bloc<AppointmentFlowEvent, AppointmentFlowStat
     }
   }
 
-  Future<void> _GetCareTrackings(GetCareTrackings event, Emitter<AppointmentFlowState> emit) async {
+  Future<void> _getCareTrackings(GetCareTrackings event, Emitter<AppointmentFlowState> emit) async {
     try {
       emit(state.copyWith(getCareTrackingsStatus: GetCareTrackingsStatus.loading));
 
       List<CareTrackingForAppointment> careTrackings =
-          await appointmentFlowRepository.getCareTrackings();
+          await appointmentFlowRepository.getCareTrackings(event.patientId);
 
       emit(state.copyWith(
         getCareTrackingsStatus: GetCareTrackingsStatus.success,
