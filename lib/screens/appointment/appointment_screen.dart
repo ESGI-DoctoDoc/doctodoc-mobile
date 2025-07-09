@@ -109,9 +109,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   );
                 case 2:
                   return AppointmentStepDoctorQuestions(
+                    key: UniqueKey(),
                     medicalConcernId: _appointmentData.medicalConcernId,
                     formKey: forms[2],
-                    onEmpty: () {},
+                    onEmpty: () {
+                      _appointmentData.answers = [];
+                    },
                     onNext: (answers) {
                       _appointmentData.answers = answers;
                     },
