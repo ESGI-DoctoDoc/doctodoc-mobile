@@ -2,8 +2,10 @@ import 'package:doctodoc_mobile/models/appointment/appointment.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../screens/appointments/appointment_detail_screen.dart';
+import '../../utils/show_error_snackbar.dart';
 
 class AppointmentCard extends StatefulWidget {
   final Appointment appointment;
@@ -49,7 +51,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 pictureUrl: widget.appointment.doctor.pictureUrl,
                 color: Colors.white,
                 trailing: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _openMap(widget.appointment.address);
+                  },
                   icon: Icon(
                     DateTime.now().isAfter(DateTime.parse('${widget.appointment.date} ${widget.appointment.end}'))
                       ? Icons.check_circle_outline
@@ -100,5 +104,16 @@ class _AppointmentCardState extends State<AppointmentCard> {
         ),
       ),
     );
+  }
+
+  void _openMap(String address) async {
+    final Uri uri =
+    Uri.parse(Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$address'));
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      showErrorSnackbar(context, "Impossible d'ouvrir la carte.");
+    }
   }
 }

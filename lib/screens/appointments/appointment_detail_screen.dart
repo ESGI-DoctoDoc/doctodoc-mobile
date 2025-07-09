@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../shared/utils/show_error_snackbar.dart';
 import '../../shared/widgets/modals/showCancelAppointmentReasonModal.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
@@ -294,7 +296,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               trailing: InkWell(
                 child: const Icon(Icons.directions_outlined),
                 onTap: () {
-                  // Handle navigation to maps
+                  _openMap(address.address);
                 },
               ),
             ),
@@ -356,5 +358,16 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
   void _fetchAppointmentDetail() {
     context.read<AppointmentDetailBloc>().add(OnGetAppointmentDetail(id: widget.appointmentId));
+  }
+
+  void _openMap(String address) async {
+    final Uri uri =
+    Uri.parse(Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$address'));
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      showErrorSnackbar(context, "Impossible d'ouvrir la carte.");
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:doctodoc_mobile/blocs/report_doctor_bloc/report_doctor_bloc.dart
 import 'package:doctodoc_mobile/models/doctor/doctor_detailed.dart';
 import 'package:doctodoc_mobile/screens/appointment/appointment_screen.dart';
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_address_data.dart';
+import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -270,7 +271,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      throw 'Could not launch map';
+      showErrorSnackbar(context, "Impossible d'ouvrir la carte.");
     }
   }
 
