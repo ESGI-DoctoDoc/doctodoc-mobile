@@ -90,6 +90,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/i18n/errors.i18n.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../../shared/utils/show_error_snackbar.dart';
 import '../introduction_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -174,7 +175,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } else if (state.onBoardingStatus == OnBoardingStatus.loading) {
       print('loading');
     } else if (state.onBoardingStatus == OnBoardingStatus.error) {
-      print(state.exception?.code);
+      showErrorSnackbar(context, state.exception);
     }
     setState(() {
       isLoading = false;

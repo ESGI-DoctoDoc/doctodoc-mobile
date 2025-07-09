@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_appointment_availability.dart';
 import 'package:doctodoc_mobile/models/appointment/medical_concern_questions.dart';
 
+import '../../../exceptions/appointment_flow_exception.dart';
 import '../../../models/appointment/care_tracking_for_appointment.dart';
 import '../../data_sources/appointment_flow_data_source/appointment_flow_data_source.dart';
 
@@ -19,7 +19,7 @@ class AppointmentFlowRepository {
     try {
       return await appointmentFlowDataSource.getMedicalConcernsByDoctorId(doctorId);
     } catch (error) {
-      throw UnknownException();
+      throw AppointmentFlowException.from(error);
     }
   }
 
@@ -28,7 +28,7 @@ class AppointmentFlowRepository {
     try {
       return await appointmentFlowDataSource.getQuestionsByMedicalConcernId(medicalConcernId);
     } catch (error) {
-      throw UnknownException();
+      throw AppointmentFlowException.from(error);
     }
   }
 
@@ -39,7 +39,7 @@ class AppointmentFlowRepository {
       return await appointmentFlowDataSource.getAppointmentsAvailabilityByMedicalConcernIdAndDate(
           medicalConcernId, date);
     } catch (error) {
-      throw UnknownException();
+      throw AppointmentFlowException.from(error);
     }
   }
 
@@ -47,7 +47,7 @@ class AppointmentFlowRepository {
     try {
       return await appointmentFlowDataSource.getCareTrackings();
     } catch (error) {
-      throw UnknownException();
+      throw AppointmentFlowException.from(error);
     }
   }
 }

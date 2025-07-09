@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'app_exception.dart';
 
-class AuthException extends AppException {
-  static const defaultCode = 'error.auth';
-  AuthException({super.code = defaultCode});
+class CareTrackingException extends AppException {
+  static const defaultCode = 'error.care_tracking';
+  CareTrackingException({super.code = defaultCode});
 
   static AppException from(dynamic exception) {
     if (exception is AppException) return exception;
@@ -11,10 +11,10 @@ class AuthException extends AppException {
       if (exception.response?.data is Map<String, dynamic>) {
         final data = exception.response!.data as Map<String, dynamic>;
         if (data.containsKey('code')) {
-          return AuthException(code: data['code']);
+          return CareTrackingException(code: data['code']);
         }
       }
     }
-    return AuthException(code: defaultCode);
+    return CareTrackingException(code: defaultCode);
   }
 }

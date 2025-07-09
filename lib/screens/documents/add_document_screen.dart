@@ -192,7 +192,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     if (state.uploadStatus == UploadDocumentStatus.success) {
       Navigator.pop(context);
     } else if (state.uploadStatus == UploadDocumentStatus.error) {
-      showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
+      showErrorSnackbar(context, state.exception);
     }
   }
 

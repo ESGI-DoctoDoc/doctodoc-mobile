@@ -135,7 +135,7 @@ class _DocumentMenuWidget extends StatelessWidget {
     if (state.deleteStatus == DeleteDocumentStatus.success) {
       Navigator.of(context).pop();
     } else if (state.deleteStatus == DeleteDocumentStatus.error) {
-      showErrorSnackbar(context, 'Une erreur est survenue');
+      showErrorSnackbar(context, state.exception);
     }
   }
 }

@@ -115,7 +115,7 @@ class _UpdateDocumentWidgetState extends State<_UpdateDocumentWidget> {
     if (state.updateStatus == UpdateDocumentStatus.success) {
       Navigator.pop(context);
     } else if (state.updateStatus == UpdateDocumentStatus.error) {
-      showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
+      showErrorSnackbar(context, state.exception);
     }
   }
 

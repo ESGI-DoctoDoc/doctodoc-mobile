@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/blocs/referent_doctor_blocs/write_referent_doctor_bloc/write_referent_doctor_bloc.dart';
+import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/doctor_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -223,7 +224,7 @@ class _SaveGeneralDoctorState extends State<SaveGeneralDoctor> {
     } else if (state.status == WriteReferentDoctorStatus.loading) {
       print('loading');
     } else if (state.status == WriteReferentDoctorStatus.error) {
-      print(state.exception?.code);
+      showErrorSnackbar(context, state.exception);
     }
   }
 }

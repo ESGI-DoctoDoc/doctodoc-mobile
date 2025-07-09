@@ -52,6 +52,7 @@ import 'package:doctodoc_mobile/services/repositories/speciality_repository/spec
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:doctodoc_mobile/shared/config/dynamic_router_config.dart';
 import 'package:doctodoc_mobile/shared/config/theme.dart';
+import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,7 @@ Future<void> main() async {
     );
   }
 
+  await ErrorTranslator.load();
   await dotenv.load(fileName: ".env");
 
   final sharedPreferences = SharedPreferencesAuthDataSource();

@@ -195,7 +195,7 @@ class _AddDocumentCareTrackingScreenState extends State<AddDocumentCareTrackingS
     if (state.uploadStatus == UploadDocumentStatus.success) {
       Navigator.pop(context);
     } else if (state.uploadStatus == UploadDocumentStatus.error) {
-      showErrorSnackbar(context, 'Une erreur est survenue'); // todo handle error
+      showErrorSnackbar(context, state.exception);
     }
   }
 
