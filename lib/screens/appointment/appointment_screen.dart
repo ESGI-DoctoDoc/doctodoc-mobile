@@ -118,7 +118,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   );
                 case 3:
                   return AppointmentStepCareTracking(
-                    patientId: _appointmentData.patientData!.patientId, // todo DANGER
+                    patientId: _appointmentData.patientData!.patientId,
                     formKey: forms[3],
                     onEmpty: () {},
                     onNext: (careTrackingId) {
