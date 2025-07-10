@@ -1,3 +1,4 @@
+import 'package:url_launcher/url_launcher.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,7 +72,12 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
             appBar: AppBar(
               title: Text(document.name),
               backgroundColor: Theme.of(context).primaryColor,
-              actions: [],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.download),
+                  onPressed: () => _downloadDocument(document),
+                ),
+              ],
             ),
             body: buildDocumentViewer(document.url),
           ),
@@ -90,6 +96,19 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     context
         .read<DisplayDocumentContentBloc>()
         .add(OnGetContentOnMedicalRecord(id: widget.documentId));
+  }
+
+  void _downloadDocument(Document document) async {
+    final url = document.url;
+    final name = document.name;
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Impossible de télécharger le document.")),
+      );
+    }
   }
 }
 
