@@ -5,6 +5,7 @@ import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/models/user.dart';
 import 'package:doctodoc_mobile/services/data_sources/user_data_source/user_data_source.dart';
 import 'package:doctodoc_mobile/services/dtos/update_profile_request.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RemoteUserDataSource implements UserDataSource {
   final Dio dio;
@@ -48,5 +49,29 @@ class RemoteUserDataSource implements UserDataSource {
         "token": fcmToken,
       },
     );
+  }
+
+  @override
+  Future<void> updatePassword(String oldPassword, String newPassword) async {
+    await dio.patch(
+      "/patients/change-password",
+      data: jsonEncode(
+        {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+      ),
+    );
+  }
+
+  @override
+  Future<void> requestNewPassword(String email) async {
+    await dio.post("/patients/password-reset",
+        data: jsonEncode(
+          {
+            "email": email,
+            "verificationUrl": dotenv.env['VERIFICATION_URL_PASSWORD'],
+          },
+        ));
   }
 }

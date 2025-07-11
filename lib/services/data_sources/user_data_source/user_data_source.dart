@@ -11,4 +11,8 @@ abstract class UserDataSource {
   Future<Patient> updateProfile(UpdateProfileRequest request);
 
   Future<void> saveFcmToken(String fcmToken);
+
+  Future<void> updatePassword(String oldPassword, String newPassword);
+
+  Future<void> requestNewPassword(String email);
 }

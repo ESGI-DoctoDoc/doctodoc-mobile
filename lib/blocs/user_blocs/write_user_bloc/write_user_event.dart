@@ -16,3 +16,21 @@ class OnUpdateProfile extends WriteUserEvent {
     required this.gender,
   });
 }
+
+class OnChangePassword extends WriteUserEvent {
+  final String oldPassword;
+  final String newPassword;
+
+  OnChangePassword({
+    required this.oldPassword,
+    required this.newPassword,
+  });
+}
+
+class OnRequestNewPassword extends WriteUserEvent {
+  final String email;
+
+  OnRequestNewPassword({
+    required this.email,
+  });
+}

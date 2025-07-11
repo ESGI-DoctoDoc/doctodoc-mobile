@@ -1,5 +1,7 @@
+import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/email_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../banners/info_banner.dart';
@@ -72,7 +74,12 @@ class _ForgotPasswordModalState extends State<ForgotPasswordModal> {
       return;
     }
     print("Verification email sent to ${emailController.text}");
-    //todo appel forgot password
+    context.read<WriteUserBloc>().add(
+          OnRequestNewPassword(
+            email: emailController.text,
+          ),
+        );
+
     setState(() {
       isSubmitted = true;
     });
@@ -103,10 +110,11 @@ void showForgotPasswordModal(BuildContext context) {
           ),
           isTopBarLayerAlwaysVisible: true,
           trailingNavBarWidget: IconButton(
-            padding: const EdgeInsets.all(20),
-            icon: const Icon(Icons.close),
-            onPressed: Navigator.of(context).pop,
-          ),
+              padding: const EdgeInsets.all(20),
+              icon: const Icon(Icons.close),
+              onPressed: () => {
+                    Navigator.of(context).pop,
+                  }),
           child: const ForgotPasswordModal(),
         ),
       ];
