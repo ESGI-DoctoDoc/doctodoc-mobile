@@ -24,6 +24,9 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
   Widget build(BuildContext context) {
     return ExpansionTileBase(
       title: widget.careTracking.name,
+      subtitle: widget.careTracking.closedAt.isNotEmpty
+          ? "Clôturé le ${Jiffy.parse(widget.careTracking.closedAt, pattern: 'yyyy-MM-dd HH:mm').format(pattern: 'd MMM yyyy à HH:mm')}"
+          : "En cours...",
       trailing: IconButton(
         onPressed: () => showCareTrackingMenuModal(context, widget.careTracking.id),
         icon: Icon(Icons.more_vert),
