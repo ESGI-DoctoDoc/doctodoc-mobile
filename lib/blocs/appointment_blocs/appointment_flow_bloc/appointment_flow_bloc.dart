@@ -85,7 +85,7 @@ class AppointmentFlowBloc extends Bloc<AppointmentFlowEvent, AppointmentFlowStat
       emit(state.copyWith(
           getAppointmentAvailabilityStatus: GetAppointmentAvailabilityStatus.loading));
 
-      List<MedicalConcernAppointmentAvailability> appointmentsAvailability =
+      MedicalConcernAppointmentAvailability appointmentsAvailability =
           await appointmentFlowRepository.getAppointmentsAvailabilityByMedicalConcernIdAndDate(
         event.medicalConcernId,
         event.date,

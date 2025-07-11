@@ -9,7 +9,7 @@ abstract class AppointmentFlowDataSource {
 
   Future<List<MedicalConcernQuestion>> getQuestionsByMedicalConcernId(String medicalConcernId);
 
-  Future<List<MedicalConcernAppointmentAvailability>>
+  Future<MedicalConcernAppointmentAvailability>
       getAppointmentsAvailabilityByMedicalConcernIdAndDate(String medicalConcernId, String date);
 
   Future<List<CareTrackingForAppointment>> getCareTrackings();

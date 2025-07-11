@@ -40,13 +40,11 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
     _dateController.addListener(_fetchAppointmentsAvailability);
     _hourController.addListener(() {
       if (_hourController.text.isNotEmpty) {
-        widget.onNext(
-          AppointmentFlowSlotData(
-            slotId: slotId,
-            time: _hourController.text,
-            date: _dateController.text,
-          )
-        );
+        widget.onNext(AppointmentFlowSlotData(
+          slotId: slotId,
+          time: _hourController.text,
+          date: _dateController.text,
+        ));
       }
     });
   }
@@ -90,30 +88,63 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
     );
   }
 
-  Widget _buildSuccess(List<MedicalConcernAppointmentAvailability> appointmentsAvailability) {
-    slotId = appointmentsAvailability.isNotEmpty
-        ? appointmentsAvailability.first.slotId
-        : '';
-    List<SelectHourItem> hours = appointmentsAvailability
-        .map((appointmentAvailability) => SelectHourItem(
-              slotId: appointmentAvailability.start,
-              startTime: appointmentAvailability.start,
-              isBooked: appointmentAvailability.isBooked,
-            ))
-        .toList();
-
-    if( hours.isEmpty) {
-      return const Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: const Center(
-          child: Text("Aucun horaire disponible pour cette date."),
-        ),
-      );
+  Widget _buildSuccess(MedicalConcernAppointmentAvailability? appointmentsAvailability) {
+    if (appointmentsAvailability == null) {
+      return _buildError();
     } else {
-      return SelectHourInput(
-        controller: _hourController,
-        slots: hours,
-      );
+      slotId = appointmentsAvailability.today.isNotEmpty
+          ? appointmentsAvailability.today.first.slotId
+          : '';
+      List<SelectHourItem> hours = appointmentsAvailability.today
+          .map((appointmentAvailability) => SelectHourItem(
+                slotId: appointmentAvailability.start,
+                startTime: appointmentAvailability.start,
+                isBooked: appointmentAvailability.isBooked,
+              ))
+          .toList();
+
+      if (hours.isEmpty) {
+        final String? previousDate = appointmentsAvailability.previous;
+        final String? nextDate = appointmentsAvailability.next;
+
+        String availableDatesMessage;
+
+        if (previousDate != null &&
+            previousDate.isNotEmpty &&
+            nextDate != null &&
+            nextDate.isNotEmpty) {
+          final formattedPrev =
+              Jiffy.parse(previousDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+          final formattedNext =
+              Jiffy.parse(nextDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+          availableDatesMessage = "Horaires disponibles les $formattedPrev ou $formattedNext";
+        } else if (previousDate != null && previousDate.isNotEmpty) {
+          final formattedPrev =
+              Jiffy.parse(previousDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+          availableDatesMessage = "Horaire disponible le $formattedPrev";
+        } else if (nextDate != null && nextDate.isNotEmpty) {
+          final formattedNext =
+              Jiffy.parse(nextDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+          availableDatesMessage = "Horaire disponible le $formattedNext";
+        } else {
+          availableDatesMessage = "Aucun horaire disponible pour cette date.";
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(availableDatesMessage, textAlign: TextAlign.center),
+            ],
+          ),
+        );
+      } else {
+        return SelectHourInput(
+          controller: _hourController,
+          slots: hours,
+        );
+      }
     }
   }
 
@@ -124,7 +155,7 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
   }
 
   void _fetchAppointmentsAvailability() {
-    if(widget.medicalConcernId == null) {
+    if (widget.medicalConcernId == null) {
       print("Medical concern ID is null, skipping fetch.");
       return;
     }
