@@ -7,21 +7,32 @@ enum WriteUserStatus {
   error,
 }
 
+enum ChangePasswordStatus {
+  initial,
+  loading,
+  success,
+  error,
+}
+
 final class WriteUserState {
-  final WriteUserStatus status;
+  final ChangePasswordStatus changePasswordStatus;
+  final WriteUserStatus writeUserStatus;
   final AppException? exception;
 
   WriteUserState({
-    this.status = WriteUserStatus.initial,
+    this.writeUserStatus = WriteUserStatus.initial,
+    this.changePasswordStatus = ChangePasswordStatus.initial,
     this.exception,
   });
 
   WriteUserState copyWith({
-    WriteUserStatus? status,
+    WriteUserStatus? writeUserStatus,
+    ChangePasswordStatus? changePasswordStatus,
     AppException? exception,
   }) {
     return WriteUserState(
-      status: status ?? this.status,
+      writeUserStatus: writeUserStatus ?? this.writeUserStatus,
+      changePasswordStatus: changePasswordStatus ?? this.changePasswordStatus,
       exception: exception ?? this.exception,
     );
   }

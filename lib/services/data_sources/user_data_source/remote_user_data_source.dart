@@ -49,4 +49,17 @@ class RemoteUserDataSource implements UserDataSource {
       },
     );
   }
+
+  @override
+  Future<void> updatePassword(String oldPassword, String newPassword) async {
+    await dio.patch(
+      "/patients/change-password",
+      data: jsonEncode(
+        {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+      ),
+    );
+  }
 }
