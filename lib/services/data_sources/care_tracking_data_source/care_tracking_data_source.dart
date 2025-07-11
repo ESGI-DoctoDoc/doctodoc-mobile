@@ -21,6 +21,4 @@ abstract class CareTrackingDataSource {
 
   Future<Document> updateDocument(
       String careTrackingId, UpdateDocumentRequest updateDocumentRequest);
-
-  Future<void> shareDocument(String careTrackingId, String id);
 }

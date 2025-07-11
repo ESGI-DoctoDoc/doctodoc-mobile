@@ -90,20 +90,6 @@ class CareTrackingRepository {
     }
   }
 
-  Future<void> shareDocument(String careTrackingId, Document document) async {
-    try {
-      await careTrackingDataSource.shareDocument(careTrackingId, document.id);
-      _careTrackingRepositoryEventController.add(UpdateCareTrackingDocumentEvent(
-        id: document.id,
-        type: document.type,
-        filename: document.name,
-        isShared: !document.isShared,
-      ));
-    } catch (error) {
-      throw UnknownException();
-    }
-  }
-
   Future<void> updateDocument(
       String careTrackingId, UpdateDocumentRequest updateDocumentRequest) async {
     try {

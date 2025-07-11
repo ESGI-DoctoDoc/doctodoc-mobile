@@ -102,11 +102,6 @@ class RemoteCareTrackingDataSource implements CareTrackingDataSource {
   }
 
   @override
-  Future<void> shareDocument(String careTrackingId, String id) async {
-    await dio.patch("/patients/care-trackings/$careTrackingId/documents/$id/share");
-  }
-
-  @override
   Future<Document> updateDocument(
       String careTrackingId, UpdateDocumentRequest updateDocumentRequest) async {
     final response = await dio.patch(

@@ -40,13 +40,3 @@ class OnUpdateDocument extends WriteDocumentInCareTrackingEvent {
     required this.filename,
   });
 }
-
-class OnShareDocument extends WriteDocumentInCareTrackingEvent {
-  final String careTrackingId;
-  final Document document;
-
-  OnShareDocument({
-    required this.careTrackingId,
-    required this.document,
-  });
-}

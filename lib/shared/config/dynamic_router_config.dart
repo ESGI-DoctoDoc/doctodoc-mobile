@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
-import 'package:doctodoc_mobile/screens/appointments/care_tracking_permissions_screen.dart';
 import 'package:doctodoc_mobile/screens/doctors/save_general_doctor.dart';
 import 'package:doctodoc_mobile/screens/documents/document_care_tracking_detail_screen.dart';
 import 'package:doctodoc_mobile/screens/medicals/medical_details_screen.dart';
@@ -31,17 +30,16 @@ class DynamicRouterConfig {
     DoctorSearchScreen.routeName2: (args) => DoctorSearchScreen.routeBuilder(args),
     DoctorDetailScreen.routeName: (args) => DoctorDetailScreen.routeBuilder(args),
     AppointmentDetailScreen.routeName: (args) => AppointmentDetailScreen.routeBuilder(args),
-    CareTrackingPermissionsScreen.routeName: (args) => CareTrackingPermissionsScreen.routeBuilder(args),
-    DocumentCareTrackingDetailScreen.routeName: (args) => DocumentCareTrackingDetailScreen.routeBuilder(args),
+    DocumentCareTrackingDetailScreen.routeName: (args) =>
+        DocumentCareTrackingDetailScreen.routeBuilder(args),
     NotificationsScreen.routeName: (args) => const NotificationsScreen(),
     SaveGeneralDoctor.routeName: (args) => SaveGeneralDoctor.routeBuilder(args),
   };
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final routeBuilder = routes[settings.name];
-    final nextScreen = routeBuilder == null
-        ? const NotFoundScreen()
-        : routeBuilder(settings.arguments);
+    final nextScreen =
+        routeBuilder == null ? const NotFoundScreen() : routeBuilder(settings.arguments);
 
     return MaterialPageRoute(builder: (context) => nextScreen);
   }
