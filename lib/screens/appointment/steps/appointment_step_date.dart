@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/models/appointment/medical_concern_appointment_availability.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
+import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/select_day_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,13 +41,11 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
     _dateController.addListener(_fetchAppointmentsAvailability);
     _hourController.addListener(() {
       if (_hourController.text.isNotEmpty) {
-        widget.onNext(
-          AppointmentFlowSlotData(
-            slotId: slotId,
-            time: _hourController.text,
-            date: _dateController.text,
-          )
-        );
+        widget.onNext(AppointmentFlowSlotData(
+          slotId: slotId,
+          time: _hourController.text,
+          date: _dateController.text,
+        ));
       }
     });
   }
@@ -102,11 +101,33 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
             ))
         .toList();
 
-    if( hours.isEmpty) {
-      return const Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: const Center(
-          child: Text("Aucun horaire disponible pour cette date."),
+    if (hours.isEmpty) {
+      final String? previousDate = "2025-07-11"; //todo mélissa
+      final String? nextDate = "2025-07-13"; //todo mélissa
+
+      String availableDatesMessage;
+
+      if (previousDate != null && previousDate.isNotEmpty && nextDate != null && nextDate.isNotEmpty) {
+        final formattedPrev = Jiffy.parse(previousDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+        final formattedNext = Jiffy.parse(nextDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+        availableDatesMessage = "Horaires disponibles les $formattedPrev ou $formattedNext";
+      } else if (previousDate != null && previousDate.isNotEmpty) {
+        final formattedPrev = Jiffy.parse(previousDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+        availableDatesMessage = "Horaire disponible le $formattedPrev";
+      } else if (nextDate != null && nextDate.isNotEmpty) {
+        final formattedNext = Jiffy.parse(nextDate, pattern: 'yyyy-MM-dd').format(pattern: 'dd MMMM yyyy');
+        availableDatesMessage = "Horaire disponible le $formattedNext";
+      } else {
+        availableDatesMessage = "Aucun horaire disponible pour cette date.";
+      }
+
+      return Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(availableDatesMessage, textAlign: TextAlign.center),
+          ],
         ),
       );
     } else {
@@ -124,7 +145,7 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
   }
 
   void _fetchAppointmentsAvailability() {
-    if(widget.medicalConcernId == null) {
+    if (widget.medicalConcernId == null) {
       print("Medical concern ID is null, skipping fetch.");
       return;
     }
