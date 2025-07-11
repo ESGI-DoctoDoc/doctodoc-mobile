@@ -4,7 +4,6 @@ import 'package:doctodoc_mobile/models/doctor/doctor.dart';
 import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/screens/appointment/widgets/onboarding_loading.dart';
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
-import 'package:doctodoc_mobile/shared/widgets/buttons/base/button_base.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/appointment_list_tile.dart';
 import 'package:doctodoc_mobile/shared/widgets/list_tile/base/list_tile_base.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:timelines_plus/timelines_plus.dart';
 import '../../shared/widgets/banners/info_banner.dart';
 import '../../shared/widgets/modals/document_care_tracking_menu_modal.dart';
 import '../../shared/widgets/modals/show_document_care_tracking_upload_modal.dart';
-import '../appointments/care_tracking_permissions_screen.dart';
 
 class CareTrackingDetailScreen extends StatefulWidget {
   static const String routeName = '/care-trackings/:careTrackingId';
@@ -116,20 +114,6 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
         _buildDoctors(careTracking.doctors),
         _buildAppointments(careTracking.appointments),
         _buildDocuments(careTracking.documents),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: ButtonBase(
-            label: "Modifier les permissions",
-            bgColor: Colors.white,
-            borderColor: Border.all(
-              color: Theme.of(context).dividerColor.withAlpha(77),
-              width: 2,
-            ),
-            onTap: () {
-              CareTrackingPermissionsScreen.navigateTo(context, widget.careTrackingId);
-            },
-          ),
-        )
       ],
     );
   }
@@ -399,8 +383,10 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
               ),
               childrenPadding: EdgeInsets.zero,
               children: _buildDocumentList(documents.skip(3).toList()),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
-              collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, side: BorderSide.none),
+              collapsedShape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, side: BorderSide.none),
             ),
           ],
         ],

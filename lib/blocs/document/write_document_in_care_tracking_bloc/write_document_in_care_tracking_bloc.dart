@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:doctodoc_mobile/models/document.dart';
 import 'package:doctodoc_mobile/services/dtos/upload_document_request.dart';
 import 'package:doctodoc_mobile/services/repositories/care_tracking_repository/care_tracking_repository.dart';
 import 'package:meta/meta.dart';
@@ -22,7 +21,6 @@ class WriteDocumentInCareTrackingBloc
     on<OnUploadDocument>(_onUploadUrl);
     on<OnDeleteDocument>(_onDeleteDocument);
     on<OnUpdateDocument>(_onUpdateDocument);
-    on<OnShareDocument>(_onShareDocument);
   }
 
   Future<void> _onUploadUrl(
@@ -78,24 +76,6 @@ class WriteDocumentInCareTrackingBloc
     } catch (e) {
       emit(state.copyWith(
         updateStatus: UpdateDocumentStatus.error,
-        exception: AppException.from(e),
-      ));
-    }
-  }
-
-  Future<void> _onShareDocument(
-      OnShareDocument event, Emitter<WriteDocumentInCareTrackingState> emit) async {
-    emit(state.copyWith(shareStatus: ShareDocumentStatus.loading));
-    try {
-      await careTrackingRepository.shareDocument(
-        event.careTrackingId,
-        event.document,
-      );
-
-      emit(state.copyWith(shareStatus: ShareDocumentStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-        shareStatus: ShareDocumentStatus.error,
         exception: AppException.from(e),
       ));
     }
