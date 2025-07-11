@@ -56,7 +56,8 @@ class _ChangePasswordWidgetState extends State<_ChangePasswordWidget> {
                   const SizedBox(height: 10),
                   PasswordInput(label: "Nouveau mot de passe", controller: newPasswordController),
                   const SizedBox(height: 10),
-                  PasswordInput(label: "Confirmation du mot de passe", controller: confirmPasswordController),
+                  PasswordInput(
+                      label: "Confirmation du mot de passe", controller: confirmPasswordController),
                   const SizedBox(height: 20),
                   PrimaryButton(
                     label: "Mettre à jour les informations",
@@ -73,7 +74,7 @@ class _ChangePasswordWidgetState extends State<_ChangePasswordWidget> {
 
   void _updatePatient() {
     if (changePasswordKey.currentState!.validate()) {
-      if(newPasswordController.text != confirmPasswordController.text) {
+      if (newPasswordController.text != confirmPasswordController.text) {
         showErrorSnackbar(context, "Les mots de passe ne correspondent pas");
         return;
       }
@@ -95,5 +96,3 @@ class _ChangePasswordWidgetState extends State<_ChangePasswordWidget> {
     }
   }
 }
-//Abdcd76@
-// _changePasswordListener
