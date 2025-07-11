@@ -1,4 +1,5 @@
 import 'package:doctodoc_mobile/screens/appointments/appointment_detail_screen.dart';
+import 'package:doctodoc_mobile/screens/care_tracking/care_tracking_detail_screen.dart';
 import 'package:doctodoc_mobile/services/data_sources/local_auth_data_source/local_auth_data_source.dart';
 import 'package:doctodoc_mobile/services/repositories/user_repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -45,6 +46,15 @@ class NotificationService {
         navigatorKey.currentState?.push(
           MaterialPageRoute(
             builder: (context) => AppointmentDetailScreen(appointmentId: appointmentId),
+          ),
+        );
+      }
+
+      if (data.containsKey('careTracking_id')) {
+        final careTrackingId = data['careTracking_id'];
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (context) => CareTrackingDetailScreen(careTrackingId: careTrackingId),
           ),
         );
       }
