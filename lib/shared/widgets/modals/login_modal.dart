@@ -1,5 +1,6 @@
 import 'package:doctodoc_mobile/screens/auth/otp_screen.dart';
 import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
+import 'package:doctodoc_mobile/shared/widgets/inputs/email_or_phone_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/forgot_password_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,6 @@ import '../../../blocs/auth_bloc/auth_bloc.dart';
 import '../../../models/credentials.dart';
 import '../../../services/data_sources/local_auth_data_source/shared_preferences_auth_data_source.dart';
 import '../buttons/primary_button.dart';
-import '../inputs/email_input.dart';
 import '../inputs/password_input.dart';
 import '../texts/inline_text_link.dart';
 
@@ -49,7 +49,7 @@ class _LoginModalState extends State<LoginModal> {
               key: loginKey,
               child: Column(
                 children: [
-                  EmailInput(controller: emailController),
+                  EmailOrPhoneInput(controller: emailController),
                   const SizedBox(height: 10),
                   PasswordInput(controller: passwordController),
                 ],

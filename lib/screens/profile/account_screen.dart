@@ -216,7 +216,6 @@ class _AccountScreenState extends State<AccountScreen> {
       title: Text('Email'),
       subtitle: Text(email),
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-      onTap: () => showUpdateEmailModal(context, email),
     );
   }
 
