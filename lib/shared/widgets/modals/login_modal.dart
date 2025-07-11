@@ -143,7 +143,9 @@ class _LoginModalState extends State<LoginModal> {
       isLoading = true;
     });
     Credentials credentials = Credentials(
-      username: emailController.text,
+      username: emailController.text.contains('@')
+          ? emailController.text
+          : "+33${emailController.text.substring(1)}".replaceAll(" ", "").trim(),
       password: passwordController.text,
     );
 
