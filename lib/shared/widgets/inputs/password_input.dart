@@ -33,11 +33,13 @@ class PasswordValidator extends Validator {
 
 class PasswordInput extends StatefulWidget {
   final TextEditingController controller;
+  final String label;
   final bool? required;
 
   const PasswordInput({
     super.key,
     required this.controller,
+    this.label = "Mot de passe",
     this.required,
   });
 
@@ -57,7 +59,7 @@ class _PasswordInputState extends State<PasswordInput> {
   @override
   Widget build(BuildContext context) {
     return InputText(
-      label: "Mot de passe",
+      label: widget.label,
       placeholder: "**********",
       controller: widget.controller,
       type: InputTextType.password,
