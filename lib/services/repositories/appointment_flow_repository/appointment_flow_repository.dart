@@ -36,7 +36,7 @@ class AppointmentFlowRepository {
     }
   }
 
-  Future<List<MedicalConcernAppointmentAvailability>>
+  Future<MedicalConcernAppointmentAvailability>
       getAppointmentsAvailabilityByMedicalConcernIdAndDate(
           String medicalConcernId, String date) async {
     try {

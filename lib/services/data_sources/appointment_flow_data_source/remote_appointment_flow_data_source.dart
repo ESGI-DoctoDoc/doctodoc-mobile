@@ -30,16 +30,13 @@ class RemoteAppointmentFlowDataSource implements AppointmentFlowDataSource {
   }
 
   @override
-  Future<List<MedicalConcernAppointmentAvailability>>
+  Future<MedicalConcernAppointmentAvailability>
       getAppointmentsAvailabilityByMedicalConcernIdAndDate(
           String medicalConcernId, String date) async {
     final response = await dio.get(
         "/patients/doctors/medical-concerns/$medicalConcernId/get-appointments-availability?date=$date");
 
-    final jsonList = (response.data["data"] as List?) ?? [];
-    return jsonList
-        .map((jsonElement) => MedicalConcernAppointmentAvailability.fromJson(jsonElement))
-        .toList();
+    return MedicalConcernAppointmentAvailability.fromJson(response.data["data"]);
   }
 
   @override

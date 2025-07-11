@@ -15,7 +15,7 @@ class AppointmentFlowState {
   final GetCareTrackingsStatus getCareTrackingsStatus;
   final List<MedicalConcern> medicalConcerns;
   final List<MedicalConcernQuestion> questions;
-  final List<MedicalConcernAppointmentAvailability> appointmentAvailability;
+  final MedicalConcernAppointmentAvailability? appointmentAvailability;
   final List<CareTrackingForAppointment> careTrackings;
   final AppException? exception;
 
@@ -26,7 +26,7 @@ class AppointmentFlowState {
     this.getCareTrackingsStatus = GetCareTrackingsStatus.initial,
     this.medicalConcerns = const [],
     this.questions = const [],
-    this.appointmentAvailability = const [],
+    this.appointmentAvailability,
     this.careTrackings = const [],
     this.exception,
   });
@@ -39,7 +39,7 @@ class AppointmentFlowState {
     List<MedicalConcern>? medicalConcerns,
     List<MedicalConcernQuestion>? questions,
     List<CareTrackingForAppointment>? careTrackings,
-    List<MedicalConcernAppointmentAvailability>? appointmentAvailability,
+    MedicalConcernAppointmentAvailability? appointmentAvailability,
     AppException? exception,
   }) {
     return AppointmentFlowState(
