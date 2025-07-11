@@ -26,3 +26,11 @@ class OnChangePassword extends WriteUserEvent {
     required this.newPassword,
   });
 }
+
+class OnRequestNewPassword extends WriteUserEvent {
+  final String email;
+
+  OnRequestNewPassword({
+    required this.email,
+  });
+}

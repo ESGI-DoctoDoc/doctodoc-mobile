@@ -16,6 +16,7 @@ class WriteUserBloc extends Bloc<WriteUserEvent, WriteUserState> {
   }) : super(WriteUserState()) {
     on<OnUpdateProfile>(_onUpdateProfile);
     on<OnChangePassword>(_onChangePassword);
+    on<OnRequestNewPassword>(_onRequestNewPassword);
   }
 
   Future<void> _onUpdateProfile(OnUpdateProfile event, Emitter<WriteUserState> emit) async {
@@ -56,6 +57,24 @@ class WriteUserBloc extends Bloc<WriteUserEvent, WriteUserState> {
     } catch (error) {
       emit(state.copyWith(
         changePasswordStatus: ChangePasswordStatus.error,
+        exception: AppException.from(error),
+      ));
+    }
+  }
+
+  Future<void> _onRequestNewPassword(
+      OnRequestNewPassword event, Emitter<WriteUserState> emit) async {
+    try {
+      emit(state.copyWith(requestPasswordStatus: RequestPasswordStatus.loading));
+
+      String email = event.email;
+
+      await userRepository.requestNewPassword(email);
+
+      emit(state.copyWith(requestPasswordStatus: RequestPasswordStatus.success));
+    } catch (error) {
+      emit(state.copyWith(
+        requestPasswordStatus: RequestPasswordStatus.error,
         exception: AppException.from(error),
       ));
     }

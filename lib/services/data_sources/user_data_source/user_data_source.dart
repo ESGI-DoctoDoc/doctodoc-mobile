@@ -13,4 +13,6 @@ abstract class UserDataSource {
   Future<void> saveFcmToken(String fcmToken);
 
   Future<void> updatePassword(String oldPassword, String newPassword);
+
+  Future<void> requestNewPassword(String email);
 }

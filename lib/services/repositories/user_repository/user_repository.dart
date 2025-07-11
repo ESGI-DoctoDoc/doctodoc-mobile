@@ -74,6 +74,14 @@ class UserRepository {
     }
   }
 
+  Future<void> requestNewPassword(String email) async {
+    try {
+      await userDataSource.requestNewPassword(email);
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
   dispose() {
     _userRepositoryEventController.close();
   }
