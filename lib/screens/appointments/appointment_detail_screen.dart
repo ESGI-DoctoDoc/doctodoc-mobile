@@ -201,7 +201,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${doctor.firstName} ${doctor.lastName}',
+                        '${_capitalize(doctor.firstName.toLowerCase())} ${_capitalize(doctor.lastName.toLowerCase())}',
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
@@ -367,5 +367,9 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     } else {
       showErrorSnackbar(context, "Impossible d'ouvrir la carte.");
     }
+  }
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }
