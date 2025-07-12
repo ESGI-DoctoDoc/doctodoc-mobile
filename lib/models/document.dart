@@ -2,7 +2,7 @@ enum DocumentType {
   medicalReport("Rapport médical"),
   prescription("Ordonnance"),
   medicalCertificate("Certificat médical"),
-  analysesResult("Résultats d\'analyses"),
+  analysesResult("Résultats d'analyses"),
   other("Autre");
 
   final String label;

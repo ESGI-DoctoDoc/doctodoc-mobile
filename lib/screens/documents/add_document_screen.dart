@@ -48,11 +48,11 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
       },
       listener: _uploadDocumentBlocListener,
       child: Container(
-        color: Color(0xFFEFEFEF),
+        color: const Color(0xFFEFEFEF),
         child: SafeArea(
           top: false,
           child: Scaffold(
-            backgroundColor: Color(0xFFEFEFEF),
+            backgroundColor: const Color(0xFFEFEFEF),
             body: CustomScrollView(slivers: [
               SliverAppBar(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -81,7 +81,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
                     ],
                   ),
                   background: Container(
-                    color: Color(0xFFEFEFEF),
+                    color: const Color(0xFFEFEFEF),
                   ),
                 ),
               ),
@@ -177,7 +177,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
             )
           else
             const Column(
-              children: const [
+              children: [
                 Icon(Icons.insert_drive_file, size: 60),
                 SizedBox(height: 8),
                 Text('Preview non supporté', style: TextStyle(fontSize: 16)),

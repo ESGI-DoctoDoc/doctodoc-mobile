@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/shared/widgets/inputs/base/input_selection.dart';
-import 'package:doctodoc_mobile/shared/widgets/inputs/patient_selection.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/validators/validator.dart';
 import 'package:flutter/material.dart';
 

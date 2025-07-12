@@ -81,7 +81,7 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
             appBar: AppBar(
               title: Text(document.name),
               backgroundColor: Theme.of(context).primaryColor,
-              actions: [],
+              actions: const [],
             ),
             body: buildDocumentViewer(document.url),
           ),

@@ -16,7 +16,7 @@ void showChangePasswordModal(BuildContext context) {
         buildModalPage(
           context: context,
           title: "Changer votre mot de passe",
-          child: _ChangePasswordWidget(),
+          child: const _ChangePasswordWidget(),
         ),
       ];
     },

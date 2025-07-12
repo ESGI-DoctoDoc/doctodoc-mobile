@@ -18,7 +18,7 @@ Future<bool?> showInviteDoctorModal(BuildContext context) async {
         buildModalPage(
           context: context,
           title: "On contacte votre médecin traitant",
-          child: _InviteDoctorWidget(),
+          child: const _InviteDoctorWidget(),
         ),
       ];
     },

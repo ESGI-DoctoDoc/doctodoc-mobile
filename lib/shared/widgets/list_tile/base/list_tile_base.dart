@@ -97,7 +97,7 @@ class ListTileBase extends StatelessWidget {
     } else {
       return Text(
         subtitle!,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black87,
           fontSize: 14,
         ),

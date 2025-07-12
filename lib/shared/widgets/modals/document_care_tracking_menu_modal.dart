@@ -71,7 +71,7 @@ class _DocumentMenuWidget extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Afficher les détails"),
-              leading: Icon(Icons.info),
+              leading: const Icon(Icons.info),
               onTap: () {
                 showDocumentCareTrackingInformationModal(
                   context,

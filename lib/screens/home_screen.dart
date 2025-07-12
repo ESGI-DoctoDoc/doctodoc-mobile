@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSuccess(BuildContext context, User user) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -88,9 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Text('Doctodoc'),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text('Doctodoc'),
                   ),
                   IconButton(
                     icon: const Icon(Icons.notifications_none_outlined),
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -225,9 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
       const ListTitle(title: "Mon médecin traitant"),
       ListTileBase(
         title: "Ajouter un médecin traitant",
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Icon(Icons.add),
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: Icon(Icons.add),
         ),
         onTap: () {
           SaveGeneralDoctor.navigateTo(context, null);
@@ -314,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 5),
                 Text(
                   specialities[index].name,
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             ),
@@ -332,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildError() {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

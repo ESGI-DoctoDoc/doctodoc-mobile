@@ -122,11 +122,11 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
     _isLoadingMore = isLoadingMore;
 
     if(_name.isEmpty) {
-      return Center(
+      return const Center(
         child: Column(
           children: [
             Text("Veuillez faire une recherche !"),
-            const Text("Vous pouvez aussi passer cette étape"),
+            Text("Vous pouvez aussi passer cette étape"),
           ],
         ),
       );
@@ -168,10 +168,10 @@ class _OnboardingGeneralPractitionerStepState extends State<OnboardingGeneralPra
 
         // Widget à la fin de la liste
         if (canInviteDoctor == false) {
-          return Column(
+          return const Column(
             children: [
-              const SizedBox(height: 20),
-              const Text("Demande d'invitation envoyée !"),
+              SizedBox(height: 20),
+              Text("Demande d'invitation envoyée !"),
             ],
           );
         }

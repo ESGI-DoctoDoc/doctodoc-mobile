@@ -30,7 +30,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -70,7 +70,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                 ],
               ),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -121,7 +121,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ),
           title: Text(
             '${member.firstName[0].toUpperCase()}${member.firstName.substring(1).toLowerCase()} ${member.lastName[0].toUpperCase()}${member.lastName.substring(1).toLowerCase()}',
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           subtitle: Text(member.email),
           trailing: const Icon(Icons.chevron_right),

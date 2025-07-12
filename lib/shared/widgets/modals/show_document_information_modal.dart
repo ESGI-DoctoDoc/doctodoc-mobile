@@ -74,22 +74,22 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
       children: [
         ListTile(
           leading: const Icon(Icons.description),
-          title: Text("Nom du document"),
+          title: const Text("Nom du document"),
           subtitle: Text(document.document.name),
         ),
         ListTile(
           leading: const Icon(Icons.category),
-          title: Text('Type de document'),
+          title: const Text('Type de document'),
           subtitle: Text(document.type),
         ),
         ListTile(
           leading: const Icon(Icons.person),
-          title: Text('Uploadé par'),
+          title: const Text('Uploadé par'),
           subtitle: Text('${document.uploadedBy.firstName} ${document.uploadedBy.lastName}'),
         ),
         ListTile(
           leading: const Icon(Icons.calendar_today),
-          title: Text('Uploadé le'),
+          title: const Text('Uploadé le'),
           subtitle: Text(
             Jiffy.parseFromDateTime(DateTime.parse(document.uploadedAt)).format(pattern: "dd/MM/yyyy à HH:mm"),
           ),

@@ -73,7 +73,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
       return _buildError();
     } else {
       return Scaffold(
-        backgroundColor: Color(0xFFEFEFEF),
+        backgroundColor: const Color(0xFFEFEFEF),
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -125,7 +125,7 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                   ],
                 ),
                 background: Container(
-                  color: Color(0xFFEFEFEF),
+                  color: const Color(0xFFEFEFEF),
                 ),
               ),
             ),

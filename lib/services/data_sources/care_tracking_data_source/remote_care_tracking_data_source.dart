@@ -55,7 +55,7 @@ class RemoteCareTrackingDataSource implements CareTrackingDataSource {
 
     final bytes = await file.readAsBytes();
 
-    final response = await dio.get("/patients/care-trackings/${careTrackingId}/upload-url/$id");
+    final response = await dio.get("/patients/care-trackings/$careTrackingId/upload-url/$id");
     String url = response.data["data"]["url"];
 
     final dioS3 = Dio(

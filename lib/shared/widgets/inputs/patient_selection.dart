@@ -1,4 +1,3 @@
-import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/validators/validator.dart';
 import 'package:flutter/material.dart';
 

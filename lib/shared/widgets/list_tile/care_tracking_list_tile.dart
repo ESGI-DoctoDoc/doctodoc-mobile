@@ -35,7 +35,7 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
           : "En cours...",
       trailing: IconButton(
         onPressed: () => showCareTrackingMenuModal(context, widget.careTracking.id),
-        icon: Icon(Icons.more_vert),
+        icon: const Icon(Icons.more_vert),
       ),
       leading: Container(
         width: 40,

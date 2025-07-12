@@ -36,9 +36,9 @@ class ExpansionTileBase extends StatelessWidget {
           subtitle: _buildSubtitle(context),
           leading: leading,
           trailing: trailing,
-          children: children,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
           collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide.none),
+          children: children,
         ),
       ),
     );

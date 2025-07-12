@@ -378,11 +378,11 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                 child: Text("Afficher tous les documents"),
               ),
               childrenPadding: EdgeInsets.zero,
-              children: _buildDocumentList(documents.skip(3).toList()),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero, side: BorderSide.none),
               collapsedShape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero, side: BorderSide.none),
+              children: _buildDocumentList(documents.skip(3).toList()),
             ),
           ],
         ],

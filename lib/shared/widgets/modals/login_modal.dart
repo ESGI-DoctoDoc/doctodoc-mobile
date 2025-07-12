@@ -3,7 +3,6 @@ import 'package:doctodoc_mobile/shared/utils/show_error_snackbar.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/email_or_phone_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/forgot_password_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/register_modal.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';

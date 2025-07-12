@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
-import 'package:doctodoc_mobile/exceptions/app_exception.dart';
 import 'package:doctodoc_mobile/exceptions/auth_exception.dart';
 import 'package:doctodoc_mobile/models/user.dart';
 

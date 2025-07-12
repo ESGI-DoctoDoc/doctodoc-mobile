@@ -34,18 +34,18 @@ class _ReasonSelectionWidget extends StatefulWidget {
 
 class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
   final List<InputDropdownItem> reasons = [
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Je ne suis plus disponible à ce créneau",
         value: "Je ne suis plus disponible à ce créneau"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "J’ai obtenu un rendez-vous plus tôt ailleurs",
         value: "J’ai obtenu un rendez-vous plus tôt ailleurs"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Mon état de santé s’est amélioré", value: "Mon état de santé s’est amélioré"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Je veux reporter mon rendez-vous", value: "Je veux reporter mon rendez-vous"),
-    InputDropdownItem(label: "Je ne peux pas me déplacer", value: "Je ne peux pas me déplacer"),
-    InputDropdownItem(label: "Rendez-vous pris par erreur", value: "Rendez-vous pris par erreur"),
+    const InputDropdownItem(label: "Je ne peux pas me déplacer", value: "Je ne peux pas me déplacer"),
+    const InputDropdownItem(label: "Rendez-vous pris par erreur", value: "Rendez-vous pris par erreur"),
   ];
 
   @override
@@ -69,7 +69,7 @@ class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
                   Navigator.of(context).pop(widget.controller.text);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text("Veuillez sélectionner une raison"),
                       backgroundColor: Colors.redAccent,
                     ),

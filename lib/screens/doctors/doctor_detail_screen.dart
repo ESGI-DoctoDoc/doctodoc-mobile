@@ -69,11 +69,11 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
 
   Container _buildSuccess(DoctorDetailed doctorDetailed) {
     return Container(
-      color: Color(0xFFEFEFEF), // Light grey background
+      color: const Color(0xFFEFEFEF), // Light grey background
       child: SafeArea(
         top: false,
         child: Scaffold(
-          backgroundColor: Color(0xFFEFEFEF),
+          backgroundColor: const Color(0xFFEFEFEF),
           body: Stack(
             children: [
               CustomScrollView(slivers: [
@@ -84,7 +84,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   automaticallyImplyLeading: false,
                   expandedHeight: 200.0,
                   collapsedHeight: 100,
-                  backgroundColor: Color(0xFFEFEFEF),
+                  backgroundColor: const Color(0xFFEFEFEF),
                   flexibleSpace: LayoutBuilder(
                     builder: (BuildContext context, BoxConstraints constraints) {
                       final top = constraints.biggest.height;
@@ -92,7 +92,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                       return FlexibleSpaceBar(
                         centerTitle: true,
                         background: Container(
-                          color: Color(0xFFEFEFEF),
+                          color: const Color(0xFFEFEFEF),
                         ),
                         title: isCollapsed
                             ? _buildCollapsedTitle(doctorDetailed)
@@ -298,7 +298,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Expanded(
             child: Text(
               time,
@@ -342,7 +342,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
               ],
             ),
           ),
-          Spacer(),
+          const Spacer(),
           if (languages.$2.isNotEmpty)
             Expanded(
               child: Row(
@@ -441,7 +441,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   ),
                   Text(
                     doctor.basicInformation.speciality,
-                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
               ),
@@ -464,15 +464,15 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
             doctorDetailed.basicInformation.pictureUrl,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           'Dr. ${_capitalize(doctorDetailed.basicInformation.firstName.toLowerCase())} ${_capitalize(doctorDetailed.basicInformation.lastName.toLowerCase())}',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           doctorDetailed.basicInformation.speciality,
-          style: TextStyle(fontSize: 12, color: Colors.black),
+          style: const TextStyle(fontSize: 12, color: Colors.black),
         ),
       ],
     );

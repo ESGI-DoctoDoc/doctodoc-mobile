@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:doctodoc_mobile/services/data_sources/register_data_source/register_data_source.dart';
 
-import '../../../exceptions/app_exception.dart';
 import '../../../exceptions/auth_exception.dart';
 import '../../../models/patient.dart';
 import '../../data_sources/local_auth_data_source/local_auth_data_source.dart';

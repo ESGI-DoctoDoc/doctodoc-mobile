@@ -64,11 +64,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFEFEFEF),
+      color: const Color(0xFFEFEFEF),
       child: SafeArea(
         top: false,
         child: Scaffold(
-          backgroundColor: Color(0xFFEFEFEF),
+          backgroundColor: const Color(0xFFEFEFEF),
           appBar: AppointmentAppBar(
             firstname: widget.doctorData.firstName,
             lastname: widget.doctorData.lastName,

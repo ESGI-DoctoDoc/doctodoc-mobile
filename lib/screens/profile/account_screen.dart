@@ -40,7 +40,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -54,7 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
               centerTitle: true,
               title: const Text('Compte'),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -236,7 +236,7 @@ class _AccountScreenState extends State<AccountScreen> {
   ListTile _buildEmailSection(String email) {
     return ListTile(
       leading: const Icon(Icons.email),
-      title: Text('Email'),
+      title: const Text('Email'),
       subtitle: Text(email),
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
     );

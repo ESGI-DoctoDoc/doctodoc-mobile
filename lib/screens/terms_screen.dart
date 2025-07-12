@@ -81,85 +81,85 @@ class TermsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "1. Objet",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text("La Plateforme a pour objet de permettre aux utilisateurs de :"),
-            SizedBox(height: 8),
-            BulletList(items: [
+            const SizedBox(height: 8),
+            const Text("La Plateforme a pour objet de permettre aux utilisateurs de :"),
+            const SizedBox(height: 8),
+            const BulletList(items: [
               "Réserver des créneaux de rendez-vous,",
               "Gérer leurs réservations et consulter leur historique,",
               "Être notifiés et informés par email ou notification.",
             ]),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "2. Accès au service",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "L’accès à la Plateforme est gratuit pour les utilisateurs. Il nécessite la création d’un compte personnel "
               "sécurisé via un identifiant et un mot de passe.",
             ),
-            SizedBox(height: 8),
-            Text("L’utilisateur s’engage à fournir des informations exactes et à jour lors de son inscription."),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 8),
+            const Text("L’utilisateur s’engage à fournir des informations exactes et à jour lors de son inscription."),
+            const SizedBox(height: 24),
+            const Text(
               "3. Engagements de l’utilisateur",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text("L’utilisateur s’engage à :"),
-            SizedBox(height: 8),
-            BulletList(items: [
+            const SizedBox(height: 8),
+            const Text("L’utilisateur s’engage à :"),
+            const SizedBox(height: 8),
+            const BulletList(items: [
               "Utiliser la Plateforme conformément aux lois et règlements en vigueur,",
               "Ne pas usurper l’identité d’un tiers,",
               "Respecter les règles de fonctionnement du service (ex. : libération automatique des créneaux à 11h, réservation selon les rôles, etc.),",
               "Ne pas tenter d’accéder aux données d’autres utilisateurs.",
             ]),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "4. Responsabilités",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "Responsabilité de l’utilisateur : L’utilisateur est responsable de l’usage qu’il fait de la Plateforme et des conséquences de ses actions.",
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "Responsabilité de l’éditeur : Docto Doc met tout en œuvre pour assurer la disponibilité et la sécurité du service.",
             ),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "5. Données personnelles",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "Les données personnelles sont traitées conformément à notre politique de confidentialité. "
               "L’utilisateur peut y accéder à tout moment pour en savoir plus sur ses droits.",
             ),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "6. Modification des CGU",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "Les présentes CGU peuvent être modifiées à tout moment. L’utilisateur sera informé en cas de changement "
               "important affectant ses droits ou obligations.",
             ),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               "7. Contact",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               "Pour toute question concernant les CGU, vous pouvez contacter notre support à l’adresse : support@doctodoc.fr.",
             ),
           ],

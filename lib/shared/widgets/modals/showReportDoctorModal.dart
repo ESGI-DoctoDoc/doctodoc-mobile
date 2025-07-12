@@ -35,16 +35,16 @@ class _ReasonSelectionWidget extends StatefulWidget {
 
 class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
   final List<InputDropdownItem> reasons = [
-    InputDropdownItem(label: "Comportement inapproprié", value: "Comportement inapproprié"),
-    InputDropdownItem(
+    const InputDropdownItem(label: "Comportement inapproprié", value: "Comportement inapproprié"),
+    const InputDropdownItem(
         label: "Motif de consultation inapproprié", value: "Motif de consultation inapproprié"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Questions déplacées ou non professionnelles",
         value: "Questions déplacées ou non professionnelles"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Annulation fréquente sans raison valable",
         value: "Annulation fréquente sans raison valable"),
-    InputDropdownItem(
+    const InputDropdownItem(
         label: "Informations incorrectes sur le profil",
         value: "Informations incorrectes sur le profil"),
   ];
@@ -75,7 +75,7 @@ class _ReasonSelectionWidgetState extends State<_ReasonSelectionWidget> {
                   Navigator.of(context).pop(widget.controller.text);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text("Veuillez sélectionner une raison"),
                       backgroundColor: Colors.redAccent,
                     ),

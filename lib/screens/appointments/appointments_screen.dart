@@ -39,7 +39,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -54,7 +54,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
               centerTitle: true,
               title: const Text('Rendez-vous'),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -62,7 +62,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> with TickerProv
             pinned: true,
             delegate: _FixedTextHeader(
               child: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
                 child: TabBar(
                   controller: _tabController,
                   tabs: const [

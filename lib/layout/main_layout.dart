@@ -23,10 +23,10 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    AppointmentsScreen(),
-    DocumentsScreen(),
-    AccountScreen()
+    const HomeScreen(),
+    const AppointmentsScreen(),
+    const DocumentsScreen(),
+    const AccountScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -45,7 +45,7 @@ class _MainLayoutState extends State<MainLayout> {
               width: 0.5,
             ),
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               offset: Offset(0, -0.10),

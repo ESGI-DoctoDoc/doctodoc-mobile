@@ -35,7 +35,7 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -65,7 +65,7 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
                 ],
               ),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -99,7 +99,7 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
                       ListTile(
                         leading: Icon(icon),
                         title: Text(docType.label),
-                        trailing: Icon(Icons.chevron_right),
+                        trailing: const Icon(Icons.chevron_right),
                         onTap: () {
                           MedicalDocumentsTypeScreen.navigateTo(
                             context,
@@ -111,7 +111,7 @@ class _MedicalDetailsScreenState extends State<MedicalDetailsScreen> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
             ]),
           ),
         ],

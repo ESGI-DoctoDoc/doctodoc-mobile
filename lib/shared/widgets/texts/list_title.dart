@@ -25,7 +25,7 @@ class ListTitle extends StatelessWidget {
         ),
         const Spacer(),
         TextButton(
-          child: trailing == null ? SizedBox.shrink() : Text(
+          child: trailing == null ? const SizedBox.shrink() : Text(
             trailing!,
             style: TextStyle(
               color: Theme.of(context).primaryColor,

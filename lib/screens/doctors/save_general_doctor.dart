@@ -136,10 +136,10 @@ class _SaveGeneralDoctorState extends State<SaveGeneralDoctor> {
     _isLoadingMore = isLoadingMore;
 
     if (_nameController.text.isEmpty) {
-      return Center(
+      return const Center(
         child: Column(
           children: [
-            const Text("Veuillez faire une recherche !"),
+            Text("Veuillez faire une recherche !"),
           ],
         ),
       );

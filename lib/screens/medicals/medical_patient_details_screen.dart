@@ -33,7 +33,7 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -63,13 +63,13 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
                 ],
               ),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Toutes les analyses',
@@ -77,15 +77,15 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.science),
-                title: Text('Analyse'),
-                trailing: Icon(Icons.chevron_right),
+                leading: const Icon(Icons.science),
+                title: const Text('Analyse'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
                 },
               ),
 
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Tous les vaccins',
@@ -93,15 +93,15 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.vaccines),
-                title: Text('Vaccin'),
-                trailing: Icon(Icons.chevron_right),
+                leading: const Icon(Icons.vaccines),
+                title: const Text('Vaccin'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
                 },
               ),
 
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Toutes les ordonnances',
@@ -109,15 +109,15 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.description),
-                title: Text('Ordonnance'),
-                trailing: Icon(Icons.chevron_right),
+                leading: const Icon(Icons.description),
+                title: const Text('Ordonnance'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
                 },
               ),
 
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
                   'tous les documents médicaux',
@@ -125,9 +125,9 @@ class _MedicalPatientDetailsScreenState extends State<MedicalPatientDetailsScree
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.image),
-                title: Text('Imagerie'),
-                trailing: Icon(Icons.chevron_right),
+                leading: const Icon(Icons.image),
+                title: const Text('Imagerie'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   MedicalDocumentsTypeScreen.navigateTo(context, patientId: "patientId", type: "type");
                 },

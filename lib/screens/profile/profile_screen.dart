@@ -53,7 +53,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
   Widget _buildSuccess(Patient userPatientInfos) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -105,7 +105,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 ],
               ),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),

@@ -72,6 +72,15 @@ class _InputChoiceState extends State<InputChoice> {
                           final item = rowItems[index ~/ 2];
                           return Expanded(
                             child: InkWell(
+                              onTap: item.disabled
+                                  ? null
+                                  : () {
+                                      formFieldState.didChange(item.value); // pour validation
+                                      setState(() {
+                                        widget.controller.text = item.value;
+                                      });
+                                      widget.onChange(item);
+                                    },
                               child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
@@ -95,15 +104,6 @@ class _InputChoiceState extends State<InputChoice> {
                                   ),
                                 ),
                               ),
-                              onTap: item.disabled
-                                  ? null
-                                  : () {
-                                      formFieldState.didChange(item.value); // pour validation
-                                      setState(() {
-                                        widget.controller.text = item.value;
-                                      });
-                                      widget.onChange(item);
-                                    },
                             ),
                           );
                         },

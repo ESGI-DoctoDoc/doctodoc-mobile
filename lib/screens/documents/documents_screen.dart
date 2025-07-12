@@ -36,7 +36,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEFEFEF),
+      backgroundColor: const Color(0xFFEFEFEF),
       floatingActionButton: _tabController.index == 1
           ? null
           : FloatingActionButton(
@@ -57,7 +57,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
               centerTitle: true,
               title: const Text('Documents'),
               background: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
               ),
             ),
           ),
@@ -65,7 +65,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> with TickerProviderSt
             pinned: true,
             delegate: _FixedTextHeader(
               child: Container(
-                color: Color(0xFFEFEFEF),
+                color: const Color(0xFFEFEFEF),
                 child: TabBar(
                   controller: _tabController,
                   tabs: const [

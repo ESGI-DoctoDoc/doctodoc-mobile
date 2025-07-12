@@ -2,10 +2,8 @@ import 'package:doctodoc_mobile/models/patient.dart';
 import 'package:doctodoc_mobile/shared/widgets/inputs/phone_input.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/show_validate_otp_modal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../blocs/close_member_blocs/write_close_member_bloc/write_close_member_bloc.dart';
 import '../buttons/primary_button.dart';
 import 'base/modal_base.dart';
 

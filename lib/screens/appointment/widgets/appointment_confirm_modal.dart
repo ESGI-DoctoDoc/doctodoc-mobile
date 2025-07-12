@@ -1,5 +1,4 @@
 import 'package:doctodoc_mobile/screens/appointment/types/appointment_flow_data.dart';
-import 'package:doctodoc_mobile/screens/home_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,27 +55,27 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
               child: Column(
                 children: [
                   ListTile(
-                    leading: Icon(Icons.calendar_today),
-                    title: Text(
+                    leading: const Icon(Icons.calendar_today),
+                    title: const Text(
                       "Date et heure",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(_formatDate()),
                   ),
-                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  const Divider(color: Color(0xFFe0e0e0), thickness: 2),
                   ListTile(
-                    leading: Icon(Icons.medical_services),
-                    title: Text(
+                    leading: const Icon(Icons.medical_services),
+                    title: const Text(
                       "Médecin",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
                         "Dr. ${widget.appointmentData.doctorData.firstName} ${widget.appointmentData.doctorData.lastName}"),
                   ),
-                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  const Divider(color: Color(0xFFe0e0e0), thickness: 2),
                   ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text(
+                    leading: const Icon(Icons.person),
+                    title: const Text(
                       "Patient",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
@@ -84,7 +83,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                       "${widget.appointmentData.patientData.firstName} ${widget.appointmentData.patientData.lastName}",
                     ),
                   ),
-                  Divider(color: const Color(0xFFe0e0e0), thickness: 2),
+                  const Divider(color: Color(0xFFe0e0e0), thickness: 2),
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 8.0,

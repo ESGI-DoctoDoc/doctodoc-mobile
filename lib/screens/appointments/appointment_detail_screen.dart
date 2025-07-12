@@ -151,9 +151,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   Center buildDateSection(String date, String start) {
     return Center(
       child: Text(
-        Jiffy.parse(date).format(pattern: "EEEE d MMMM yyyy") +
-        ' - ' +
-        Jiffy.parse(start, pattern: 'HH:mm').format(pattern: "HH:mm"),
+        '${Jiffy.parse(date).format(pattern: "EEEE d MMMM yyyy")} - ${Jiffy.parse(start, pattern: 'HH:mm').format(pattern: "HH:mm")}',
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
@@ -264,7 +262,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Motif', style: TextStyle(color: Colors.grey.shade600)),
-                Spacer(),
+                const Spacer(),
                 Text(motif),
               ],
             ),
@@ -333,7 +331,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   }
 
   Widget _buildCareTracking() {
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildTitleSection({required String title, Widget? trailing}) {
