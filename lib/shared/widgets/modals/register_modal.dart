@@ -51,7 +51,11 @@ class _RegisterModalState extends State<RegisterModal> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildRegisterButton(),
+            PrimaryButton(
+              label: "S'inscrire",
+              isLoading: isLoading,
+              onTap: () => _register(),
+            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,43 +89,6 @@ class _RegisterModalState extends State<RegisterModal> {
         ),
       ),
     );
-  }
-
-  //todo remove for release
-  Widget _buildRegisterButton() {
-    if (!kReleaseMode) {
-      return Row(
-        children: [
-          Expanded(
-            child: PrimaryButton(
-              label: "S'inscrire",
-              isLoading: isLoading,
-              onTap: () => _register(),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 100,
-            child: PrimaryButton(
-              label: "Fast",
-              onTap: () => _fastRegister(),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return PrimaryButton(
-        label: "S'inscrire'",
-        isLoading: isLoading,
-        onTap: () => _register(),
-      );
-    }
-  }
-
-  void _fastRegister() {
-    emailController.text = "c.lecqds@fmiqsd.cr";
-    passwordController.text = "Abdcd76@";
-    phoneController.text = "06 06 06 06 06";
   }
 
   void _registerListener(BuildContext context, RegisterState state) {

@@ -56,7 +56,11 @@ class _LoginModalState extends State<LoginModal> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildLoginButton(),
+            PrimaryButton(
+              label: "Se connecter",
+              isLoading: isLoading,
+              onTap: () => _login(),
+            ),
             const SizedBox(height: 20),
             InlineTextLink(
               text: "Mot de passe oublié ?",
@@ -87,50 +91,6 @@ class _LoginModalState extends State<LoginModal> {
         ),
       ),
     );
-  }
-
-  //todo remove for release
-  Widget _buildLoginButton() {
-    if (!kReleaseMode) {
-      return Row(
-        children: [
-          Expanded(
-            child: PrimaryButton(
-              label: "Se connecter",
-              isLoading: isLoading,
-              onTap: () => _login(),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 60,
-            child: PrimaryButton(
-              label: "Y",
-              onTap: () => _fastLogin(true),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 60,
-            child: PrimaryButton(
-              label: "N",
-              onTap: () => _fastLogin(false),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return PrimaryButton(
-        label: "Se connecter",
-        isLoading: isLoading,
-        onTap: () => _login(),
-      );
-    }
-  }
-
-  void _fastLogin(bool exist) {
-    emailController.text = exist ? "patient1@example.com" : "c.lecqds@fmiqsd.cr";
-    passwordController.text = "Abdcd76@";
   }
 
   void _login() {
