@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
-import '../../shared/widgets/banners/info_banner.dart';
 import '../../shared/widgets/modals/document_care_tracking_menu_modal.dart';
 import '../../shared/widgets/modals/show_document_care_tracking_upload_modal.dart';
 
@@ -105,10 +104,6 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const InfoBanner(
-          title:
-              "Le suivi de dossier est géré uniquement par vous, vous pouvez gérer les permissions à tout moment.",
-        ),
         const SizedBox(height: 16),
         _buildDescription(careTracking.careTracking.description),
         const SizedBox(height: 16),
