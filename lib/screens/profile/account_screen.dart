@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../models/user.dart';
 import '../../shared/utils/show_error_snackbar.dart';
+import '../../shared/widgets/modals/confirm_modal.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 import '../medicals/medical_details_screen.dart';
 
@@ -165,8 +166,15 @@ class _AccountScreenState extends State<AccountScreen> {
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    context.read<WriteUserBloc>().add(OnDeleteAccount());
+                  onTap: () async {
+                    final shouldDelete = await showConfirmModal(
+                      context,
+                      'Êtes-vous sûr de vouloir supprimer votre compte ?'
+                      ' Vos futurs rendez-vous seront de ce fait annulés.',
+                    );
+                    if (shouldDelete == true) {
+                      context.read<WriteUserBloc>().add(OnDeleteAccount());
+                    }
                   },
                 ),
               ),
