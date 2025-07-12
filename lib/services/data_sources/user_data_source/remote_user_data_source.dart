@@ -74,4 +74,9 @@ class RemoteUserDataSource implements UserDataSource {
           },
         ));
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    await dio.patch("/patients/delete-account");
+  }
 }

@@ -34,3 +34,5 @@ class OnRequestNewPassword extends WriteUserEvent {
     required this.email,
   });
 }
+
+class OnDeleteAccount extends WriteUserEvent {}
