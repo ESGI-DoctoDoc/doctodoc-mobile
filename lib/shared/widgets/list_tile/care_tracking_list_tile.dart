@@ -21,6 +21,12 @@ class CareTrackingListTile extends StatefulWidget {
 
 class _CareTrackingListTileState extends State<CareTrackingListTile> {
   @override
+  void initState() {
+    super.initState();
+    Jiffy.setLocale('fr-FR');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ExpansionTileBase(
       title: widget.careTracking.name,

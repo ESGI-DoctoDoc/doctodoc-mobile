@@ -48,6 +48,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
   void initState() {
     super.initState();
     _getCareTrackingDetailed();
+    Jiffy.setLocale('fr-FR');
   }
 
   @override

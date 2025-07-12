@@ -34,6 +34,7 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
   @override
   void initState() {
     super.initState();
+    Jiffy.setLocale('fr-FR');
     _dateController.text = Jiffy.now().format(pattern: 'yyyy-MM-dd');
     _fetchAppointmentsAvailability();
 
