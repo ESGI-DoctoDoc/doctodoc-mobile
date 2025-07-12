@@ -67,7 +67,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                   CareTrackingDetailLoading() =>
                     const OnboardingLoading(),
                   CareTrackingDetailError() => _buildError(),
-                  CareTrackingDetailLoaded() => Text(state.careTracking.careTracking.name),
+                  CareTrackingDetailLoaded() => Text(_capitalize(state.careTracking.careTracking.name.toLowerCase())),
                 };
               },
             ),
@@ -423,5 +423,10 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
     context.read<CareTrackingDetailBloc>().add(OnGetCareTrackingDetail(
           id: widget.careTrackingId,
         ));
+  }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

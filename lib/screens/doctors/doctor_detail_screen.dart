@@ -436,7 +436,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Dr. ${doctor.basicInformation.firstName}',
+                    'Dr. ${_capitalize(doctor.basicInformation.firstName.toLowerCase())}',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   Text(
@@ -466,7 +466,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
         ),
         SizedBox(height: 10),
         Text(
-          'Dr. ${doctorDetailed.basicInformation.firstName} ${doctorDetailed.basicInformation.lastName}',
+          'Dr. ${_capitalize(doctorDetailed.basicInformation.firstName.toLowerCase())} ${_capitalize(doctorDetailed.basicInformation.lastName.toLowerCase())}',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5),
@@ -486,5 +486,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   _onLoadMedicalConcern() {
     final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
     appointmentFlowBloc.add(GetMedicalConcerns(doctorId: widget.doctorId));
+  }
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

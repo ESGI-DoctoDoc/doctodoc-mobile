@@ -46,7 +46,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: AppointmentListTile(
-                title: "Dr. ${widget.appointment.doctor.firstName} ${widget.appointment.doctor.lastName}",
+                title: "Dr. ${_capitalize(widget.appointment.doctor.firstName.toLowerCase())} ${_capitalize(widget.appointment.doctor.lastName.toLowerCase())}",
                 subtitle: widget.appointment.doctor.speciality,
                 pictureUrl: widget.appointment.doctor.pictureUrl,
                 color: Colors.white,
@@ -115,5 +115,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
     } else {
       showErrorSnackbar(context, "Impossible d'ouvrir la carte.");
     }
+  }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

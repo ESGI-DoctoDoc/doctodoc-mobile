@@ -29,7 +29,7 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTileBase(
-      title: widget.careTracking.name,
+      title: _capitalize(widget.careTracking.name.toLowerCase()),
       subtitle: widget.careTracking.closedAt.isNotEmpty
           ? "Clôturé le ${Jiffy.parse(widget.careTracking.closedAt, pattern: 'yyyy-MM-dd HH:mm').format(pattern: 'd MMM yyyy à HH:mm')}"
           : "En cours...",
@@ -126,5 +126,10 @@ class _CareTrackingListTileState extends State<CareTrackingListTile> {
         ),
       ),
     ];
+  }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

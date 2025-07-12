@@ -67,8 +67,8 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
       patients.map(
         (patient) => PatientItem(
           patientId: patient.id,
-          firstname: patient.firstName,
-          lastname: patient.lastName,
+          firstname: _capitalize(patient.firstName.toLowerCase()),
+          lastname: _capitalize(patient.lastName.toLowerCase()),
         ),
       ),
     );
@@ -87,8 +87,8 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
                   if (patient != null) {
                     final newPatient = PatientItem(
                       patientId: patient.id,
-                      firstname: patient.firstName,
-                      lastname: patient.lastName,
+                      firstname: _capitalize(patient.firstName.toLowerCase()),
+                      lastname: _capitalize(patient.lastName.toLowerCase()),
                     );
 
                     setState(() {
@@ -126,5 +126,10 @@ class _AppointmentStepPatientState extends State<AppointmentStepPatient> {
   void _fetchCloseMembers() {
     final userBloc = context.read<UserBloc>();
     userBloc.add(OnUserLoadedCloseMembers());
+  }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }
