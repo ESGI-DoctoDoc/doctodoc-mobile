@@ -222,7 +222,6 @@ class _SaveGeneralDoctorState extends State<SaveGeneralDoctor> {
     if (state.status == WriteReferentDoctorStatus.success) {
       Navigator.pop(context);
     } else if (state.status == WriteReferentDoctorStatus.loading) {
-      print('loading');
     } else if (state.status == WriteReferentDoctorStatus.error) {
       showErrorSnackbar(context, state.exception);
     }

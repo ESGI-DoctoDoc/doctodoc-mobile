@@ -50,7 +50,6 @@ class _FilterSearchModalState extends State<_FilterSearchModal> {
   @override
   void initState() {
     super.initState();
-    print(widget.filters);
     if (widget.filters != null) {
       _specialityController.text = widget.filters?['speciality'] ?? '';
       _languageController.text = widget.filters?['languages'] ?? '';

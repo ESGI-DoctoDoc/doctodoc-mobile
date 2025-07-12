@@ -116,7 +116,6 @@ class _OtpScreenState extends State<OtpScreen> {
         OnboardingScreen.navigateTo(context);
       }
     } else if (state.status == AuthStatus.loadingSecondFactorAuthentication) {
-      print("loading");
     }
     setState(() {
       isLoading = false;

@@ -157,16 +157,12 @@ class _AppointmentStepDateState extends State<AppointmentStepDate> {
 
   void _fetchAppointmentsAvailability() {
     if (widget.medicalConcernId == null) {
-      print("Medical concern ID is null, skipping fetch.");
       return;
     }
 
-    print("Fetching appointments availability... for date: ${_dateController.text}");
     if (_dateController.text.isEmpty) {
-      print("Date is empty, skipping fetch.");
       return;
     }
-    print("Fetching appointments availability for date: ${_dateController.text}");
     final appointmentFlowBloc = context.read<AppointmentFlowBloc>();
     appointmentFlowBloc.add(GetAppointmentsAvailability(
       medicalConcernId: widget.medicalConcernId!,

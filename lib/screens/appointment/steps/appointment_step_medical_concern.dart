@@ -65,7 +65,6 @@ class _AppointmentStepMedicalConcernState extends State<AppointmentStepMedicalCo
                 controller: _medicalConcernController,
                 medicalConcerns: medicalConcernItems,
                 onChange: (item) {
-                  print("Selected medical concern: ${item.label}");
                   widget.onNext(item.value);
                 },
               )

@@ -116,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       focusNode: _searchFocusNode,
                       onSearch: (search) {
                         // Handle search action
-                        print("Searching for: $search");
                       },
                     ),
 

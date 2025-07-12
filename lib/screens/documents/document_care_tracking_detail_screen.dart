@@ -99,7 +99,6 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
   }
 
   void _getUrl() {
-    print(widget.careTrackingId);
     context.read<DisplayDocumentContentBloc>().add(OnGetContentOnCareTracking(
           careTrackingId: widget.careTrackingId,
           id: widget.documentId,

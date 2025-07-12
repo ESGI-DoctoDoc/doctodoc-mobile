@@ -170,10 +170,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onBoardingListener(BuildContext context, RegisterState state) {
     if (state.onBoardingStatus == OnBoardingStatus.onBoarded) {
-      print('on boarded ok');
       MainLayout.navigateTo(context);
     } else if (state.onBoardingStatus == OnBoardingStatus.loading) {
-      print('loading');
     } else if (state.onBoardingStatus == OnBoardingStatus.error) {
       showErrorSnackbar(context, state.exception);
     }
@@ -184,7 +182,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onBoardingDone(BuildContext context) {
     if (!_userData.isValid()) {
-      print("Error : User data is not valid");
       return;
     }
 

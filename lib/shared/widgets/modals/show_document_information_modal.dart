@@ -67,7 +67,6 @@ class _DocumentInformationWidgetState extends State<_DocumentInformationWidget> 
   }
 
   Column _buildSuccess(DocumentDetailed document) {
-    print(document.uploadedBy.firstName);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

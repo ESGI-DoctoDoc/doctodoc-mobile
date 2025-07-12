@@ -19,7 +19,6 @@ class ErrorTranslator {
     if (_translations.isEmpty) {
       throw Exception("Translations not loaded. Call ErrorTranslator.load() first.");
     }
-    print(_translations[code]);
     return _translations[code] ?? code;
   }
 }

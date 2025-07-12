@@ -186,7 +186,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('here');
-  print(
-      "Background message received: ${message.notification?.title} - ${message.notification?.body}");
 }

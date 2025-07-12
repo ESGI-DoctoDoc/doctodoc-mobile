@@ -23,7 +23,6 @@ class DoctorSearchScreen extends StatefulWidget {
     Navigator.pushNamed(context, routeName2, arguments: filters);
   }
   static Widget routeBuilder(Object? args) {
-    print(args);
     if (args is Map<String, String>) {
       return DoctorSearchScreen(filters: args);
     }

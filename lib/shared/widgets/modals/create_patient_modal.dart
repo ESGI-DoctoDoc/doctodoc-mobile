@@ -114,7 +114,6 @@ class _CreatePatientModalState extends State<CreatePatientModal> {
     if (forgotPasswordKey.currentState?.validate() == false) {
       return;
     }
-    print("Patient created: ${firstNameController.text} ${lastNameController.text}");
     _onCreateCloseMember();
     setState(() {
       isSubmitted = true;

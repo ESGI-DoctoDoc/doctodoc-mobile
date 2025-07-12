@@ -89,7 +89,6 @@ class _AppointmentStepCareTrackingState extends State<AppointmentStepCareTrackin
       careTrackings: careTrackingItems,
       required: false,
       onChange: (item) {
-        print('Selected care tracking: ${item.label}');
         widget.onNext(item.value);
       },
     );

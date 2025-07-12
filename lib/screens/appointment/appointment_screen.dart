@@ -181,7 +181,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
     canGoNext = formState.validate();
     if (!canGoNext) {
-      print("Form is not valid");
       return;
     }
 
@@ -191,7 +190,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       try {
         showAppointmentConfirmationModal(context, _appointmentData.toReview());
       } catch (e) {
-        print("Error showing confirmation modal: $e");
+        // print("Error showing confirmation modal: $e");
       }
     } else {
       nextPage();
@@ -220,7 +219,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         ).toList(),
       ));
     } catch (e) {
-      print("Error converting appointment data to review: $e");
+      // print("Error converting appointment data to review: $e");
       return;
     }
   }

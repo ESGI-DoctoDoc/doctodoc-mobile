@@ -10,7 +10,6 @@ class CareTrackingValidator extends Validator {
 
   @override
   String? validation(String? value) {
-    print(value);
     if (value == null || value.isEmpty) {
       return required ? errorMessage : null;
     } else {

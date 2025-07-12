@@ -32,7 +32,7 @@ class DioClient {
             : '?${options.queryParameters.entries.map((e) => '${e.key}=${e.value}').join('&')}';
         String payload = options.data != null ? options.data.toString() : '';
 
-        print("[$method] $url$query -- with payload = $payload");
+        // print("[$method] $url$query -- with payload = $payload");
         return handler.next(options);
       },
       onResponse: (options, handler) {
@@ -43,7 +43,7 @@ class DioClient {
             : '?${options.requestOptions.queryParameters.entries.map((e) => '${e.key}=${e.value}').join('&')}';
         String payload = options.data != null ? options.data.toString() : '';
 
-        print("[$method] $url$query -- with payload = $payload");
+        // print("[$method] $url$query -- with payload = $payload");
         return handler.next(options);
       },
     ));

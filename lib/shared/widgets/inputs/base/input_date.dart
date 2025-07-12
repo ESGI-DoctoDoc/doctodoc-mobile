@@ -148,7 +148,6 @@ class _InputDateNoModalState extends State<InputDateNoModal> {
                   firstDate: widget.min,
                   lastDate: widget.max,
                   onDateChanged: (date) {
-                    print(date.toString());
                     final dateTime = DateTime(date.year, date.month, date.day);
                     final formattedDate =
                         Jiffy.parseFromDateTime(dateTime).format(pattern: 'yyyy-MM-dd').toString();

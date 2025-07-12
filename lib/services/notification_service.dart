@@ -26,20 +26,19 @@ class NotificationService {
     if (userTokenFcm == null) {
       final fcmToken = await _firebaseMessaging.getToken();
       if (fcmToken != null) {
-        print("Create new FCM Token: $fcmToken");
+        // print("Create new FCM Token: $fcmToken");
         try {
           await userRepository.saveFcmToken(fcmToken);
           await localAuthDataSource.saveFcmToken(fcmToken);
         } catch (error) {
-          print("Failed to save FCM token");
+          // print("Failed to save FCM token");
         }
       } else {
-        print("Failed to get FCM token");
+        // print("Failed to get FCM token");
       }
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Message clicked!");
       final data = message.data;
       if (data.containsKey('appointment_id')) {
         final appointmentId = data['appointment_id'];
@@ -61,9 +60,6 @@ class NotificationService {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Message received: ${message.notification?.title} - ${message.notification?.body}");
-      // Handle the foreground message
-      // You can show a dialog, snackbar, or update the UI
     });
   }
 }

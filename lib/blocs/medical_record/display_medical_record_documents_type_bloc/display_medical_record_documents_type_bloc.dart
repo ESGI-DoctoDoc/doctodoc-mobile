@@ -57,8 +57,6 @@ class DisplayMedicalRecordDocumentsTypeBloc
         type: event.type,
       );
 
-      print(event.type);
-
       bool isLoadingMore = documents.isEmpty || documents.length < 10 ? false : true;
 
       emit(state.copyWith(

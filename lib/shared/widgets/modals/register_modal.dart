@@ -92,10 +92,8 @@ class _RegisterModalState extends State<RegisterModal> {
 
   void _registerListener(BuildContext context, RegisterState state) {
     if (state.registerStatus == RegisterStatus.registered) {
-      print('registered ok');
       showLoginModal(context, true);
     } else if (state.registerStatus == RegisterStatus.loading) {
-      print('loading');
     } else if (state.registerStatus == RegisterStatus.error) {
       showErrorSnackbar(context, state.exception);
     }

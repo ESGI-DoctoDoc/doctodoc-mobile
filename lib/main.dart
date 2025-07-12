@@ -92,17 +92,17 @@ Future<void> main() async {
 
   Widget nextScreen = const IntroductionScreen();
 
-  print("Is logged in: $isLoggedIn");
-  print("Has completed two-factor authentication: $hasTwoFactor");
-  print("Has completed onboarding: $hasOnboarded");
+  // print("Is logged in: $isLoggedIn");
+  // print("Has completed two-factor authentication: $hasTwoFactor");
+  // print("Has completed onboarding: $hasOnboarded");
   if (isLoggedIn && hasTwoFactor == false) {
-    print("User is logged in but has not completed two-factor authentication");
+    // print("User is logged in but has not completed two-factor authentication");
     await sharedPreferences.reset();
   } else if (isLoggedIn && hasOnboarded == false) {
-    print("User is logged in but has not completed onboarding");
+    // print("User is logged in but has not completed onboarding");
     nextScreen = const OnboardingScreen();
   } else if (isLoggedIn && hasTwoFactor == true && hasOnboarded == true) {
-    print("User is logged in and has completed onboarding");
+    // print("User is logged in and has completed onboarding");
     nextScreen = const MainLayout();
   }
 

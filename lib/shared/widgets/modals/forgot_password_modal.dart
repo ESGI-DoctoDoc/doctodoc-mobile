@@ -73,7 +73,6 @@ class _ForgotPasswordModalState extends State<ForgotPasswordModal> {
     if (forgotPasswordKey.currentState?.validate() == false) {
       return;
     }
-    print("Verification email sent to ${emailController.text}");
     context.read<WriteUserBloc>().add(
           OnRequestNewPassword(
             email: emailController.text,

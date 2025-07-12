@@ -13,7 +13,6 @@ class SelectDayValidator extends Validator {
   @override
   String? validation(String? value) {
     if (value == null || value.isEmpty) {
-      print("value is null or empty");
       return required ? "La date est requise" : null;
     }
     

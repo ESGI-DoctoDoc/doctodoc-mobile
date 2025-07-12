@@ -116,12 +116,10 @@ class _LoginModalState extends State<LoginModal> {
     if (state.status == AuthStatus.firstFactorAuthenticationError) {
       showErrorSnackbar(context, state.exception);
     } else if (state.status == AuthStatus.firstFactorAuthenticationValidate) {
-      print("login successful");
       final sharedPreferences = SharedPreferencesAuthDataSource();
       sharedPreferences.saveHasCompletedTwoFactorAuthentication(false);
       OtpScreen.navigateTo(context);
     } else if (state.status == AuthStatus.loadingFirstFactorAuthentication) {
-      print("loading");
     }
     setState(() {
       isLoading = false;

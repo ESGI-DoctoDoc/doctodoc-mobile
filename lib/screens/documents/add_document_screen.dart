@@ -137,7 +137,6 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
   }
 
   Widget _buildFilePreview() {
-    print('Building file preview for: ${widget.file.path}');
     final String fileName = widget.file.path.split('/').last;
     final bool isPdf = widget.file.path.toLowerCase().endsWith('.pdf');
     final bool isImage = ['jpg', 'jpeg', 'png', 'heic']

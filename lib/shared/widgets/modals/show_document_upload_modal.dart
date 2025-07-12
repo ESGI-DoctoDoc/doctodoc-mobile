@@ -43,7 +43,6 @@ class _DocumentUploadWidget extends StatelessWidget {
                 File file = File(photo.path);
                 AddDocumentScreen.navigateTo(context, file, null);
               } else {
-                print("Photo non prise ou annulée.");
               }
             },
           ),
@@ -81,7 +80,6 @@ class _DocumentUploadWidget extends StatelessWidget {
       File file = File(result.files.single.path!);
       AddDocumentScreen.navigateTo(context, file, null);
     } else {
-      print("No file selected or file selection was cancelled.");
     }
   }
 }
