@@ -110,11 +110,12 @@ void showForgotPasswordModal(BuildContext context) {
           ),
           isTopBarLayerAlwaysVisible: true,
           trailingNavBarWidget: IconButton(
-              padding: const EdgeInsets.all(20),
-              icon: const Icon(Icons.close),
-              onPressed: () => {
-                    Navigator.of(context).pop,
-                  }),
+            padding: const EdgeInsets.all(20),
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           child: const ForgotPasswordModal(),
         ),
       ];
