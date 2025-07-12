@@ -15,4 +15,6 @@ abstract class UserDataSource {
   Future<void> updatePassword(String oldPassword, String newPassword);
 
   Future<void> requestNewPassword(String email);
+
+  Future<void> deleteAccount();
 }

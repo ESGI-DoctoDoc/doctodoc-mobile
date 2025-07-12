@@ -82,6 +82,14 @@ class UserRepository {
     }
   }
 
+  Future<void> deleteAccount() async {
+    try {
+      await userDataSource.deleteAccount();
+    } catch (error) {
+      throw UnknownException();
+    }
+  }
+
   dispose() {
     _userRepositoryEventController.close();
   }

@@ -1,9 +1,9 @@
 import 'package:doctodoc_mobile/blocs/auth_bloc/auth_bloc.dart';
+import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
-import 'package:doctodoc_mobile/shared/widgets/modals/update_email_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_phone_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +11,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../blocs/user_blocs/user_bloc/user_bloc.dart';
 import '../../models/user.dart';
+import '../../shared/utils/show_error_snackbar.dart';
+import '../../shared/widgets/modals/confirm_modal.dart';
 import '../appointment/widgets/onboarding_loading.dart';
 import '../medicals/medical_details_screen.dart';
 
@@ -152,14 +154,29 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
 
               const SizedBox(height: 16),
-              ListTile(
-                leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-                title: Text(
-                  'Supprimer mon compte',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+              BlocListener<WriteUserBloc, WriteUserState>(
+                listenWhen: (previous, current) {
+                  return previous.deleteAccountStatus != current.deleteAccountStatus;
+                },
+                listener: _deleteAccountListener,
+                child: ListTile(
+                  leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+                  title: Text(
+                    'Supprimer mon compte',
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    final shouldDelete = await showConfirmModal(
+                      context,
+                      'Êtes-vous sûr de vouloir supprimer votre compte ?'
+                      ' Vos futurs rendez-vous seront de ce fait annulés.',
+                    );
+                    if (shouldDelete == true) {
+                      context.read<WriteUserBloc>().add(OnDeleteAccount());
+                    }
+                  },
                 ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo mélissa supprimer le compte
               ),
 
               const SizedBox(height: 16),
@@ -239,5 +256,13 @@ class _AccountScreenState extends State<AccountScreen> {
       subtitle: Text("Veuillez réessayer plus tard."),
       leading: Icon(Icons.error, color: Colors.red),
     );
+  }
+
+  void _deleteAccountListener(BuildContext context, WriteUserState state) async {
+    if (state.deleteAccountStatus == DeleteAccountStatus.success) {
+      _onLogout(context);
+    } else if (state.deleteAccountStatus == DeleteAccountStatus.error) {
+      showErrorSnackbar(context, state.exception);
+    }
   }
 }
