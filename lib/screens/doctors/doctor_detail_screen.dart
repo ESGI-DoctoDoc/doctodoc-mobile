@@ -336,7 +336,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 const Icon(Icons.language, size: 16, color: Colors.black54),
                 const SizedBox(width: 8),
                 Text(
-                  languages.$1,
+                  _translateLanguage(languages.$1),
                   style: const TextStyle(fontSize: 14, color: Colors.black87),
                 ),
               ],
@@ -350,7 +350,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   const Icon(Icons.language, size: 16, color: Colors.black54),
                   const SizedBox(width: 8),
                   Text(
-                    languages.$2,
+                    _translateLanguage(languages.$2),
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
@@ -375,6 +375,23 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
         ),
       ),
     ];
+  }
+
+  String _translateLanguage(String lang) {
+    const translations = {
+      'French': 'Français',
+      'English': 'Anglais',
+      'Spanish': 'Espagnol',
+      'German': 'Allemand',
+      'Italian': 'Italien',
+      'Chinese': 'Chinois',
+      'Arabic': 'Arabe',
+      'Portuguese': 'Portugais',
+      'Russian': 'Russe',
+      'Japanese': 'Japonais',
+      'Korean': 'Coréen',
+    };
+    return translations[lang] ?? lang;
   }
 
   List<Widget> _buildLegalInformation(String rpps) {
