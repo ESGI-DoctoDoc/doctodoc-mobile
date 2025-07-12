@@ -1,8 +1,10 @@
 import 'package:doctodoc_mobile/blocs/auth_bloc/auth_bloc.dart';
 import 'package:doctodoc_mobile/blocs/user_blocs/write_user_bloc/write_user_bloc.dart';
 import 'package:doctodoc_mobile/screens/introduction_screen.dart';
+import 'package:doctodoc_mobile/screens/privacy_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/patients_screen.dart';
 import 'package:doctodoc_mobile/screens/profile/profile_screen.dart';
+import 'package:doctodoc_mobile/screens/terms_screen.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/change_password_modal.dart';
 import 'package:doctodoc_mobile/shared/widgets/modals/update_phone_modal.dart';
 import 'package:flutter/material.dart';
@@ -136,13 +138,17 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading: const Icon(Icons.privacy_tip),
                 title: const Text('Politique de confidentialité'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo add page
+                onTap: () {
+                  PrivacyScreen.navigateTo(context);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.description),
                 title: const Text("Conditions d'utilisation"),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {}, //Todo add page
+                onTap: () {
+                  TermsScreen.navigateTo(context);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.logout),
