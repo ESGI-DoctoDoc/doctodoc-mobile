@@ -86,45 +86,6 @@ class _DocumentMenuWidget extends StatelessWidget {
                 onTap: () {
                   showDocumentCareTrackingLogsModal(context, document.id, careTrackingId);
                 }),
-            ListTile(
-              title: Text(
-                "Supprimer le document",
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-              leading: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-              onTap: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                }
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Confirmer la suppression"),
-                      content: const Text("Voulez-vous vraiment supprimer ce document ?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Annuler
-                          },
-                          child: const Text("Annuler"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context.read<WriteDocumentInCareTrackingBloc>().add(OnDeleteDocument(
-                                  careTrackingId: careTrackingId,
-                                  id: document.id,
-                                ));
-                            Navigator.of(context).pop(); // Fermer la dialog après confirmation
-                          },
-                          child: const Text("Oui"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
           ],
         ),
       ),
