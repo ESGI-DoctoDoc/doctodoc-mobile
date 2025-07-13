@@ -93,6 +93,12 @@ class _RegisterModalState extends State<RegisterModal> {
   void _registerListener(BuildContext context, RegisterState state) {
     if (state.registerStatus == RegisterStatus.registered) {
       showLoginModal(context, true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Inscription réussie, veuillez vous connecter."),
+          backgroundColor: Colors.green,
+        ),
+      );
     } else if (state.registerStatus == RegisterStatus.loading) {
     } else if (state.registerStatus == RegisterStatus.error) {
       showErrorSnackbar(context, state.exception);
