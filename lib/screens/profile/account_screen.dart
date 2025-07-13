@@ -229,7 +229,6 @@ class _AccountScreenState extends State<AccountScreen> {
             .trim(),
       ),
       trailing: const Icon(Icons.verified, color: Colors.green, size: 18),
-      onTap: () => showUpdatePhoneModal(context, phoneNumber),
     );
   }
 
