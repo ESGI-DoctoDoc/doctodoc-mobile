@@ -17,7 +17,7 @@ class DoctorListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTileBase(
-      title: "Dr. ${doctor.firstName} ${doctor.lastName}",
+      title: "Dr. ${_capitalize(doctor.firstName.toLowerCase())} ${_capitalize(doctor.lastName.toLowerCase())}",
       subtitle: doctor.speciality,
       leading: _buildLeadingIcon(context),
       trailing: trailing ?? const Padding(
@@ -51,5 +51,9 @@ class DoctorListTile extends StatelessWidget {
         },
       ),
     );
+  }
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

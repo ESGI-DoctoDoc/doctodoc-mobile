@@ -70,7 +70,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
-                        "Dr. ${widget.appointmentData.doctorData.firstName} ${widget.appointmentData.doctorData.lastName}"),
+                        "Dr. ${_capitalize(widget.appointmentData.doctorData.firstName.toLowerCase())} ${_capitalize(widget.appointmentData.doctorData.lastName.toLowerCase())}"),
                   ),
                   const Divider(color: Color(0xFFe0e0e0), thickness: 2),
                   ListTile(
@@ -131,7 +131,7 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
 
     Jiffy.setLocale('fr-FR');
 
-    final dateFormatted = parsedDate.format(pattern: 'EEEE d MMMM yyyy');
+    final dateFormatted = _capitalize(parsedDate.format(pattern: 'EEEE d MMMM yyyy'));
     final hour = parsedTime.hour.toString().padLeft(2, '0');
     final minute = parsedTime.minute.toString().padLeft(2, '0');
 
@@ -141,6 +141,11 @@ class _AppointmentConfirmWidgetState extends State<_AppointmentConfirmWidget> {
   _onConfirmAppointment() {
     final appointmentBloc = context.read<AppointmentBloc>();
     appointmentBloc.add(OnConfirmAppointment());
+  }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }
 

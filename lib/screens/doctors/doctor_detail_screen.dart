@@ -379,17 +379,17 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
 
   String _translateLanguage(String lang) {
     const translations = {
-      'French': 'Français',
-      'English': 'Anglais',
-      'Spanish': 'Espagnol',
-      'German': 'Allemand',
-      'Italian': 'Italien',
-      'Chinese': 'Chinois',
-      'Arabic': 'Arabe',
-      'Portuguese': 'Portugais',
-      'Russian': 'Russe',
-      'Japanese': 'Japonais',
-      'Korean': 'Coréen',
+      'french': 'Français',
+      'english': 'Anglais',
+      'spanish': 'Espagnol',
+      'german': 'Allemand',
+      'italian': 'Italien',
+      'chinese': 'Chinois',
+      'arabic': 'Arabe',
+      'portuguese': 'Portugais',
+      'russian': 'Russe',
+      'japanese': 'Japonais',
+      'korean': 'Coréen',
     };
     return translations[lang] ?? lang;
   }

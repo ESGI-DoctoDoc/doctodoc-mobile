@@ -70,8 +70,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         child: Scaffold(
           backgroundColor: const Color(0xFFEFEFEF),
           appBar: AppointmentAppBar(
-            firstname: widget.doctorData.firstName,
-            lastname: widget.doctorData.lastName,
+            firstname: _capitalize(widget.doctorData.firstName.toLowerCase()),
+            lastname: _capitalize(widget.doctorData.lastName.toLowerCase()),
             avatarUrl: widget.doctorData.pictureUrl,
             onBack: () {
               if (_pageController.page != 0) {
@@ -224,3 +224,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     }
   }
 }
+
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
+  }

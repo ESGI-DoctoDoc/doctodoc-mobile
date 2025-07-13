@@ -197,7 +197,7 @@ class _CareTrackingDetailScreenState extends State<CareTrackingDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${doctor.firstName} ${doctor.lastName}",
+                          "${_capitalize(doctor.firstName.toLowerCase())} ${_capitalize(doctor.lastName.toLowerCase())}",
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 4),
