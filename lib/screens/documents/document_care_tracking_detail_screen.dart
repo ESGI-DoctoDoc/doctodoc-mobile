@@ -2,6 +2,7 @@ import 'package:doctodoc_mobile/models/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../blocs/document/display_document_content_bloc/display_document_content_bloc.dart';
 
@@ -81,7 +82,12 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
             appBar: AppBar(
               title: Text(document.name),
               backgroundColor: Theme.of(context).primaryColor,
-              actions: const [],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.download),
+                  onPressed: () => _downloadDocument(document),
+                ),
+              ],
             ),
             body: buildDocumentViewer(document.url),
           ),
@@ -103,6 +109,19 @@ class _DocumentCareTrackingDetailScreenState extends State<DocumentCareTrackingD
           careTrackingId: widget.careTrackingId,
           id: widget.documentId,
         ));
+  }
+
+  void _downloadDocument(Document document) async {
+    final url = document.url;
+    final name = document.name;
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Impossible de télécharger le document.")),
+      );
+    }
   }
 }
 

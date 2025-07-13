@@ -39,10 +39,6 @@ class _CareTrackingMenuWidget extends StatelessWidget {
               leading: const Icon(Icons.visibility),
               onTap: () => CareTrackingDetailScreen.navigateTo(context, careTrackingId)),
           ListTile(
-              title: const Text("Ajouter un rendez-vous"),
-              leading: const Icon(Icons.add),
-              onTap: () {}),
-          ListTile(
               title: const Text('Ajouter un document'),
               leading: const Icon(Icons.attach_file),
               onTap: () {
