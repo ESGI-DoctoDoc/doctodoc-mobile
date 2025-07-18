@@ -81,5 +81,7 @@
   "token.invalid": "Jeton invalide.",
   "trace.already-exist": "Trace déjà existante.",
   "user.already.exist": "Utilisateur déjà existant.",
-  "user.not-found": "Utilisateur introuvable."
+  "user.not-found": "Utilisateur introuvable.",
+  "auth": "Erreur d'authentification.",
+  "error.auth": "Erreur d'authentification."
 }
